@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "878142863034",
+    "firebase_url": "https://taesproject-c7fd4.firebaseio.com",
+    "project_id": "taesproject-c7fd4",
+    "storage_bucket": "taesproject-c7fd4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:878142863034:android:23f69de6e8913e364df483",
+        "android_client_info": {
+          "package_name": "pt.ipleiria.estg.dei.sentinel"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "878142863034-mjasad56epocjlupth3t0qn6l9rndgrk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "pt.ipleiria.estg.dei.sentinel",
+            "certificate_hash": "4d9470650e6357248ca7eecb0d9545853030fc9b"
+          }
+        },
+        {
+          "client_id": "878142863034-ih5139rlnbjusdhqqbmfu18sk9t9o7qs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC4OuZl52qxD024ZrHx7DRrwpaFLisoQPI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "878142863034-ih5139rlnbjusdhqqbmfu18sk9t9o7qs.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
