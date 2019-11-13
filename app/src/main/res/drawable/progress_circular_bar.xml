@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@android:id/progress">
+        <shape
+            android:innerRadiusRatio="3"
+            android:shape="ring"
+            android:thicknessRatio="7.0"
+            android:useLevel="true">
+
+            <gradient
+                android:angle= "90"
+                android:startColor="#90EE90"
+                android:endColor="#8E1600"
+                android:centerColor="#fbf400"
+                android:type="sweep" />
+        </shape>
+    </item>
+</selector>
