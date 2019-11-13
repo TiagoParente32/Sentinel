@@ -3,7 +3,10 @@ package pt.ipleiria.estg.dei.sentinel;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -22,17 +25,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private EditText inputEmailField;
     private EditText inputPasswordField;
-    private Button btnLogin;
-    private Button btnRegister;
     private CheckBox checboxSignedIn;
 
 
     private FirebaseAuth mAuth;
-    private FirebaseApp firebase;
 
-    private boolean keepSignedIn = false;
+    private boolean keepSignedIn;
 
     private static final String TAG = "EmailPassword";
+    private static final String PREFERENCES_FILE_NAME = "pt.ipleiria.estg.dei.sentinel.SHARED_PREFERENCES";
+
+    private SharedPreferences sharedPref;
 
 
     @Override
@@ -49,6 +52,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         findViewById(R.id.btnLogin).setOnClickListener(this);
         findViewById(R.id.btnRegister).setOnClickListener(this);
 
+         sharedPref = this.getSharedPreferences(PREFERENCES_FILE_NAME,Context.MODE_PRIVATE);
+
+
     }
 
     @Override
@@ -56,12 +62,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         super.onStart();
 
+        /*CHECKS USER SAVED PREFERENCE TO KEEP SIGNED IN */
+        keepSignedIn = sharedPref.getBoolean("keep_signed_in",false);
 
-            FirebaseUser currentUser = mAuth.getCurrentUser();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
 
         if(currentUser != null){
             //OPENS DASHBOARD ACTIVITY
-            Toast.makeText(LoginActivity.this,"LOGADO",Toast.LENGTH_LONG).show();
+
+
         }
 
 
@@ -90,8 +99,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             return;
         }
 
-        if(checboxSignedIn.isChecked())
-            keepSignedIn = true;
+        /*SAVES USER PREFERENCE TO KEEP SIGNED IN AFTER APP CLOSE OR NOT IN SHARED PREFERENCES FILE*/
+        keepSignedIn = checboxSignedIn.isChecked();
+        sharedPref.edit().putBoolean("keep_signed_in",keepSignedIn).commit();
 
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -117,6 +127,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void signOut(){
+        sharedPref.edit().putBoolean("keep_signed_in",false).commit();
         FirebaseAuth.getInstance().signOut();
     }
 
@@ -127,10 +138,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             signIn(inputEmailField.getText().toString(),inputPasswordField.getText().toString());
         }
         if(i == R.id.btnRegister){
-            Toast.makeText(LoginActivity.this,"DESLOGADO",Toast.LENGTH_LONG).show();
+            /*OPENS REGISTER ACTIVITY*/
         }
     }
 
+    /* IF USER PREFERENCE KEEP SIGNED IN IS FALSE, SIGNOUT USER BEFORE APP CLOSURE*/
     @Override
     public void onStop() {
         super.onStop();
@@ -138,10 +150,4 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             signOut();
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        if (!keepSignedIn)
-            signOut();
-    }
 }
