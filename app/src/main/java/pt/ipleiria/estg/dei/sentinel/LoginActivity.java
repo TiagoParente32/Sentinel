@@ -7,11 +7,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -20,9 +22,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private EditText inputEmailField;
     private EditText inputPasswordField;
-
     private Button btnLogin;
+    private Button btnRegister;
+    private CheckBox checboxSignedIn;
+
+
     private FirebaseAuth mAuth;
+    private FirebaseApp firebase;
+
+    private boolean keepSignedIn = false;
 
     private static final String TAG = "EmailPassword";
 
@@ -35,9 +43,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         inputEmailField = findViewById(R.id.inputEmail);
         inputPasswordField = findViewById(R.id.inputPassword);
+        checboxSignedIn = findViewById(R.id.chbSignedIn);
 
         //binds methods to button
         findViewById(R.id.btnLogin).setOnClickListener(this);
+        findViewById(R.id.btnRegister).setOnClickListener(this);
 
     }
 
@@ -46,7 +56,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         super.onStart();
 
-        FirebaseUser currentUser = mAuth.getCurrentUser();
+
+            FirebaseUser currentUser = mAuth.getCurrentUser();
+
+        if(currentUser != null){
+            //OPENS DASHBOARD ACTIVITY
+            Toast.makeText(LoginActivity.this,"LOGADO",Toast.LENGTH_LONG).show();
+        }
 
 
     }
@@ -73,6 +89,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             inputPasswordField.setError("Password has a minimum of 8 characters!");
             return;
         }
+
+        if(checboxSignedIn.isChecked())
+            keepSignedIn = true;
 
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -107,5 +126,22 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if(i == R.id.btnLogin){
             signIn(inputEmailField.getText().toString(),inputPasswordField.getText().toString());
         }
+        if(i == R.id.btnRegister){
+            Toast.makeText(LoginActivity.this,"DESLOGADO",Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (!keepSignedIn)
+            signOut();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (!keepSignedIn)
+            signOut();
     }
 }

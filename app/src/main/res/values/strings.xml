@@ -13,4 +13,5 @@
     <string name="login_failed">"Login failed"</string>
     <string name="login">Login</string>
     <string name="register">CREATE NEW ACCOUNT</string>
+    <string name="keep_me_signed">Keep me signed in</string>
 </resources>
