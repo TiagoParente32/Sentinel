@@ -26,11 +26,10 @@ import java.util.List;
 public class DashboardActivity extends AppCompatActivity {
     public static final String TAG = "Dashboard";
     private DatabaseReference mDatabase;
-    TextView stats;
     TextView qoa;
     TextView humidade;
     TextView temperatura;
-    TextView utilmaData;
+    TextView ultimaData;
     ProgressBar pb;
     List<String> dateArray;
     ImageView imageTemp;
@@ -41,14 +40,14 @@ public class DashboardActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
+        ultimaData = findViewById(R.id.textViewData);
 
-        stats = findViewById(R.id.textViewStats);
         qoa = findViewById(R.id.textViewQOA);
         humidade = findViewById(R.id.textViewHumidade);
         temperatura = findViewById(R.id.textViewTemperatura);
         mDatabase = FirebaseDatabase.getInstance().getReference();
         dateArray = new ArrayList<>();
-        ProgressBar pb = (ProgressBar) findViewById(R.id.progressBar2);
+        pb = (ProgressBar) findViewById(R.id.progressBar2);
         imageTemp = findViewById(R.id.imageViewTemperatura);
         imageHum = findViewById(R.id.imageViewHumidade);
 
@@ -57,14 +56,13 @@ public class DashboardActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                //isto esta muito scuffed
                 int temperaturasSum = 0;
                 int humidadeSum = 0;
                 int numTemperatura = 0;
                 int numHumidade = 0;
                 float mediaHum = 0;
                 float mediaTemp = 0;
-                int hora = 0;
+                String hora = "";
                 String data ;
                 //--
                 for (DataSnapshot datas:dataSnapshot.child("Edificio A").getChildren()) {
@@ -83,8 +81,8 @@ public class DashboardActivity extends AppCompatActivity {
                                     numHumidade++;
                                 }
                                 if(key.getKey().equals("hora")){
-                                    if(Integer.parseInt(key.getValue().toString())>hora){
-                                        hora = Integer.parseInt(key.getValue().toString());
+                                    if(key.getValue().toString().compareTo(hora)>1){
+                                        hora = key.getValue().toString();
                                     }
                                 }
                         }
@@ -95,27 +93,25 @@ public class DashboardActivity extends AppCompatActivity {
 
                 temperatura.setText(String.valueOf(mediaTemp)+"ºC");
                 humidade.setText(String.valueOf(mediaHum));
-                stats.setText("Temperatura: " + mediaTemp+ "ºC\r\n" + "Humidade: " +mediaHum);
-                //data ta a dar erro idk
-                //utilmaData.setText(data + " - " + hora +"H");
+                ultimaData.setText(data + " " + hora);
 
 
 
                 if(mediaTemp>=19 && mediaTemp <=35){
                     //verde
-                    imageTemp.setBackgroundColor(Color.parseColor("#90EE90"));
-                }else if(mediaTemp<19 || mediaTemp>=35 ){
+                    imageTemp.setBackgroundColor(Color.parseColor("#008000"));
+                }else{
                     //vermelho
-                    imageTemp.setBackgroundColor(Color.parseColor("#8E1600"));
+                    imageTemp.setBackgroundColor(Color.parseColor("#FF0000"));
 
                 }
 
                 if(mediaHum>=50 && mediaHum <=75){
                     //verde
-                    imageHum.setBackgroundColor(Color.parseColor("#90EE90"));
-                }else if(mediaHum<50 || mediaHum>=75 ){
+                    imageHum.setBackgroundColor(Color.parseColor("#008000"));
+                }else {
                     //vermelho
-                    imageHum.setBackgroundColor(Color.parseColor("#8E1600"));
+                    imageHum.setBackgroundColor(Color.parseColor("#FF0000"));
 
                 }
 
@@ -126,7 +122,7 @@ public class DashboardActivity extends AppCompatActivity {
                     qoa.setText("Good");
                     //vai para 20%
                     ObjectAnimator animation = ObjectAnimator.ofInt(pb, "progress", pb.getProgress(), 20);
-                    animation.setDuration(1000);
+                    animation.setDuration(500);
                     animation.setInterpolator(new DecelerateInterpolator());
                     animation.start();
                 }else if(((mediaTemp<19 || mediaTemp>=35) && (mediaHum>=50 && mediaHum <=75)) ||(
@@ -135,7 +131,7 @@ public class DashboardActivity extends AppCompatActivity {
                     qoa.setText("Average");
                     //vai para 50%
                     ObjectAnimator animation = ObjectAnimator.ofInt(pb, "progress", pb.getProgress(), 50);
-                    animation.setDuration(1000);
+                    animation.setDuration(500);
                     animation.setInterpolator(new DecelerateInterpolator());
                     animation.start();
                 }else{
@@ -143,7 +139,7 @@ public class DashboardActivity extends AppCompatActivity {
                     qoa.setText("Bad");
                     //vai para 99%
                     ObjectAnimator animation = ObjectAnimator.ofInt(pb, "progress", pb.getProgress(), 99);
-                    animation.setDuration(1000);
+                    animation.setDuration(500);
                     animation.setInterpolator(new DecelerateInterpolator());
                     animation.start();
                 }
