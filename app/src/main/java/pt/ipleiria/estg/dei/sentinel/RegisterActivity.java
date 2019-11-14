@@ -78,22 +78,38 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
 
         if(email.isEmpty()){
-            inputEmail.setError("Email field is mandatory!");
+            inputEmail.setError("Email field is mandatory");
             inputEmail.requestFocus();
             return;
         }
         if(!isEmailValid(email)) {
-            inputEmail.setError("Wrong email format!");
+            inputEmail.setError("Email format must be example@email.com");
             inputEmail.requestFocus();
             return;
         }
-         if(password.length() < 8) {
-             inputPassword.setError("Password as a minimum of 8 characters!");
+
+        if(password.isEmpty()){
+           inputPassword.setError("Password field is mandatory");
+           inputPassword.requestFocus();
+           return;
+        }
+
+         if(!isPasswordValid(password)) {
+             inputPassword.setError("Password must have at least have 8 digits, 1 number and 1 special character");
              inputPassword.requestFocus();
              return;
          }
+
+
+        if(passwordConf.isEmpty()){
+            inputPasswordConf.setError("Password confirmation field is mandatory");
+            inputPasswordConf.requestFocus();
+            return;
+        }
+
+
         if(!passwordConf.equals(password)){
-            inputPasswordConf.setError("Password Confirmation doesn't match password!");
+            inputPasswordConf.setError("Password Confirmation doesn't match password");
             inputPasswordConf.requestFocus();
             return;
         }
@@ -132,13 +148,31 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     public static boolean isEmailValid(String email) {
 
+        /*MINIUM 8 CHARACTERS, 1 NUMBER AND 1 SPECIAL CHARACTER*/
         String regExpn = "^(([\\w-]+\\.)+[\\w-]+|([a-zA-Z]{1}|[\\w-]{2,}))@"
                 + "((([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
                 + "[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\."
                 + "([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
                 + "[0-9]{1,2}|25[0-5]|2[0-4][0-9])){1}|"
                 + "([a-zA-Z]+[\\w-]+\\.)+[a-zA-Z]{2,4})$";
+
         CharSequence inputStr = email;
+        Pattern pattern = Pattern.compile(regExpn, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(inputStr);
+        if (matcher.matches())
+            return true;
+        else
+            return false;
+    }
+
+
+
+    public static boolean isPasswordValid(String passsword) {
+
+        String regExpn = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$";
+
+
+        CharSequence inputStr = passsword;
         Pattern pattern = Pattern.compile(regExpn, Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(inputStr);
         if (matcher.matches())
