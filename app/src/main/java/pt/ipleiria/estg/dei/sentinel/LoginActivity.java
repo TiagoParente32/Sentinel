@@ -6,17 +6,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -25,7 +22,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private EditText inputEmailField;
     private EditText inputPasswordField;
-    private CheckBox checboxSignedIn;
+    private CheckBox checkboxSignedIn;
 
 
     private FirebaseAuth mAuth;
@@ -46,7 +43,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         inputEmailField = findViewById(R.id.inputEmail);
         inputPasswordField = findViewById(R.id.inputPassword);
-        checboxSignedIn = findViewById(R.id.chbSignedIn);
+        checkboxSignedIn = findViewById(R.id.chbSignedIn);
 
         //binds methods to button
         findViewById(R.id.btnLogin).setOnClickListener(this);
@@ -78,6 +75,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private void updateUI(FirebaseUser currentUser) {
         //AFTER USER LOG IN INITIALIZES DASHBOARD ACTIVITY WITH USER'S NAME
+        //TEMPORARY
         if(currentUser == null){
             Toast.makeText(LoginActivity.this,"Wrong username/password!",Toast.LENGTH_LONG).show();
             return;
@@ -100,7 +98,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
 
         /*SAVES USER PREFERENCE TO KEEP SIGNED IN AFTER APP CLOSE OR NOT IN SHARED PREFERENCES FILE*/
-        keepSignedIn = checboxSignedIn.isChecked();
+        keepSignedIn = checkboxSignedIn.isChecked();
         sharedPref.edit().putBoolean("keep_signed_in",keepSignedIn).commit();
 
         mAuth.signInWithEmailAndPassword(email, password)
