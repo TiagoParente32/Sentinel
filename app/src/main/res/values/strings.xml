@@ -12,6 +12,10 @@
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
     <string name="login">Login</string>
-    <string name="register">CREATE NEW ACCOUNT</string>
     <string name="keep_me_signed">Keep me signed in</string>
+    <string name="password_conf">Password confirmation</string>
+    <string name="register">Create Account</string>
+    <string name="error_user_exists">The email addressed is already asssociated with an account!</string>
+    <string name="error_invalid_email">Invalid email address!</string>
+    <string name="building_a">Edifício A</string>
 </resources>
