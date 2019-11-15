@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">Sentinel</string>
+    <string name="email">E-mail</string>
+    <string name="passsword">Password</string>
+    <string name="password_conf">Password confirmation</string>
+    <string name="register">Create Account</string>
+    <string name="error_user_exists">The email addressed is already asssociated with an account!</string>
+    <string name="error_invalid_email">Invalid email address!</string>
     <string name="building_a">Edifício A</string>
 </resources>
