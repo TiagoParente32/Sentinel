@@ -6,9 +6,8 @@
     android:layout_height="match_parent"
     android:layout_centerHorizontal="true"
     android:layout_centerVertical="true"
-    android:background="#e8f4f8"
+    android:background="@color/colorPrimary"
     tools:context=".DashboardActivity">
-
 
     <ProgressBar
         android:id="@+id/progressBar2"
@@ -42,13 +41,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewTitulo" />
 
+
     <TextView
         android:id="@+id/textViewQOA"
         android:layout_width="150dp"
         android:layout_height="70dp"
         android:gravity="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        android:textColor="#000000"
+        android:textColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="@+id/progressBar2"
         app:layout_constraintEnd_toEndOf="@+id/progressBar2"
         app:layout_constraintStart_toStartOf="@+id/progressBar2"
@@ -56,16 +56,19 @@
 
     <TextView
         android:id="@+id/textViewTitulo"
-        android:layout_width="161dp"
+        android:layout_width="170dp"
         android:layout_height="38dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="100dp"
+        android:capitalize="none"
+        android:fontFamily="sans-serif"
         android:gravity="center"
-        android:text="Edificio A"
+        android:text="@string/building_a"
+        android:textAllCaps="true"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        android:textColor="#000000"
+        android:textColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewDashboard" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/imageViewHumidade"
@@ -73,6 +76,8 @@
         android:layout_height="70dp"
         android:layout_marginStart="40dp"
         android:layout_marginTop="20dp"
+        android:background="#00FFFFFF"
+        android:foregroundTint="#00FFFFFF"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/progressBar2"
         app:srcCompat="@mipmap/drops_foreground" />
@@ -84,6 +89,7 @@
         android:layout_marginStart="44dp"
         android:gravity="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textColor="#FFFFFF"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageViewHumidade" />
 
@@ -94,6 +100,7 @@
         android:layout_marginEnd="44dp"
         android:gravity="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageViewTemperatura" />
 
@@ -108,24 +115,12 @@
         app:srcCompat="@mipmap/temperatura_foreground" />
 
     <TextView
-        android:id="@+id/textViewDashboard"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="Dashboard"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display3"
-        android:textColor="#000000"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
         android:id="@+id/textViewData"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        android:textColor="#000000"
+        android:textColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
