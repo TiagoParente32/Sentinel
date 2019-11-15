@@ -125,7 +125,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                             FirebaseUser user = mAuth.getCurrentUser();
 
                             /* OPEN DASHBOARD ACTIVITY*/
-                            Toast.makeText(RegisterActivity.this,"User created: "+user.getEmail(),Toast.LENGTH_LONG).show();
+
+
                         } else {
                             try {
                                 throw task.getException();
