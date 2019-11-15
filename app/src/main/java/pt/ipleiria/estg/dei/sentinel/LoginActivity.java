@@ -9,8 +9,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -19,10 +17,13 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener{
 
-    private TextInputLayout inputEmailField;
-    private TextInputLayout inputPasswordField;
+    private TextInputLayout inputEmail;
+    private TextInputLayout inputPassword;
     private CheckBox checkboxSignedIn;
 
 
@@ -42,8 +43,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_login);
         mAuth = FirebaseAuth.getInstance();
 
-        inputEmailField = findViewById(R.id.inputEmail);
-        inputPasswordField = findViewById(R.id.inputPassword);
+        inputEmail = findViewById(R.id.inputEmail);
+        inputPassword = findViewById(R.id.inputPassword);
         checkboxSignedIn = findViewById(R.id.chbSignedIn);
 
         //binds methods to button
@@ -78,8 +79,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         //AFTER USER LOG IN INITIALIZES DASHBOARD ACTIVITY WITH USER'S NAME
         //TEMPORARY
         if(currentUser == null){
-            inputEmailField.setError("Invalid email/password combination");
-            inputEmailField.requestFocus();
+            inputEmail.setError("Invalid email/password combination");
+            inputPassword.getEditText().getText().clear();
+            inputEmail.requestFocus();
             return;
         }
 
@@ -87,20 +89,46 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     }
 
+    public static boolean isEmailValid(String email) {
+
+        /*MINIUM 8 CHARACTERS, 1 NUMBER AND 1 SPECIAL CHARACTER*/
+        String regExpn = "^(([\\w-]+\\.)+[\\w-]+|([a-zA-Z]{1}|[\\w-]{2,}))@"
+                + "((([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
+                + "[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\."
+                + "([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
+                + "[0-9]{1,2}|25[0-5]|2[0-4][0-9])){1}|"
+                + "([a-zA-Z]+[\\w-]+\\.)+[a-zA-Z]{2,4})$";
+
+        CharSequence inputStr = email;
+        Pattern pattern = Pattern.compile(regExpn, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(inputStr);
+        if (matcher.matches())
+            return true;
+        else
+            return false;
+    }
+
+
 
     private void signIn(String email, String password){
 
         /*CLEANS POSSIBLE ERROR MESSAGES*/
-        inputPasswordField.setError(null);
-        inputEmailField.setError(null);
+        inputPassword.setError(null);
+        inputEmail.setError(null);
 
-        if(email.isEmpty() ){
-            inputEmailField.setError("Email field is mandatory");
-            inputEmailField.requestFocus();
+        if(email.isEmpty()){
+            inputEmail.setError("Email field is mandatory");
+            inputEmail.requestFocus();
+            return;
+        }
+
+        if(!isEmailValid(email)) {
+            inputEmail.setError("Email format must be example@email.com");
+            inputEmail.requestFocus();
             return;
         }if(password.isEmpty()){
-            inputPasswordField.setError("Password field is mandatory");
-            inputPasswordField.requestFocus();
+            inputPassword.setError("Password field is mandatory");
+            inputPassword.requestFocus();
             return;
         }
 
@@ -140,7 +168,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         int i = v.getId();
         if(i == R.id.btnLogin){
-            signIn(inputEmailField.getEditText().getText().toString().trim(),inputPasswordField.getEditText().getText().toString().trim());
+            signIn(inputEmail.getEditText().getText().toString().trim(), inputPassword.getEditText().getText().toString().trim());
         }
         if(i == R.id.btnRegister){
             /*OPENS REGISTER ACTIVITY*/
