@@ -14,14 +14,15 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener{
 
-    private EditText inputEmailField;
-    private EditText inputPasswordField;
+    private TextInputLayout inputEmailField;
+    private TextInputLayout inputPasswordField;
     private CheckBox checkboxSignedIn;
 
 
@@ -77,23 +78,29 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         //AFTER USER LOG IN INITIALIZES DASHBOARD ACTIVITY WITH USER'S NAME
         //TEMPORARY
         if(currentUser == null){
-            Toast.makeText(LoginActivity.this,"Wrong username/password!",Toast.LENGTH_LONG).show();
+            inputEmailField.setError("Invalid email/password combination");
+            inputEmailField.requestFocus();
             return;
         }
 
-        Toast.makeText(LoginActivity.this,"Welcome " + currentUser.getEmail(),Toast.LENGTH_LONG).show();
-
+        /*OPENS DASHBOARD ACITIVITY*/
 
     }
 
 
     private void signIn(String email, String password){
 
-        if(email.length() <= 0 ){
-            inputEmailField.setError("Email field is mandatory!");
+        /*CLEANS POSSIBLE ERROR MESSAGES*/
+        inputPasswordField.setError(null);
+        inputEmailField.setError(null);
+
+        if(email.isEmpty() ){
+            inputEmailField.setError("Email field is mandatory");
+            inputEmailField.requestFocus();
             return;
-        }if(password.length() <= 0){
-            inputPasswordField.setError("Password has a minimum of 8 characters!");
+        }if(password.isEmpty()){
+            inputPasswordField.setError("Password field is mandatory");
+            inputPasswordField.requestFocus();
             return;
         }
 
@@ -133,7 +140,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         int i = v.getId();
         if(i == R.id.btnLogin){
-            signIn(inputEmailField.getText().toString(),inputPasswordField.getText().toString());
+            signIn(inputEmailField.getEditText().getText().toString().trim(),inputPasswordField.getEditText().getText().toString().trim());
         }
         if(i == R.id.btnRegister){
             /*OPENS REGISTER ACTIVITY*/
