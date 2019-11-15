@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "878142863034-ibbbt93re9l9tkco8c58k0jp0u2m177h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "pt.ipleiria.estg.dei.sentinel",
+            "certificate_hash": "bec6156a4570151397a1a60b5f99687f87cf36e3"
+          }
+        },
+        {
           "client_id": "878142863034-mjasad56epocjlupth3t0qn6l9rndgrk.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
