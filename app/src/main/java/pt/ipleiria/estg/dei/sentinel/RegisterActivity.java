@@ -3,6 +3,7 @@ package pt.ipleiria.estg.dei.sentinel;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -62,7 +63,9 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
         if(currentUser != null){
             //OPENS DASHBOARD ACTIVITY
-
+            Intent intent = new Intent(RegisterActivity.this,DashboardActivity.class);
+            startActivity(intent);
+            finish();
 
         }
 
@@ -124,7 +127,10 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                             Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
 
-                            /* OPEN DASHBOARD ACTIVITY*/
+                            /*OPENS DASHBOARD ACITIVITY*/
+                            Intent intent = new Intent(RegisterActivity.this,DashboardActivity.class);
+                            startActivity(intent);
+                            finish();
 
 
                         } else {

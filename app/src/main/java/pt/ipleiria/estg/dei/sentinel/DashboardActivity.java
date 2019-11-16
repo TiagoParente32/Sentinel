@@ -4,12 +4,16 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.animation.ObjectAnimator;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -28,6 +32,7 @@ public class DashboardActivity extends AppCompatActivity {
     ProgressBar pb;
     ImageView imageTemp;
     ImageView imageHum;
+
 
 
     @Override
@@ -69,6 +74,8 @@ public class DashboardActivity extends AppCompatActivity {
         float mediaTemp = 0;
         String hora = "";
         String data = getlatestDate(dataSnapshot,"Edificio A");
+
+
 
         for (DataSnapshot latestDate:dataSnapshot.child("Edificio A").child(data).getChildren()) {
             for (DataSnapshot key: latestDate.getChildren()) {

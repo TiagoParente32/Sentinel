@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -68,7 +69,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         if(currentUser != null){
             //OPENS DASHBOARD ACTIVITY
-
+            Intent intent = new Intent(LoginActivity.this,DashboardActivity.class);
+            startActivity(intent);
+            finish();
 
         }
 
@@ -86,6 +89,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
 
         /*OPENS DASHBOARD ACITIVITY*/
+        Intent intent = new Intent(LoginActivity.this,DashboardActivity.class);
+        startActivity(intent);
+        finish();
 
     }
 
@@ -157,6 +163,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         //STARTS DASHBOARD ACTIVITY
 
+
     }
 
     private void signOut(){
@@ -172,6 +179,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
         if(i == R.id.btnRegister){
             /*OPENS REGISTER ACTIVITY*/
+            Intent intent = new Intent(LoginActivity.this,RegisterActivity.class);
+            startActivity(intent);
+            finish();
         }
     }
 
