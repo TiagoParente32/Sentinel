@@ -7,15 +7,25 @@
         <item android:id="@+id/nav_dashboard"
             android:icon="@drawable/ic_dashboard"
             android:title="@string/dashboard"/>
+        <item android:id="@+id/nav_login"
+            android:icon="@drawable/ic_account"
+            android:title="@string/login"/>
+        <item android:id="@+id/nav_register"
+            android:icon="@drawable/ic_register"
+            android:title="@string/register"/>
 
     </group>
+
 
     <item android:title="@string/account">
         <menu>
             <item android:id="@+id/nav_logout"
                 android:icon="@drawable/ic_logout"
                 android:title="@string/logout"/>
+
+
         </menu>
+
     </item>
 
 </menu>

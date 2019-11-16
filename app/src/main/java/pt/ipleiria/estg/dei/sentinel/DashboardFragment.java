@@ -1,20 +1,21 @@
 package pt.ipleiria.estg.dei.sentinel;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import android.animation.ObjectAnimator;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -22,7 +23,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class DashboardActivity extends AppCompatActivity {
+public class DashboardFragment extends Fragment {
     public static final String TAG = "Dashboard";
     private DatabaseReference mDatabase;
     TextView qoa;
@@ -36,18 +37,12 @@ public class DashboardActivity extends AppCompatActivity {
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dashboard);
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        qoa = findViewById(R.id.textViewQOA);
-        humidade = findViewById(R.id.textViewHumidade);
-        temperatura = findViewById(R.id.textViewTemperatura);
-        ultimaData = findViewById(R.id.textViewData);
-        pb = (ProgressBar) findViewById(R.id.progressBar2);
-        imageTemp = findViewById(R.id.imageViewTemperatura);
-        imageHum = findViewById(R.id.imageViewHumidade);
+
+        getActivity().setTitle("DASHBOARD");
 
 
         mDatabase.addValueEventListener(new ValueEventListener() {
@@ -65,6 +60,23 @@ public class DashboardActivity extends AppCompatActivity {
 
     }
 
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+        View view = inflater.inflate(R.layout.fragment_dashboard,container,false);
+
+        qoa = view.findViewById(R.id.textViewQOA);
+        humidade = view.findViewById(R.id.textViewHumidade);
+        temperatura = view.findViewById(R.id.textViewTemperatura);
+        ultimaData = view.findViewById(R.id.textViewData);
+        pb = (ProgressBar) view.findViewById(R.id.progressBar2);
+        imageTemp = view.findViewById(R.id.imageViewTemperatura);
+        imageHum = view.findViewById(R.id.imageViewHumidade);
+
+
+        return view;
+    }
+
     public void updateUI(DataSnapshot dataSnapshot){
         int temperaturasSum = 0;
         int humidadeSum = 0;
@@ -73,11 +85,11 @@ public class DashboardActivity extends AppCompatActivity {
         float mediaHum = 0;
         float mediaTemp = 0;
         String hora = "";
-        String data = getlatestDate(dataSnapshot,"Edificio A");
+        String data = getlatestDate(dataSnapshot,"Room A");
 
 
 
-        for (DataSnapshot latestDate:dataSnapshot.child("Edificio A").child(data).getChildren()) {
+        for (DataSnapshot latestDate:dataSnapshot.child("Room A").child(data).getChildren()) {
             for (DataSnapshot key: latestDate.getChildren()) {
                 if(key.getKey().equals("temperatura")){
                     temperaturasSum+=Integer.parseInt(key.getValue().toString());
@@ -118,7 +130,7 @@ public class DashboardActivity extends AppCompatActivity {
     public float getAverage(DataSnapshot dataSnapshot,String edificio,String date,String key){
         int soma = 0;
         int n = 0;
-        for (DataSnapshot latestDate:dataSnapshot.child("Edificio A").child(date).getChildren()) {
+        for (DataSnapshot latestDate:dataSnapshot.child("Room A").child(date).getChildren()) {
             for (DataSnapshot value: latestDate.getChildren()) {
                 if(value.getKey().equals(key)){
                     soma+=Integer.parseInt(value.getValue().toString());
@@ -178,4 +190,6 @@ public class DashboardActivity extends AppCompatActivity {
             animation.start();
         }
     }
+
+
 }
