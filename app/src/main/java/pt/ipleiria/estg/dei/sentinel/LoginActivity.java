@@ -44,6 +44,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_login);
         mAuth = FirebaseAuth.getInstance();
 
+
         inputEmail = findViewById(R.id.inputEmail);
         inputPassword = findViewById(R.id.inputPassword);
         checkboxSignedIn = findViewById(R.id.chbSignedIn);
@@ -61,6 +62,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     protected void onStart() {
 
         super.onStart();
+
+        getSupportActionBar().setTitle("LOGIN");
 
         /*CHECKS USER SAVED PREFERENCE TO KEEP SIGNED IN */
         keepSignedIn = sharedPref.getBoolean("keep_signed_in",false);
