@@ -1,13 +1,16 @@
 package pt.ipleiria.estg.dei.sentinel;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
-import android.widget.Toast;
+import android.view.ViewGroup;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -16,13 +19,12 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
-import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class RegisterActivity extends AppCompatActivity implements View.OnClickListener{
+public class RegisterFragment extends Fragment implements View.OnClickListener{
 
     private TextInputLayout inputEmail;
     private TextInputLayout inputPassword;
@@ -35,24 +37,34 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
 
-        inputEmail = findViewById(R.id.inputEmail);
-        inputPassword = findViewById(R.id.inputPassword);
-        inputPasswordConf = findViewById(R.id.inputPasswordConf);
+        getActivity().setTitle("REGISTER");
+
 
         mAuth = FirebaseAuth.getInstance();
 
 
-
-        //binds methods to button
-        findViewById(R.id.btnRegister).setOnClickListener(this);
-
     }
 
+    @Nullable
     @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+        View view = inflater.inflate(R.layout.fragment_register,container,false);
+
+        inputEmail = view.findViewById(R.id.inputEmail);
+        inputPassword = view.findViewById(R.id.inputPassword);
+        inputPasswordConf = view.findViewById(R.id.inputPasswordConf);
+
+        //binds methods to button
+        view.findViewById(R.id.btnRegister).setOnClickListener(this);
+
+
+        return view;
+    }
+
+    /*@Override
     protected void onStart() {
 
         super.onStart();
@@ -62,12 +74,14 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
         if(currentUser != null){
             //OPENS DASHBOARD ACTIVITY
-
+            Intent intent = new Intent(RegisterFragment.this, DashboardFragment.class);
+            startActivity(intent);
+            finish();
 
         }
 
 
-    }
+    }*/
 
     private void registerUser(String email, String password, String passwordConf){
 
@@ -116,7 +130,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
         /*USES FIREBASE TO CREATE THE USER*/
         mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
@@ -124,7 +138,9 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                             Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
 
-                            /* OPEN DASHBOARD ACTIVITY*/
+                            /*OPENS DASHBOARD ACITIVITY*/
+                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                                    new DashboardFragment()).commit();
 
 
                         } else {
@@ -190,4 +206,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         }
 
     }
+
+
 }
