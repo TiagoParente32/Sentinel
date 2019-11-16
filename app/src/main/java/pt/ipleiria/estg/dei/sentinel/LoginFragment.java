@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,16 +32,12 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
     private CheckBox checkboxSignedIn;
     private boolean keepSignedIn;
 
-
-
     private FirebaseAuth mAuth;
 
 
     private static final String TAG = "EmailPassword";
     protected static final String PREFERENCES_FILE_NAME = "pt.ipleiria.estg.dei.sentinel.SHARED_PREFERENCES";
 
-
-    private SharedPreferences sharedPref;
 
     @Nullable
     @Override
@@ -68,7 +65,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
 
         mAuth = FirebaseAuth.getInstance();
 
-        sharedPref = getActivity().getSharedPreferences(PREFERENCES_FILE_NAME,Context.MODE_PRIVATE);
     }
 
     @Override
@@ -152,7 +148,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
 
         /*SAVES USER PREFERENCE TO KEEP SIGNED IN AFTER APP CLOSE OR NOT IN SHARED PREFERENCES FILE*/
         keepSignedIn = checkboxSignedIn.isChecked();
-        sharedPref.edit().putBoolean("keep_signed_in",keepSignedIn).commit();
+        getActivity().getSharedPreferences(PREFERENCES_FILE_NAME,Context.MODE_PRIVATE).edit().putBoolean("keep_signed_in",keepSignedIn).commit();
 
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {

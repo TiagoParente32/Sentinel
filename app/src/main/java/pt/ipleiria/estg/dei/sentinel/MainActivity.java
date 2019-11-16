@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,7 +26,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private DrawerLayout drawer;
     private TextView tvHeaderEmail;
-    private boolean keepSignedIn;
     private SharedPreferences sharedPref;
     private NavigationView navigationView;
 
@@ -79,8 +79,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        sharedPref = this.getSharedPreferences(PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
-        keepSignedIn = sharedPref.getBoolean("keep_signed_in", false);
+        sharedPref = getSharedPreferences(PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
 
 
 
@@ -163,8 +162,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onStop() {
         super.onStop();
-        if (!keepSignedIn)
+        if (!sharedPref.getBoolean("keep_signed_in", false)) {
             signOut();
+        }
     }
 
 
