@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-
+        tvHeaderEmail = navigationView.getHeaderView(0).findViewById(R.id.nav_email);
 
 
         /*THE STRINGS IN THE CONSTRUCTOR ARE HELPFUL FOR BLIND PEOPLE WHO NEED TEXT TO SPEECH*/
@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
                 if (currentUser == null) {
-//            tvHeaderEmail.setText("Not logged in");
+                    tvHeaderEmail.setText("Not logged in");
 
                     /*DISPLAYS LOGIN AND REGISTER BUTTONS*/
                     navigationView.getMenu().findItem(R.id.nav_logout).setVisible(false);
@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     navigationView.getMenu().findItem(R.id.nav_login).setVisible(false);
                     navigationView.getMenu().findItem(R.id.nav_register).setVisible(false);
 
-                    //  tvHeaderEmail.setText(currentUser.getEmail());
+                    tvHeaderEmail.setText(currentUser.getEmail());
 
                 }
             }
