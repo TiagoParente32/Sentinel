@@ -25,11 +25,16 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Spinner
+        style="@style/Widget.AppCompat.DropDownItem.Spinner"
         android:id="@+id/spinnerRooms"
-        android:layout_width="150dp"
+        android:layout_width="300dp"
         android:layout_height="50dp"
         android:layout_marginTop="20dp"
         android:spinnerMode="dropdown"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:background="@drawable/spinner_with_border"
+        android:popupBackground="@color/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewTitulo" />
@@ -49,6 +54,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/progressBar3" />
 
+
     <ProgressBar
         android:id="@+id/progressBar3"
         style="?android:attr/progressBarStyleHorizontal"
@@ -64,7 +70,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spinnerRooms" />
-
 
     <TextView
         android:id="@+id/textViewQOA"
