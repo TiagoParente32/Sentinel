@@ -7,13 +7,12 @@
     android:layout_centerHorizontal="true"
     android:layout_centerVertical="true"
     android:background="@color/colorPrimary"
-    tools:context=".DashboardActivity">
+    tools:context=".DashboardFragment">
 
     <TextView
         android:id="@+id/textViewTitulo"
         android:layout_width="170dp"
         android:layout_height="38dp"
-        android:layout_marginTop="30dp"
         android:fontFamily="sans-serif"
         android:gravity="center"
         android:text="@string/building_a"
@@ -25,16 +24,16 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Spinner
-        style="@style/Widget.AppCompat.DropDownItem.Spinner"
         android:id="@+id/spinnerRooms"
+        style="@style/Widget.AppCompat.DropDownItem.Spinner"
         android:layout_width="300dp"
         android:layout_height="50dp"
         android:layout_marginTop="20dp"
+        android:background="@drawable/spinner_with_border"
+        android:gravity="center"
+        android:popupBackground="@color/colorPrimary"
         android:spinnerMode="dropdown"
         android:textAlignment="center"
-        android:gravity="center"
-        android:background="@drawable/spinner_with_border"
-        android:popupBackground="@color/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewTitulo" />

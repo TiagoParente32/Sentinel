@@ -1,13 +1,18 @@
 package pt.ipleiria.estg.dei.sentinel;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.CheckBox;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -20,55 +25,62 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener{
+public class LoginFragment extends Fragment implements View.OnClickListener{
 
     private TextInputLayout inputEmail;
     private TextInputLayout inputPassword;
     private CheckBox checkboxSignedIn;
-
+    private boolean keepSignedIn;
 
     private FirebaseAuth mAuth;
 
-    private boolean keepSignedIn;
 
     private static final String TAG = "EmailPassword";
-    private static final String PREFERENCES_FILE_NAME = "pt.ipleiria.estg.dei.sentinel.SHARED_PREFERENCES";
+    protected static final String PREFERENCES_FILE_NAME = "pt.ipleiria.estg.dei.sentinel.SHARED_PREFERENCES";
 
-    private SharedPreferences sharedPref;
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState){
+        View view = inflater.inflate(R.layout.fragment_login,container,false);
+
+        inputEmail = view.findViewById(R.id.inputEmail);
+        inputPassword = view.findViewById(R.id.inputPassword);
+        checkboxSignedIn = view.findViewById(R.id.chbSignedIn);
+
+        //binds methods to button
+        view.findViewById(R.id.btnLogin).setOnClickListener(this);
+        view.findViewById(R.id.btnRegister).setOnClickListener(this);
+
+        return view;
+    }
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+
+        getActivity().setTitle("LOGIN");
+
+
         mAuth = FirebaseAuth.getInstance();
-
-        inputEmail = findViewById(R.id.inputEmail);
-        inputPassword = findViewById(R.id.inputPassword);
-        checkboxSignedIn = findViewById(R.id.chbSignedIn);
-
-        //binds methods to button
-        findViewById(R.id.btnLogin).setOnClickListener(this);
-        findViewById(R.id.btnRegister).setOnClickListener(this);
-
-         sharedPref = this.getSharedPreferences(PREFERENCES_FILE_NAME,Context.MODE_PRIVATE);
-
 
     }
 
     @Override
-    protected void onStart() {
+    public void onStart() {
 
         super.onStart();
 
-        /*CHECKS USER SAVED PREFERENCE TO KEEP SIGNED IN */
-        keepSignedIn = sharedPref.getBoolean("keep_signed_in",false);
+        //getActivity().getSupportActionBar().setTitle("LOGIN");
+
 
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
         if(currentUser != null){
             //OPENS DASHBOARD ACTIVITY
-
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                    new DashboardFragment()).commit();
 
         }
 
@@ -86,6 +98,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
 
         /*OPENS DASHBOARD ACITIVITY*/
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                new DashboardFragment()).commit();
 
     }
 
@@ -134,10 +148,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         /*SAVES USER PREFERENCE TO KEEP SIGNED IN AFTER APP CLOSE OR NOT IN SHARED PREFERENCES FILE*/
         keepSignedIn = checkboxSignedIn.isChecked();
-        sharedPref.edit().putBoolean("keep_signed_in",keepSignedIn).commit();
+        getActivity().getSharedPreferences(PREFERENCES_FILE_NAME,Context.MODE_PRIVATE).edit().putBoolean("keep_signed_in",keepSignedIn).commit();
 
         mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
@@ -157,30 +171,25 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         //STARTS DASHBOARD ACTIVITY
 
+
     }
 
-    private void signOut(){
-        sharedPref.edit().putBoolean("keep_signed_in",false).commit();
-        FirebaseAuth.getInstance().signOut();
-    }
 
     @Override
     public void onClick(View v) {
         int i = v.getId();
         if(i == R.id.btnLogin){
+
             signIn(inputEmail.getEditText().getText().toString().trim(), inputPassword.getEditText().getText().toString().trim());
         }
         if(i == R.id.btnRegister){
             /*OPENS REGISTER ACTIVITY*/
+            Intent intent = new Intent(getActivity(), RegisterFragment.class);
+            startActivity(intent);
+            getActivity().finish();
         }
     }
 
-    /* IF USER PREFERENCE KEEP SIGNED IN IS FALSE, SIGNOUT USER BEFORE APP CLOSURE*/
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (!keepSignedIn)
-            signOut();
-    }
+
 
 }

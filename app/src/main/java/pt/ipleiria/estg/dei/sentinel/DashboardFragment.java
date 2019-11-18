@@ -1,14 +1,18 @@
 package pt.ipleiria.estg.dei.sentinel;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import android.animation.ObjectAnimator;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -27,7 +31,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DashboardActivity extends AppCompatActivity {
+public class DashboardFragment extends Fragment {
 
     //-----------------UI----------------
     private TextView qoa;
@@ -58,28 +62,58 @@ public class DashboardActivity extends AppCompatActivity {
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dashboard);
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        qoa = findViewById(R.id.textViewQOA);
-        humidade = findViewById(R.id.textViewHumidade);
-        temperatura = findViewById(R.id.textViewTemperatura);
-        ultimaData = findViewById(R.id.textViewData);
-        pb = (ProgressBar) findViewById(R.id.progressBar2);
-        spinnerRooms = findViewById(R.id.spinnerRooms);
-        pbTemp = findViewById(R.id.progressBarTemperatura);
-        pbHum = findViewById(R.id.progressBarHumidade);
+        getActivity().setTitle("DASHBOARD");
+
+
+        mDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                try {
+                    ds = dataSnapshot;
+                    updateUIOnDataChange(dataSnapshot);
+                } catch (Exception e) {
+                    Log.w(TAG, "Failed to read value.", e);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.w(TAG, "Failed to read value.", databaseError.toException());
+            }
+        });
+
+    }
+
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+        View view = inflater.inflate(R.layout.fragment_dashboard,container,false);
+
+        qoa = view.findViewById(R.id.textViewQOA);
+        humidade = view.findViewById(R.id.textViewHumidade);
+        temperatura = view.findViewById(R.id.textViewTemperatura);
+        ultimaData = view.findViewById(R.id.textViewData);
+        pb = (ProgressBar) view.findViewById(R.id.progressBar2);
+        spinnerRooms = view.findViewById(R.id.spinnerRooms);
+        pbTemp = view.findViewById(R.id.progressBarTemperatura);
+        pbHum = view.findViewById(R.id.progressBarHumidade);
 
         //check if user is authenticated
-        /*FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) {
             // User is  not signed in
             //nao consegue alterar o sitio
             spinnerRooms.setEnabled(false);
             spinnerRooms.setClickable(false);
-        }*/
+            spinnerRooms.setAlpha(0.5f);
+        }else{
+            spinnerRooms.setAlpha(1);
+        }
 
         //user is signed in
         spinnerRooms.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -101,24 +135,10 @@ public class DashboardActivity extends AppCompatActivity {
 
             }
         });
-        mDatabase.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                try {
-                    ds = dataSnapshot;
-                    updateUIOnDataChange(dataSnapshot);
-                } catch (Exception e) {
-                    Log.w(TAG, "Failed to read value.", e);
-                }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.w(TAG, "Failed to read value.", databaseError.toException());
-            }
-        });
-
+        return view;
     }
+
 
     public void updateUIOnDataChange(DataSnapshot dataSnapshot) {
         //ir buscar a ultima data de selected
@@ -134,7 +154,7 @@ public class DashboardActivity extends AppCompatActivity {
         }
 
         //dar setup ao adapter e atribuilo ao spinner ( para meter os rooms todos sempre na dropdown)
-        adapter = new ArrayAdapter<String>(this, R.layout.spinner_list, roomsList);
+        adapter = new ArrayAdapter<String>(this.getActivity(), R.layout.spinner_list, roomsList);
         adapter.setDropDownViewResource(R.layout.spinner_list_dropdown);
         spinnerRooms.setAdapter(adapter);
         adapter.notifyDataSetChanged();

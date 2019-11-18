@@ -18,4 +18,10 @@
     <string name="error_user_exists">The email addressed is already asssociated with an account!</string>
     <string name="error_invalid_email">Invalid email address!</string>
     <string name="building_a">Edifício A</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="logout">Logout</string>
+    <string name="account">Account</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="unauthenticated">Unauthenticated</string>
 </resources>
