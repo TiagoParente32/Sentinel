@@ -73,13 +73,13 @@ public class DashboardActivity extends AppCompatActivity {
         pbHum = findViewById(R.id.progressBarHumidade);
 
         //check if user is authenticated
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        /*FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) {
             // User is  not signed in
             //nao consegue alterar o sitio
             spinnerRooms.setEnabled(false);
             spinnerRooms.setClickable(false);
-        }
+        }*/
 
         //user is signed in
         spinnerRooms.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -134,8 +134,8 @@ public class DashboardActivity extends AppCompatActivity {
         }
 
         //dar setup ao adapter e atribuilo ao spinner ( para meter os rooms todos sempre na dropdown)
-        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, roomsList);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adapter = new ArrayAdapter<String>(this, R.layout.spinner_list, roomsList);
+        adapter.setDropDownViewResource(R.layout.spinner_list_dropdown);
         spinnerRooms.setAdapter(adapter);
         adapter.notifyDataSetChanged();
         //aqui como ao dar setup ao adapter atribui o indice 0 como default fazer esta verificaçao para
