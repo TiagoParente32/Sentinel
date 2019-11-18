@@ -9,13 +9,41 @@
     android:background="@color/colorPrimary"
     tools:context=".DashboardFragment">
 
+    <TextView
+        android:id="@+id/textViewTitulo"
+        android:layout_width="170dp"
+        android:layout_height="38dp"
+        android:fontFamily="sans-serif"
+        android:gravity="center"
+        android:text="@string/building_a"
+        android:textAllCaps="true"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textColor="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Spinner
+        android:id="@+id/spinnerRooms"
+        style="@style/Widget.AppCompat.DropDownItem.Spinner"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/spinner_with_border"
+        android:gravity="center"
+        android:popupBackground="@color/colorPrimary"
+        android:spinnerMode="dropdown"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewTitulo" />
+
     <ProgressBar
         android:id="@+id/progressBar2"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="300dp"
         android:layout_height="300dp"
         android:layout_centerInParent="true"
-        android:layout_marginTop="20dp"
         android:indeterminate="false"
         android:max="100"
         android:progress="0"
@@ -23,7 +51,8 @@
         android:rotation="92.5"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewTitulo" />
+        app:layout_constraintTop_toTopOf="@+id/progressBar3" />
+
 
     <ProgressBar
         android:id="@+id/progressBar3"
@@ -39,8 +68,7 @@
         android:rotation="92.5"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewTitulo" />
-
+        app:layout_constraintTop_toBottomOf="@+id/spinnerRooms" />
 
     <TextView
         android:id="@+id/textViewQOA"
@@ -52,23 +80,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/progressBar2"
         app:layout_constraintEnd_toEndOf="@+id/progressBar2"
         app:layout_constraintStart_toStartOf="@+id/progressBar2"
-        app:layout_constraintTop_toTopOf="@+id/progressBar2" />
-
-    <TextView
-        android:id="@+id/textViewTitulo"
-        android:layout_width="170dp"
-        android:layout_height="38dp"
-        android:layout_marginTop="100dp"
-        android:capitalize="none"
-        android:fontFamily="sans-serif"
-        android:gravity="center"
-        android:text="@string/building_a"
-        android:textAllCaps="true"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        android:textColor="#FFFFFF"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/progressBar3" />
 
     <ImageView
         android:id="@+id/imageViewHumidade"
@@ -82,27 +94,32 @@
         app:layout_constraintTop_toBottomOf="@+id/progressBar2"
         app:srcCompat="@mipmap/drops_foreground" />
 
+    <ProgressBar
+        android:id="@+id/progressBarHumidade"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerInParent="true"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="100"
+        android:progressDrawable="@drawable/progress_circular_bar_one_color"
+        android:rotation="92.5"
+        app:layout_constraintBottom_toBottomOf="@+id/imageViewHumidade"
+        app:layout_constraintEnd_toEndOf="@+id/imageViewHumidade"
+        app:layout_constraintStart_toStartOf="@+id/imageViewHumidade"
+        app:layout_constraintTop_toTopOf="@+id/imageViewHumidade" />
+
     <TextView
         android:id="@+id/textViewHumidade"
         android:layout_width="61dp"
         android:layout_height="20dp"
-        android:layout_marginStart="44dp"
+        android:layout_marginStart="43dp"
         android:gravity="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textColor="#FFFFFF"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageViewHumidade" />
-
-    <TextView
-        android:id="@+id/textViewTemperatura"
-        android:layout_width="61dp"
-        android:layout_height="20dp"
-        android:layout_marginEnd="44dp"
-        android:gravity="center"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textColor="#FFFFFF"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageViewTemperatura" />
+        app:layout_constraintTop_toBottomOf="@+id/progressBarHumidade" />
 
     <ImageView
         android:id="@+id/imageViewTemperatura"
@@ -114,16 +131,42 @@
         app:layout_constraintTop_toBottomOf="@+id/progressBar2"
         app:srcCompat="@mipmap/temperatura_foreground" />
 
+    <ProgressBar
+        android:id="@+id/progressBarTemperatura"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerInParent="true"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="100"
+        android:progressDrawable="@drawable/progress_circular_bar_one_color"
+        android:rotation="92.5"
+        app:layout_constraintBottom_toBottomOf="@+id/imageViewTemperatura"
+        app:layout_constraintEnd_toEndOf="@+id/imageViewTemperatura"
+        app:layout_constraintStart_toStartOf="@+id/imageViewTemperatura"
+        app:layout_constraintTop_toTopOf="@+id/imageViewTemperatura" />
+
+    <TextView
+        android:id="@+id/textViewTemperatura"
+        android:layout_width="61dp"
+        android:layout_height="20dp"
+        android:layout_marginEnd="43dp"
+        android:gravity="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textColor="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/progressBarTemperatura" />
+
     <TextView
         android:id="@+id/textViewData"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
         android:textColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewTemperatura" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
