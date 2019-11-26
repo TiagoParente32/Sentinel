@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -31,7 +32,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DashboardFragment extends Fragment {
+public class DashboardFragment extends Fragment implements View.OnClickListener {
 
     //-----------------UI----------------
     private TextView qoa;
@@ -42,6 +43,7 @@ public class DashboardFragment extends Fragment {
     private ProgressBar pbTemp;
     private ProgressBar pbHum;
     private Spinner spinnerRooms;
+    private Button btnShare;
     //------------variables---------------
     private DatabaseReference mDatabase;
     public static final String TAG = "Dashboard";
@@ -102,6 +104,10 @@ public class DashboardFragment extends Fragment {
         spinnerRooms = view.findViewById(R.id.spinnerRooms);
         pbTemp = view.findViewById(R.id.progressBarTemperatura);
         pbHum = view.findViewById(R.id.progressBarHumidade);
+        btnShare = view.findViewById(R.id.btnShare);
+
+
+        btnShare.setOnClickListener(this);
 
         //check if user is authenticated
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -137,6 +143,13 @@ public class DashboardFragment extends Fragment {
         });
 
         return view;
+    }
+
+    @Override
+    public void onClick(View v) {
+        
+
+
     }
 
 
