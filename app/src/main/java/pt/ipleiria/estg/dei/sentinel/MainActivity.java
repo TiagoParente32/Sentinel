@@ -10,6 +10,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
@@ -22,14 +23,30 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import twitter4j.Twitter;
+import twitter4j.TwitterFactory;
+import twitter4j.auth.AccessToken;
+import twitter4j.auth.RequestToken;
+import twitter4j.conf.Configuration;
+import twitter4j.conf.ConfigurationBuilder;
+
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
+    private static final int MBVIEW_REQUEST_CODE = 1;
     private DrawerLayout drawer;
     private TextView tvHeaderEmail;
     private SharedPreferences sharedPref;
     private NavigationView navigationView;
 
     protected static final String PREFERENCES_FILE_NAME = "pt.ipleiria.estg.dei.sentinel.SHARED_PREFERENCES";
+
+
+    /*TWITTER API*/
+
+    private static SharedPreferences mSharedPreferences;
+    private static Twitter twitter;
+    private static RequestToken requestToken;
+    private AccessToken accessToken;
 
 
     @Override
@@ -157,6 +174,46 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         sharedPref.edit().putBoolean("keep_signed_in", false).commit();
         FirebaseAuth.getInstance().signOut();
     }
+
+
+    public void loginToTwitter() {
+        // Check if already logged in
+
+            // Setup builder
+            ConfigurationBuilder builder = new ConfigurationBuilder();
+            // Get key and secret from Constants.java
+            builder.setOAuthConsumerKey(Constants.API_KEY);
+            builder.setOAuthConsumerSecret(Constants.API_SECRET);
+
+            // Build
+            Configuration configuration = builder.build();
+            TwitterFactory factory = new TwitterFactory(configuration);
+            twitter = factory.getInstance();
+
+            // Start new thread for activity (you can't do too much work on the UI/Main thread.
+            Thread thread = new Thread(new Runnable(){
+                @Override
+                public void run() {
+                    try {
+
+                        requestToken = twitter
+                                .getOAuthRequestToken(Constants.CALLBACKURL);
+
+                        Intent intent = new Intent(MainActivity.this,WebViewActivity.class);
+                        intent.putExtra("AUTH_URL",requestToken.getAuthenticationURL());
+                        startActivityForResult(intent,MBVIEW_REQUEST_CODE);
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            thread.start();
+
+    }
+
+
+
 
     /* IF USER PREFERENCE KEEP SIGNED IN IS FALSE, SIGNOUT USER BEFORE APP CLOSURE*/
     @Override

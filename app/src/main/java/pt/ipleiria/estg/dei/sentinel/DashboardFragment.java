@@ -2,12 +2,14 @@ package pt.ipleiria.estg.dei.sentinel;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.animation.ObjectAnimator;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,6 +23,7 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.android.gms.common.internal.Constants;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -29,8 +32,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+
+
 import java.util.ArrayList;
 import java.util.List;
+
+
+
 
 public class DashboardFragment extends Fragment implements View.OnClickListener {
 
@@ -61,6 +69,10 @@ public class DashboardFragment extends Fragment implements View.OnClickListener 
     private int checkListener = 0;
     private ArrayAdapter<String> adapter;
     private String data = "";
+
+
+
+
 
 
     @Override
@@ -104,10 +116,9 @@ public class DashboardFragment extends Fragment implements View.OnClickListener 
         spinnerRooms = view.findViewById(R.id.spinnerRooms);
         pbTemp = view.findViewById(R.id.progressBarTemperatura);
         pbHum = view.findViewById(R.id.progressBarHumidade);
-        btnShare = view.findViewById(R.id.btnShare);
 
 
-        btnShare.setOnClickListener(this);
+        view.findViewById(R.id.btnShare).setOnClickListener(this);
 
         //check if user is authenticated
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -147,10 +158,9 @@ public class DashboardFragment extends Fragment implements View.OnClickListener 
 
     @Override
     public void onClick(View v) {
-        
-
-
+        ((MainActivity)getActivity()).loginToTwitter();
     }
+
 
 
     public void updateUIOnDataChange(DataSnapshot dataSnapshot) {
