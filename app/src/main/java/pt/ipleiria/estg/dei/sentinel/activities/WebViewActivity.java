@@ -1,4 +1,4 @@
-package pt.ipleiria.estg.dei.sentinel;
+package pt.ipleiria.estg.dei.sentinel.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -14,7 +14,6 @@ import android.widget.Toast;
 
 public class WebViewActivity extends AppCompatActivity {
 
-    public static final String EXTRA_URL = "http://www.twitter.com";
     public WebView mWebview;
 
     @Override
@@ -28,7 +27,7 @@ public class WebViewActivity extends AppCompatActivity {
 
         mWebview  = new WebView(this);
 
-        //mWebview.getSettings().setJavaScriptEnabled(true); // enable javascript
+       // mWebview.getSettings().setJavaScriptEnabled(true); // enable javascript
 
         final Activity activity = this;
 
@@ -46,7 +45,7 @@ public class WebViewActivity extends AppCompatActivity {
             }
         });
 
-        mWebview .loadUrl(extras.getString(authURL));
+        mWebview .loadUrl(authURL);
         setContentView(mWebview );
 
     }

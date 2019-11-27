@@ -1,4 +1,4 @@
-package pt.ipleiria.estg.dei.sentinel;
+package pt.ipleiria.estg.dei.sentinel.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -10,19 +10,20 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import pt.ipleiria.estg.dei.sentinel.Constants;
+import pt.ipleiria.estg.dei.sentinel.R;
+import pt.ipleiria.estg.dei.sentinel.fragments.DashboardFragment;
+import pt.ipleiria.estg.dei.sentinel.fragments.LoginFragment;
+import pt.ipleiria.estg.dei.sentinel.fragments.RegisterFragment;
 import twitter4j.Twitter;
 import twitter4j.TwitterFactory;
 import twitter4j.auth.AccessToken;
