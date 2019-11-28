@@ -1,11 +1,9 @@
-package pt.ipleiria.estg.dei.sentinel;
+package pt.ipleiria.estg.dei.sentinel.fragments;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,6 +21,8 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import pt.ipleiria.estg.dei.sentinel.R;
 
 public class RegisterFragment extends Fragment implements View.OnClickListener{
 

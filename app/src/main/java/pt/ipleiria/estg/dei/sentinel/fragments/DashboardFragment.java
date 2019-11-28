@@ -1,8 +1,7 @@
-package pt.ipleiria.estg.dei.sentinel;
+package pt.ipleiria.estg.dei.sentinel.fragments;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.animation.ObjectAnimator;
@@ -16,6 +15,8 @@ import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -28,10 +29,16 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class DashboardFragment extends Fragment {
+import pt.ipleiria.estg.dei.sentinel.activities.MainActivity;
+import pt.ipleiria.estg.dei.sentinel.R;
+
+
+public class DashboardFragment extends Fragment implements View.OnClickListener {
 
     //-----------------UI----------------
     private TextView qoa;
@@ -42,6 +49,8 @@ public class DashboardFragment extends Fragment {
     private ProgressBar pbTemp;
     private ProgressBar pbHum;
     private Spinner spinnerRooms;
+    private ImageButton btnShare;
+
     //------------variables---------------
     private DatabaseReference mDatabase;
     public static final String TAG = "Dashboard";
@@ -59,6 +68,10 @@ public class DashboardFragment extends Fragment {
     private int checkListener = 0;
     private ArrayAdapter<String> adapter;
     private String data = "";
+
+
+
+
 
 
     @Override
@@ -102,6 +115,10 @@ public class DashboardFragment extends Fragment {
         spinnerRooms = view.findViewById(R.id.spinnerRooms);
         pbTemp = view.findViewById(R.id.progressBarTemperatura);
         pbHum = view.findViewById(R.id.progressBarHumidade);
+        btnShare = view.findViewById(R.id.btnShare);
+
+
+        view.findViewById(R.id.btnShare).setOnClickListener(this);
 
         //check if user is authenticated
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -111,6 +128,8 @@ public class DashboardFragment extends Fragment {
             spinnerRooms.setEnabled(false);
             spinnerRooms.setClickable(false);
             spinnerRooms.setAlpha(0.5f);
+            btnShare.setVisibility(View.INVISIBLE);
+
         }else{
             spinnerRooms.setAlpha(1);
         }
@@ -138,6 +157,12 @@ public class DashboardFragment extends Fragment {
 
         return view;
     }
+
+    @Override
+    public void onClick(View v) {
+        ((MainActivity)getActivity()).loginToTwitter();
+    }
+
 
 
     public void updateUIOnDataChange(DataSnapshot dataSnapshot) {
