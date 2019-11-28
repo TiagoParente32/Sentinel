@@ -24,6 +24,7 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="unauthenticated">Unauthenticated</string>
-    <string name="com.twitter.sdk.android.CONSUMER_KEY">l5WyDb7KgKtMqAWr2WiMefy3E</string>
-    <string name="com.twitter.sdk.android.CONSUMER_SECRET">Qvr3lNBDZkVH1UegCB42rjGZq1ceGUnCLKNhYnwBkM1iAGGpB3</string>
+    <string name="tweet">Tweet</string>
+    <string name="tweetHint">What\'s happening?</string>
+    <string name="tweetMax">280</string>
 </resources>

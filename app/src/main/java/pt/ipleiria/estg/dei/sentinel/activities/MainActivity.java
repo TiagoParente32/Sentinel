@@ -7,13 +7,19 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -25,7 +31,9 @@ import pt.ipleiria.estg.dei.sentinel.fragments.DashboardFragment;
 import pt.ipleiria.estg.dei.sentinel.fragments.LoginFragment;
 import pt.ipleiria.estg.dei.sentinel.fragments.RegisterFragment;
 import twitter4j.Twitter;
+import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
+import twitter4j.User;
 import twitter4j.auth.AccessToken;
 import twitter4j.auth.RequestToken;
 import twitter4j.conf.Configuration;
@@ -38,6 +46,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private TextView tvHeaderEmail;
     private SharedPreferences sharedPref;
     private NavigationView navigationView;
+    private  Configuration configuration;
+
+    public Boolean LOGGED_IN=false;
+
 
     protected static final String PREFERENCES_FILE_NAME = "pt.ipleiria.estg.dei.sentinel.SHARED_PREFERENCES";
 
@@ -57,6 +69,55 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+
+        /*GETS URL FROM INTENT*/
+        Uri uri = getIntent().getData();
+        if(!isTwitterLoggedInAlready()){
+            /*IF USER STARTED THE APP, NO URL EXISTS*/
+            if (uri != null && uri.toString().startsWith(Constants.CALLBACKURL)) {
+
+                /*GETS VERIFIER FROM URL*/
+                final String verifier = uri.getQueryParameter(Constants.URL_TWITTER_OAUTH_VERIFIER);
+
+                try {
+                    Thread thread = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                accessToken = twitter.getOAuthAccessToken(
+                                        requestToken, verifier);
+
+                                SharedPreferences.Editor e = mSharedPreferences.edit();
+
+
+                                // After getting access token, access token secret
+                                // store them in application preferences
+                                e.putString(Constants.PREF_KEY_OAUTH_TOKEN, accessToken.getToken());
+                                e.putString(Constants.PREF_KEY_OAUTH_SECRET, accessToken.getTokenSecret());
+                                // Store login status - true
+                                e.putBoolean(Constants.PREF_KEY_TWITTER_LOGIN, true);
+                                e.commit(); // save changes
+
+                                startActivity(new Intent(MainActivity.this, TwitterPop_Activity.class));
+
+
+                                Log.v("accessToken", accessToken.getToken());
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                    });
+                    thread.start();
+
+
+                } catch (Exception e) {
+                    Log.v("Sentinel", "Erro => " + e.getMessage());
+                }
+            }
+
+        }
 
 
         drawer = findViewById(R.id.drawer_layout);
@@ -112,15 +173,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onStart() {
         super.onStart();
-
-        /*CHECKS USER SAVED PREFERENCE TO KEEP SIGNED IN */
-//        tvHeaderEmail = navigationView.getHeaderView(R.id.nav_view).findViewById(R.id.nav_email);
-
-
-        /*CHANGES EMAIL ACCORDING TO USER LOGIN*/
-
-
-
     }
 
 
@@ -177,33 +229,41 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
+    private boolean isTwitterLoggedInAlready() {
+        // return twitter login status from Shared Preferences
+        return mSharedPreferences.getBoolean(Constants.PREF_KEY_TWITTER_LOGIN, false);
+    }
+
     public void loginToTwitter() {
         // Check if already logged in
+        if(!isTwitterLoggedInAlready()) {
 
-            // Setup builder
-            ConfigurationBuilder builder = new ConfigurationBuilder();
-            // Get key and secret from Constants.java
-            builder.setOAuthConsumerKey(Constants.API_KEY);
-            builder.setOAuthConsumerSecret(Constants.API_SECRET);
-
-            // Build
-            Configuration configuration = builder.build();
-            TwitterFactory factory = new TwitterFactory(configuration);
-            twitter = factory.getInstance();
 
             // Start new thread for activity (you can't do too much work on the UI/Main thread.
-            Thread thread = new Thread(new Runnable(){
+            Thread thread = new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    try {
 
+
+                    // Setup builder
+                    ConfigurationBuilder builder = new ConfigurationBuilder();
+                    // Get key and secret from Constants.java
+                    builder.setOAuthConsumerKey(Constants.API_KEY);
+                    builder.setOAuthConsumerSecret(Constants.API_SECRET);
+
+                    // Build
+                    configuration = builder.build();
+
+                    TwitterFactory factory = new TwitterFactory(configuration);
+                    twitter = factory.getInstance();
+
+                    try {
                         requestToken = twitter
                                 .getOAuthRequestToken(Constants.CALLBACKURL);
+                        MainActivity.this.startActivity(new Intent(Intent.ACTION_VIEW, Uri
+                                .parse(requestToken.getAuthenticationURL())));
 
-                        Intent intent = new Intent(MainActivity.this,WebViewActivity.class);
-                        intent.putExtra("AUTH_URL",requestToken.getAuthenticationURL());
-                        startActivityForResult(intent,MBVIEW_REQUEST_CODE);
-
+                        LOGGED_IN = true;
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -211,9 +271,49 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             });
             thread.start();
 
+        }else{
+            startActivity(new Intent(MainActivity.this,TwitterPop_Activity.class));
+        }
+
+
     }
 
+    public static void tweet(String tweet,Context context){
+        Handler success = new Handler() {
+            public void handleMessage(Message msg){
+                if(msg.what == 0){
+                    Toast.makeText(context, "Tweet sent successfully!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        };
 
+        Handler error = new Handler() {
+            public void handleMessage(Message msg){
+                if(msg.what == 0){
+                    Toast.makeText(context, "An error occurred while trying to send the Tweet!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        };
+
+
+        Thread thread = new Thread(new Runnable(){
+            @Override
+            public void run() {
+
+                try {
+                    twitter.updateStatus(tweet);
+                    success.sendEmptyMessage(0);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    error.sendEmptyMessage(0);
+                }
+            }
+        });
+        thread.start();
+
+
+    }
 
 
     /* IF USER PREFERENCE KEEP SIGNED IN IS FALSE, SIGNOUT USER BEFORE APP CLOSURE*/

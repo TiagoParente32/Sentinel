@@ -12,7 +12,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.WebViewActivity"></activity>
+        <activity android:name=".activities.TwitterPop_Activity"
+            android:theme="@style/AppTheme.TranslucentWindows">
+
+        </activity>
         <activity
             android:name=".ui.login.LoginActivity"
             android:label="@string/title_activity_login" />
@@ -26,6 +29,16 @@
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="sentinel"
+                    android:scheme="app" />
             </intent-filter>
         </activity>
 

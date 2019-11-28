@@ -4,8 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.webkit.URLUtil;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceError;
 import android.webkit.WebView;
@@ -29,7 +32,10 @@ public class WebViewActivity extends AppCompatActivity {
 
        // mWebview.getSettings().setJavaScriptEnabled(true); // enable javascript
 
+
         final Activity activity = this;
+
+
 
         mWebview.setWebViewClient(new WebViewClient() {
             @SuppressWarnings("deprecation")
@@ -45,7 +51,7 @@ public class WebViewActivity extends AppCompatActivity {
             }
         });
 
-        mWebview .loadUrl(authURL);
+        mWebview.loadUrl(authURL);
         setContentView(mWebview );
 
     }

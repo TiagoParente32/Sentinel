@@ -8,5 +8,6 @@
     <color name="colorGreen">#90EE90</color>
     <color name="colorBlack">#000000</color>
     <color name="colorWhite">#FFFFFF</color>
-
+    <color name="colorTweet">#15202B</color>
+    <color name="colorTwitterBlue">#00ACED</color>
 </resources>
