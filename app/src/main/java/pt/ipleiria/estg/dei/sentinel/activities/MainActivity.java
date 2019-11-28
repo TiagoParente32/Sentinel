@@ -70,8 +70,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(toolbar);
 
         sharedPref = getSharedPreferences(PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
-       // sharedPref.edit().remove(Constants.PREF_KEY_TWITTER_LOGIN);
-
 
         /*GETS URL FROM INTENT*/
         Uri uri = getIntent().getData();
@@ -98,6 +96,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 e.putString(Constants.PREF_KEY_OAUTH_TOKEN, accessToken.getToken());
                                 e.putString(Constants.PREF_KEY_OAUTH_SECRET, accessToken.getTokenSecret());
                                 e.putBoolean(Constants.PREF_KEY_TWITTER_LOGIN, true);
+                                e.putBoolean(Constants.KEEP_SIGNEDIN_TWITTER,false);
                                 e.commit(); // save changes
 
                                 startActivity(new Intent(MainActivity.this, TwitterPop_Activity.class));
@@ -220,7 +219,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void signOut() {
-        sharedPref.edit().putBoolean("keep_signed_in", false).commit();
+        sharedPref.edit().putBoolean(Constants.KEEP_SIGNEDIN, false).commit();
         FirebaseAuth.getInstance().signOut();
     }
 
@@ -258,6 +257,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     try {
                         requestToken = twitter
                                 .getOAuthRequestToken(Constants.CALLBACKURL);
+
+                        sharedPref.edit().putBoolean(Constants.KEEP_SIGNEDIN_TWITTER,true).commit();
+
                         MainActivity.this.startActivity(new Intent(Intent.ACTION_VIEW, Uri
                                 .parse(requestToken.getAuthenticationURL())));
 
@@ -318,7 +320,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onStop() {
         sharedPref.edit().putBoolean(Constants.PREF_KEY_TWITTER_LOGIN, false).commit();
-        if (!sharedPref.getBoolean("keep_signed_in", false)) {
+        if (!sharedPref.getBoolean(Constants.KEEP_SIGNEDIN, false) && !sharedPref.getBoolean(Constants.KEEP_SIGNEDIN_TWITTER,false)){
             signOut();
         }
         super.onStop();

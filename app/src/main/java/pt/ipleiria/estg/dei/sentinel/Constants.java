@@ -1,6 +1,12 @@
 package pt.ipleiria.estg.dei.sentinel;
 
 public final class Constants {
+
+    public static final String KEEP_SIGNEDIN = "keep_signed_in";
+    public static final String KEEP_SIGNEDIN_TWITTER = "keep_signed_in_twitter";
+
+
+
     public static final String API_KEY = "l5WyDb7KgKtMqAWr2WiMefy3E";
     public static final String API_SECRET = "Qvr3lNBDZkVH1UegCB42rjGZq1ceGUnCLKNhYnwBkM1iAGGpB3";
     public static final String CALLBACKURL = "app://sentinel";
