@@ -16,6 +16,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -48,7 +49,8 @@ public class DashboardFragment extends Fragment implements View.OnClickListener 
     private ProgressBar pbTemp;
     private ProgressBar pbHum;
     private Spinner spinnerRooms;
-    private Button btnShare;
+    private ImageButton btnShare;
+
     //------------variables---------------
     private DatabaseReference mDatabase;
     public static final String TAG = "Dashboard";
@@ -113,6 +115,7 @@ public class DashboardFragment extends Fragment implements View.OnClickListener 
         spinnerRooms = view.findViewById(R.id.spinnerRooms);
         pbTemp = view.findViewById(R.id.progressBarTemperatura);
         pbHum = view.findViewById(R.id.progressBarHumidade);
+        btnShare = view.findViewById(R.id.btnShare);
 
 
         view.findViewById(R.id.btnShare).setOnClickListener(this);
@@ -125,6 +128,8 @@ public class DashboardFragment extends Fragment implements View.OnClickListener 
             spinnerRooms.setEnabled(false);
             spinnerRooms.setClickable(false);
             spinnerRooms.setAlpha(0.5f);
+            btnShare.setVisibility(View.INVISIBLE);
+
         }else{
             spinnerRooms.setAlpha(1);
         }

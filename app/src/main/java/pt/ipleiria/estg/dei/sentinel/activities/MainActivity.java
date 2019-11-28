@@ -70,6 +70,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(toolbar);
 
         sharedPref = getSharedPreferences(PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
+       // sharedPref.edit().remove(Constants.PREF_KEY_TWITTER_LOGIN);
+
 
         /*GETS URL FROM INTENT*/
         Uri uri = getIntent().getData();
@@ -317,14 +319,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void onStop() {
         sharedPref.edit().putBoolean(Constants.PREF_KEY_TWITTER_LOGIN, false).commit();
         if (!sharedPref.getBoolean("keep_signed_in", false)) {
-            signOut();  @Override
-    public void onPause(){
-        sharedPref.edit().putBoolean(Constants.PREF_KEY_TWITTER_LOGIN, false).commit();
-        if (!sharedPref.getBoolean("keep_signed_in", false)) {
             signOut();
-        }
-        super.onStop();
-    }
         }
         super.onStop();
     }
