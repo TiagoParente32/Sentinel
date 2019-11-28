@@ -48,7 +48,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private NavigationView navigationView;
     private  Configuration configuration;
 
-    public Boolean LOGGED_IN=false;
 
 
     protected static final String PREFERENCES_FILE_NAME = "pt.ipleiria.estg.dei.sentinel.SHARED_PREFERENCES";
@@ -56,7 +55,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     /*TWITTER API*/
 
-    private static SharedPreferences mSharedPreferences;
     private static Twitter twitter;
     private static RequestToken requestToken;
     private AccessToken accessToken;
@@ -64,16 +62,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        sharedPref = getSharedPreferences(PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
 
         /*GETS URL FROM INTENT*/
         Uri uri = getIntent().getData();
-        if(!isTwitterLoggedInAlready()){
+
             /*IF USER STARTED THE APP, NO URL EXISTS*/
             if (uri != null && uri.toString().startsWith(Constants.CALLBACKURL)) {
 
@@ -88,14 +88,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 accessToken = twitter.getOAuthAccessToken(
                                         requestToken, verifier);
 
-                                SharedPreferences.Editor e = mSharedPreferences.edit();
+                                SharedPreferences.Editor e = sharedPref.edit();
 
 
                                 // After getting access token, access token secret
                                 // store them in application preferences
                                 e.putString(Constants.PREF_KEY_OAUTH_TOKEN, accessToken.getToken());
                                 e.putString(Constants.PREF_KEY_OAUTH_SECRET, accessToken.getTokenSecret());
-                                // Store login status - true
                                 e.putBoolean(Constants.PREF_KEY_TWITTER_LOGIN, true);
                                 e.commit(); // save changes
 
@@ -117,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
             }
 
-        }
+
 
 
         drawer = findViewById(R.id.drawer_layout);
@@ -158,7 +157,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        sharedPref = getSharedPreferences(PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
+
 
 
 
@@ -208,11 +207,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_logout:
                 signOut();
 
-                /*SEND DATA ABOUT SIGNOUT DO DASHBOARD ACITVITY*/
-               /* Bundle bundle = new Bundle();
-                bundle.putString("signout", "Logged out");
-                DashboardFragment dashboardFragment = new DashboardFragment();
-                dashboardFragment.setArguments(bundle);*/
 
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         new DashboardFragment()).commit();
@@ -230,8 +224,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
     private boolean isTwitterLoggedInAlready() {
-        // return twitter login status from Shared Preferences
-        return mSharedPreferences.getBoolean(Constants.PREF_KEY_TWITTER_LOGIN, false);
+        if(sharedPref.contains(Constants.PREF_KEY_TWITTER_LOGIN)){
+            return sharedPref.getBoolean(Constants.PREF_KEY_TWITTER_LOGIN, false);
+        }
+        return false;
     }
 
     public void loginToTwitter() {
@@ -263,7 +259,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         MainActivity.this.startActivity(new Intent(Intent.ACTION_VIEW, Uri
                                 .parse(requestToken.getAuthenticationURL())));
 
-                        LOGGED_IN = true;
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -279,6 +274,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public static void tweet(String tweet,Context context){
+
         Handler success = new Handler() {
             public void handleMessage(Message msg){
                 if(msg.what == 0){
@@ -319,11 +315,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     /* IF USER PREFERENCE KEEP SIGNED IN IS FALSE, SIGNOUT USER BEFORE APP CLOSURE*/
     @Override
     public void onStop() {
-        super.onStop();
+        sharedPref.edit().putBoolean(Constants.PREF_KEY_TWITTER_LOGIN, false).commit();
+        if (!sharedPref.getBoolean("keep_signed_in", false)) {
+            signOut();  @Override
+    public void onPause(){
+        sharedPref.edit().putBoolean(Constants.PREF_KEY_TWITTER_LOGIN, false).commit();
         if (!sharedPref.getBoolean("keep_signed_in", false)) {
             signOut();
         }
+        super.onStop();
     }
+        }
+        super.onStop();
+    }
+
 
 
 }
