@@ -214,11 +214,13 @@ public class DashboardFragment extends Fragment {
             humidade.setText(mediaHum + "%");
             ultimaData.setText("Last Update: " + data + " " + hora);
 
-            setData(temperatura.getText().toString(),humidade.getText().toString(),"Edifício A");
 
 
             //setup das cores segundo os nossos limites
             updateUIColors(mediaTemp, mediaHum);
+
+            setData(temperatura.getText().toString(),humidade.getText().toString(),selected,qoa.getText().toString());
+
         }
     }
 
@@ -330,11 +332,12 @@ public class DashboardFragment extends Fragment {
         ultimaData.setText("Last Update: " + data + " " + hora);
 
 
-        setData(temperatura.getText().toString(),humidade.getText().toString(),selected);
-
 
         //update das cores com os nossos limites
         updateUIColors(mediaTemp, mediaHum);
+
+        setData(temperatura.getText().toString(),humidade.getText().toString(),selected,qoa.getText().toString());
+
 
     }
 
@@ -383,10 +386,10 @@ public class DashboardFragment extends Fragment {
         }
     }
 
-    public void setData(String temperature,String humidity,String location) {
+    public void setData(String temperature,String humidity,String location,String airQuality) {
         Activity activity = getActivity();
         if(activity instanceof MainActivity) {
-            ((MainActivity) activity).setData(temperature,humidity,location);
+            ((MainActivity) activity).setData(temperature,humidity,location,airQuality);
         }
     }
 

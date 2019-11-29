@@ -184,9 +184,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
         }
         if(i == R.id.btnRegister){
             /*OPENS REGISTER ACTIVITY*/
-            Intent intent = new Intent(getActivity(), RegisterFragment.class);
-            startActivity(intent);
-            getActivity().finish();
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                    new RegisterFragment()).commit();
         }
     }
 
