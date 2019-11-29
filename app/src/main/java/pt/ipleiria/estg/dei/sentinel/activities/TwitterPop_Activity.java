@@ -34,6 +34,9 @@ public class TwitterPop_Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_twitter_pop);
 
+        View v = findViewById(android.R.id.content);
+
+        v.setClipToOutline(true);
 
         btnClose = findViewById(R.id.btnClose);
         btnTweet = findViewById(R.id.btnTweet);

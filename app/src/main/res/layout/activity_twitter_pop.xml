@@ -4,11 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/layout_bg"
+    android:background="@color/colorTweet"
     android:outlineProvider="bounds"
     android:paddingEnd="1dp"
     tools:context=".activities.TwitterPop_Activity">
-
 
 
     <View
