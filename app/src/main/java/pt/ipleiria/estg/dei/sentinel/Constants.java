@@ -17,8 +17,13 @@ public final class Constants {
     public static final String PREF_KEY_TWITTER_LOGIN = "isTwitterLoggedIn";
 
     // Twitter oauth urls
-    public static final String URL_TWITTER_AUTH = "auth_url";
     public static final String URL_TWITTER_OAUTH_VERIFIER = "oauth_verifier";
-    public static final String URL_TWITTER_OAUTH_TOKEN = "oauth_token";
+
+
+    //INTENT TAGS
+    public static final String DATA_INTENT_TEMPERATURE = "data_intent_temperature";
+    public static final String DATA_INTENT_HUMIDITY = "data_intent_humidity";
+    public static final String DATA_INTENT_LOCATION = "data_intent_location";
+
 
 }

@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.animation.ObjectAnimator;
+import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
@@ -34,11 +35,12 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import pt.ipleiria.estg.dei.sentinel.Constants;
 import pt.ipleiria.estg.dei.sentinel.activities.MainActivity;
 import pt.ipleiria.estg.dei.sentinel.R;
 
 
-public class DashboardFragment extends Fragment implements View.OnClickListener {
+public class DashboardFragment extends Fragment {
 
     //-----------------UI----------------
     private TextView qoa;
@@ -118,7 +120,14 @@ public class DashboardFragment extends Fragment implements View.OnClickListener 
         btnShare = view.findViewById(R.id.btnShare);
 
 
-        view.findViewById(R.id.btnShare).setOnClickListener(this);
+        /*CALLS MAIN ACTIVITY METHOD TO TWEET*/
+        view.findViewById(R.id.btnShare).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity)getActivity()).loginToTwitter();
+            }
+        });
+
 
         //check if user is authenticated
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -158,12 +167,6 @@ public class DashboardFragment extends Fragment implements View.OnClickListener 
         return view;
     }
 
-    @Override
-    public void onClick(View v) {
-        ((MainActivity)getActivity()).loginToTwitter();
-    }
-
-
 
     public void updateUIOnDataChange(DataSnapshot dataSnapshot) {
         //ir buscar a ultima data de selected
@@ -190,7 +193,7 @@ public class DashboardFragment extends Fragment implements View.OnClickListener 
         }
 
         //default vais buscar "EdificioA"
-        //se o index estiver 0, ou seja na primeira call, ou quando "dificio A" selected, nos outros updates skippa isto pq vai fazer o listener do spinner
+        //se o index estiver 0, ou seja na primeira call, ou quando "edificio A" selected, nos outros updates skippa isto pq vai fazer o listener do spinner
         if (selectedIndex == 0) {
             iterateDatasnapshot();
 
@@ -210,6 +213,9 @@ public class DashboardFragment extends Fragment implements View.OnClickListener 
             temperatura.setText(mediaTemp + "ºC");
             humidade.setText(mediaHum + "%");
             ultimaData.setText("Last Update: " + data + " " + hora);
+
+            setData(temperatura.getText().toString(),humidade.getText().toString(),"Edifício A");
+
 
             //setup das cores segundo os nossos limites
             updateUIColors(mediaTemp, mediaHum);
@@ -323,6 +329,10 @@ public class DashboardFragment extends Fragment implements View.OnClickListener 
         humidade.setText(mediaHum + "%");
         ultimaData.setText("Last Update: " + data + " " + hora);
 
+
+        setData(temperatura.getText().toString(),humidade.getText().toString(),selected);
+
+
         //update das cores com os nossos limites
         updateUIColors(mediaTemp, mediaHum);
 
@@ -372,4 +382,14 @@ public class DashboardFragment extends Fragment implements View.OnClickListener 
             }
         }
     }
+
+    public void setData(String temperature,String humidity,String location) {
+        Activity activity = getActivity();
+        if(activity instanceof MainActivity) {
+            ((MainActivity) activity).setData(temperature,humidity,location);
+        }
+    }
+
+
+
 }
