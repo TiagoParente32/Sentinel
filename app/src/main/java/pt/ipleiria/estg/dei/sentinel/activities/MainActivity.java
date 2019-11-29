@@ -60,6 +60,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private AccessToken accessToken;
 
 
+    /*DATA TO PASS TO TWITTER ACITIVITY*/
+    private String temperature;
+    private String humidity;
+    private String location;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -99,7 +105,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 e.putBoolean(Constants.KEEP_SIGNEDIN_TWITTER,false);
                                 e.commit(); // save changes
 
-                                startActivity(new Intent(MainActivity.this, TwitterPop_Activity.class));
+                                Intent intent = new Intent(MainActivity.this,TwitterPop_Activity.class);
+                                intent.putExtra(Constants.DATA_INTENT_TEMPERATURE, temperature);
+                                intent.putExtra(Constants.DATA_INTENT_HUMIDITY, humidity);
+                                intent.putExtra(Constants.DATA_INTENT_LOCATION, location);
+
+                                startActivity(intent);
 
 
                                 Log.v("accessToken", accessToken.getToken());
@@ -135,7 +146,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
                 if (currentUser == null) {
-                    tvHeaderEmail.setText("Not logged in");
+                    tvHeaderEmail.setText(R.string.unauthenticated);
 
                     /*DISPLAYS LOGIN AND REGISTER BUTTONS*/
                     navigationView.getMenu().findItem(R.id.nav_logout).setVisible(false);
@@ -157,9 +168,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-
-
-
 
 
         /*SWITCHS TO DASHBOARD FRAGMENT*/
@@ -271,29 +279,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             thread.start();
 
         }else{
-            startActivity(new Intent(MainActivity.this,TwitterPop_Activity.class));
-        }
+            Intent intent = new Intent(MainActivity.this,TwitterPop_Activity.class);
+            intent.putExtra(Constants.DATA_INTENT_TEMPERATURE, temperature);
+            intent.putExtra(Constants.DATA_INTENT_HUMIDITY, humidity);
+            intent.putExtra(Constants.DATA_INTENT_LOCATION, location);
 
+            startActivity(intent);        }
 
     }
 
     public static void tweet(String tweet,Context context){
 
-        Handler success = new Handler() {
+        Handler message = new Handler() {
             public void handleMessage(Message msg){
                 if(msg.what == 0){
                     Toast.makeText(context, "Tweet sent successfully!", Toast.LENGTH_SHORT).show();
                 }
-            }
-        };
-
-        Handler error = new Handler() {
-            public void handleMessage(Message msg){
-                if(msg.what == 0){
+                if(msg.what == 1){
                     Toast.makeText(context, "An error occurred while trying to send the Tweet!", Toast.LENGTH_SHORT).show();
                 }
             }
         };
+
 
 
         Thread thread = new Thread(new Runnable(){
@@ -302,17 +309,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 try {
                     twitter.updateStatus(tweet);
-                    success.sendEmptyMessage(0);
+                    message.sendEmptyMessage(0);
 
                 } catch (Exception e) {
                     e.printStackTrace();
-                    error.sendEmptyMessage(0);
+                    message.sendEmptyMessage(1);
                 }
             }
         });
         thread.start();
 
 
+    }
+
+    public void setData(String temperature,String humidity, String location) {
+        this.temperature = temperature;
+        this.humidity = humidity;
+        this.location = location;
     }
 
 

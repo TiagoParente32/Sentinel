@@ -2,7 +2,6 @@ package pt.ipleiria.estg.dei.sentinel.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -13,14 +12,20 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import pt.ipleiria.estg.dei.sentinel.Constants;
 import pt.ipleiria.estg.dei.sentinel.R;
 
 public class TwitterPop_Activity extends AppCompatActivity {
 
     private ImageButton btnClose;
     private Button btnTweet;
-    private EditText tweetText;
+    private EditText inputTweet;
     private TextView viewCounter;
+
+    private String temperature;
+    private String humidity;
+    private String location;
+    private String tweetMessage;
 
 
     @Override
@@ -29,11 +34,23 @@ public class TwitterPop_Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_twitter_pop);
 
+        View v = findViewById(android.R.id.content);
+
+        v.setClipToOutline(true);
 
         btnClose = findViewById(R.id.btnClose);
         btnTweet = findViewById(R.id.btnTweet);
         viewCounter= findViewById(R.id.counterView);
-        tweetText = findViewById(R.id.inputTweet);
+        inputTweet = findViewById(R.id.inputTweet);
+
+        /*GETS HUMIDITY AND TEMPERATURE DATA TO SHARE*/
+        temperature = getIntent().getStringExtra(Constants.DATA_INTENT_TEMPERATURE);
+        humidity = getIntent().getStringExtra(Constants.DATA_INTENT_HUMIDITY);
+        location = getIntent().getStringExtra(Constants.DATA_INTENT_LOCATION);
+
+        /*CREATES CUSTOM TWEET MESSAGE*/
+        tweetMessage = "It's currently " + temperature + " and the humidity is at " + humidity + " on "+ location +"! Tweeted using @SentinelIPL #sentinelapp";
+
 
         /*CLOSES TWEET LAYOUT*/
         btnClose.setOnClickListener(new View.OnClickListener() {
@@ -61,6 +78,14 @@ public class TwitterPop_Activity extends AppCompatActivity {
         getWindow().setLayout((int)(width*.9),(int)(height*.4));
 
 
+        /*LOADS CUSTOM MESSAGE INTO TWEET BOX*/
+        inputTweet.setText(tweetMessage);
+
+        /*UPDATES COUNTER*/
+        viewCounter.setText(tweetMessage.length() + "/280");
+
+
+
         /*LIVE CHARACTER COUNT*/
          TextWatcher mTextEditorWatcher = new TextWatcher() {
             String textToDisplay = null;
@@ -83,7 +108,7 @@ public class TwitterPop_Activity extends AppCompatActivity {
 
          };
 
-         tweetText.addTextChangedListener(mTextEditorWatcher);
+         inputTweet.addTextChangedListener(mTextEditorWatcher);
 
 
 
@@ -92,7 +117,7 @@ public class TwitterPop_Activity extends AppCompatActivity {
 
     public void tweet(){
 
-        MainActivity.tweet(tweetText.getText().toString(),getApplicationContext());
+        MainActivity.tweet(inputTweet.getText().toString(),getApplicationContext());
         finish();
 
     }
