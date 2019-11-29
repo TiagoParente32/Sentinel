@@ -26,6 +26,7 @@ public class TwitterPop_Activity extends AppCompatActivity {
     private String humidity;
     private String location;
     private String tweetMessage;
+    private String airQuality;
 
 
     @Override
@@ -47,9 +48,10 @@ public class TwitterPop_Activity extends AppCompatActivity {
         temperature = getIntent().getStringExtra(Constants.DATA_INTENT_TEMPERATURE);
         humidity = getIntent().getStringExtra(Constants.DATA_INTENT_HUMIDITY);
         location = getIntent().getStringExtra(Constants.DATA_INTENT_LOCATION);
+        airQuality = getIntent().getStringExtra(Constants.DATA_INTENT_AIRQUALITY);
 
         /*CREATES CUSTOM TWEET MESSAGE*/
-        tweetMessage = "It's currently " + temperature + " and the humidity is at " + humidity + " on "+ location +"! Tweeted using @SentinelIPL #sentinelapp";
+        tweetMessage = "The air quality on " + location+ " is currently '" + airQuality + "' with a temperature of " + temperature + " and a humidity of " + humidity + "! Tweeted using @SentinelIPL #sentinelapp";
 
 
         /*CLOSES TWEET LAYOUT*/

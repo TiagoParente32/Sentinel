@@ -64,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private String temperature;
     private String humidity;
     private String location;
+    private String airQuality;
 
 
     @Override
@@ -109,6 +110,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 intent.putExtra(Constants.DATA_INTENT_TEMPERATURE, temperature);
                                 intent.putExtra(Constants.DATA_INTENT_HUMIDITY, humidity);
                                 intent.putExtra(Constants.DATA_INTENT_LOCATION, location);
+                                intent.putExtra(Constants.DATA_INTENT_AIRQUALITY,airQuality);
 
                                 startActivity(intent);
 
@@ -283,6 +285,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             intent.putExtra(Constants.DATA_INTENT_TEMPERATURE, temperature);
             intent.putExtra(Constants.DATA_INTENT_HUMIDITY, humidity);
             intent.putExtra(Constants.DATA_INTENT_LOCATION, location);
+            intent.putExtra(Constants.DATA_INTENT_AIRQUALITY,airQuality);
+
 
             startActivity(intent);        }
 
@@ -322,10 +326,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-    public void setData(String temperature,String humidity, String location) {
+    public void setData(String temperature,String humidity, String location,String airQuality) {
         this.temperature = temperature;
         this.humidity = humidity;
         this.location = location;
+        this.airQuality = airQuality;
     }
 
 

@@ -23,7 +23,9 @@ public final class Constants {
     //INTENT TAGS
     public static final String DATA_INTENT_TEMPERATURE = "data_intent_temperature";
     public static final String DATA_INTENT_HUMIDITY = "data_intent_humidity";
+    public static final String DATA_INTENT_AIRQUALITY = "data_intent_airquality";
     public static final String DATA_INTENT_LOCATION = "data_intent_location";
+
 
 
 }
