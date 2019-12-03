@@ -27,5 +27,8 @@ public final class Constants {
     public static final String DATA_INTENT_LOCATION = "data_intent_location";
 
 
+    public static final String PREFERENCES_FILE_NAME = "pt.ipleiria.estg.dei.sentinel.SHARED_PREFERENCES";
+    public static final String PREFERENCES_FAVORITES_SET ="favorites_string_set";
+
 
 }
