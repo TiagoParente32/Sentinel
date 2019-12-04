@@ -25,10 +25,11 @@ import pt.ipleiria.estg.dei.sentinel.Constants;
 import pt.ipleiria.estg.dei.sentinel.CustomAdapter;
 import pt.ipleiria.estg.dei.sentinel.R;
 
-public class FavoritesFragment extends Fragment {
+public class FavoritesFragment extends Fragment implements View.OnClickListener {
     private ListView lView;
     private ArrayList<String> list;
     private SharedPreferences sharedPref;
+    private Button btnAdd;
 
     @Nullable
     @Override
@@ -41,6 +42,10 @@ public class FavoritesFragment extends Fragment {
 
         CustomAdapter adapter = new CustomAdapter(list, this.getContext(),sharedPref);
         TextView emptyText = view.findViewById(R.id.tvEmpty);
+        btnAdd = view.findViewById(R.id.btnAdd);
+
+
+        btnAdd.setOnClickListener(this);
 
 
         //handle listview and assign adapter
@@ -101,5 +106,14 @@ public class FavoritesFragment extends Fragment {
     }
 
 
+    @Override
+    public void onClick(View v) {
+        switch(v.getId()){
+            case R.id.btnAdd:
+                create();
+        }
+    }
 
+    private void create() {
+    }
 }
