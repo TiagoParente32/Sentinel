@@ -16,7 +16,6 @@ import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
@@ -35,7 +34,6 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import pt.ipleiria.estg.dei.sentinel.Constants;
 import pt.ipleiria.estg.dei.sentinel.activities.MainActivity;
 import pt.ipleiria.estg.dei.sentinel.R;
 

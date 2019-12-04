@@ -81,6 +81,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        sharedPref = getSharedPreferences(Constants.PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
+
 
         /*GETS URL FROM INTENT*/
         Uri uri = getIntent().getData();
@@ -233,8 +235,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
 
             case R.id.nav_favorites:
+                FavoritesFragment favoritesFragment = new FavoritesFragment();
+                bundle = new Bundle();
+                bundle.putStringArrayList(Constants.DATA_INTENT_SPINNER_DATA,roomsList);
+                favoritesFragment.setArguments(bundle);
+
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                        new FavoritesFragment()).commit();
+                        favoritesFragment).commit();
                 break;
 
             case R.id.nav_logout:
