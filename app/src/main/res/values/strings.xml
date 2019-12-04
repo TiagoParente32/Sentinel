@@ -34,4 +34,8 @@
     <string name="favoriteDialogTitle">Confirmation</string>
     <string name="no_favorites">No favorites added!</string>
     <string name="add_favorite">Add Favorite</string>
+    <string name="send">Send</string>
+    <string name="temperature">Temperature</string>
+    <string name="humidity">Humidity</string>
+    <string name="location">Guess My Location</string>
 </resources>

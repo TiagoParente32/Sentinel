@@ -60,8 +60,8 @@ public class DashboardFragment extends Fragment {
     //para depois usar como query para encontrar
     private String selected = "Edificio A";
     private int selectedIndex = 0;
-    private int temperaturasSum = 0;
-    private int humidadeSum = 0;
+    private float temperaturasSum = 0;
+    private float humidadeSum = 0;
     private int numTemperatura = 0;
     private int numHumidade = 0;
     private float mediaHum = 0;
@@ -180,6 +180,8 @@ public class DashboardFragment extends Fragment {
         for (DataSnapshot rooms : dataSnapshot.getChildren()) {
             roomsList.add(rooms.getKey());
         }
+        setSpinnerData(roomsList);
+
 
         //dar setup ao adapter e atribuilo ao spinner ( para meter os rooms todos sempre na dropdown)
         adapter = new ArrayAdapter<String>(this.getActivity(), R.layout.spinner_list, roomsList);
@@ -210,8 +212,8 @@ public class DashboardFragment extends Fragment {
             }
 
             //atribuir medias e datas a UI
-            temperatura.setText(mediaTemp + "ºC");
-            humidade.setText(mediaHum + "%");
+            temperatura.setText(  String.format("%.02f", mediaTemp)+ "ºC");
+            humidade.setText( String.format("%.02f", mediaHum) + "%");
             ultimaData.setText("Last Update: " + data + " " + hora);
 
 
@@ -327,8 +329,8 @@ public class DashboardFragment extends Fragment {
         }
 
         //atribuir a UI
-        temperatura.setText(mediaTemp + "ºC");
-        humidade.setText(mediaHum + "%");
+        temperatura.setText( String.format("%.02f", mediaTemp) + "ºC");
+        humidade.setText( String.format("%.02f", mediaHum) + "%");
         ultimaData.setText("Last Update: " + data + " " + hora);
 
 
@@ -349,11 +351,11 @@ public class DashboardFragment extends Fragment {
                 for (DataSnapshot latestDate : rooms.child(data).getChildren()) {
                     for (DataSnapshot key : latestDate.getChildren()) {
                         if (key.getKey().equals("temperatura")) {
-                            temperaturasSum += Integer.parseInt(key.getValue().toString());
+                            temperaturasSum += Float.parseFloat(key.getValue().toString());
                             numTemperatura++;
                         }
                         if (key.getKey().equals("humidade")) {
-                            humidadeSum += Integer.parseInt(key.getValue().toString());
+                            humidadeSum += Float.parseFloat(key.getValue().toString());
                             numHumidade++;
                         }
                         if (key.getKey().equals("hora")) {
@@ -369,11 +371,11 @@ public class DashboardFragment extends Fragment {
             for (DataSnapshot latestDate : ds.child(selected).child(data).getChildren()) {
                 for (DataSnapshot key : latestDate.getChildren()) {
                     if (key.getKey().equals("temperatura")) {
-                        temperaturasSum += Integer.parseInt(key.getValue().toString());
+                        temperaturasSum += Float.parseFloat(key.getValue().toString());
                         numTemperatura++;
                     }
                     if (key.getKey().equals("humidade")) {
-                        humidadeSum += Integer.parseInt(key.getValue().toString());
+                        humidadeSum += Float.parseFloat(key.getValue().toString());
                         numHumidade++;
                     }
                     if (key.getKey().equals("hora")) {
@@ -390,6 +392,14 @@ public class DashboardFragment extends Fragment {
         Activity activity = getActivity();
         if(activity instanceof MainActivity) {
             ((MainActivity) activity).setData(temperature,humidity,location,airQuality);
+        }
+    }
+
+
+    public void setSpinnerData(List<String> roomsList ) {
+        Activity activity = getActivity();
+        if(activity instanceof MainActivity) {
+            ((MainActivity) activity).setSpinnerData(roomsList);
         }
     }
 
