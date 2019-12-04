@@ -34,6 +34,7 @@
         android:popupBackground="@color/colorPrimary"
         android:spinnerMode="dropdown"
         android:textAlignment="center"
+        android:overlapAnchor="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewTitulo" />

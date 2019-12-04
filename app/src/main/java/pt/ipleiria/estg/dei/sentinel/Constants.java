@@ -25,6 +25,7 @@ public final class Constants {
     public static final String DATA_INTENT_HUMIDITY = "data_intent_humidity";
     public static final String DATA_INTENT_AIRQUALITY = "data_intent_airquality";
     public static final String DATA_INTENT_LOCATION = "data_intent_location";
+    public static final String DATA_INTENT_SPINNER_DATA= "data_intent_spinner_adapter";
 
 
 

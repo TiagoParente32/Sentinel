@@ -27,4 +27,8 @@
     <string name="tweet">Tweet</string>
     <string name="tweetHint">What\'s happening?</string>
     <string name="tweetMax">280</string>
+    <string name="send">Send</string>
+    <string name="temperature">Temperature</string>
+    <string name="humidity">Humidity</string>
+    <string name="location">Guess My Location</string>
 </resources>
