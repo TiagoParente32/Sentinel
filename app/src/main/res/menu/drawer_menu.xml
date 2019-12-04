@@ -17,6 +17,9 @@
         <item android:id="@+id/nav_register"
             android:icon="@drawable/ic_register"
             android:title="@string/register"/>
+        <item android:id="@+id/nav_favorites"
+            android:icon="@drawable/ic_star_white"
+            android:title="@string/favorites"/>
 
     </group>
 

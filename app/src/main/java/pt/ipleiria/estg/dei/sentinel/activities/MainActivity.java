@@ -1,20 +1,5 @@
 package pt.ipleiria.estg.dei.sentinel.activities;
 
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.net.Uri;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.os.Parcelable;
-import android.util.Log;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,17 +7,32 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
+
+
+
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import pt.ipleiria.estg.dei.sentinel.Constants;
 import pt.ipleiria.estg.dei.sentinel.R;
 import pt.ipleiria.estg.dei.sentinel.fragments.DashboardFragment;
+import pt.ipleiria.estg.dei.sentinel.fragments.FavoritesFragment;
 import pt.ipleiria.estg.dei.sentinel.fragments.LoginFragment;
 import pt.ipleiria.estg.dei.sentinel.fragments.RegisterFragment;
 import pt.ipleiria.estg.dei.sentinel.fragments.SendFragment;
@@ -48,13 +48,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final int MBVIEW_REQUEST_CODE = 1;
     private DrawerLayout drawer;
     private TextView tvHeaderEmail;
-    private SharedPreferences sharedPref;
+    public SharedPreferences sharedPref;
     private NavigationView navigationView;
     private Configuration configuration;
 
-
-
-    protected static final String PREFERENCES_FILE_NAME = "pt.ipleiria.estg.dei.sentinel.SHARED_PREFERENCES";
 
 
     /*TWITTER API*/
@@ -84,7 +81,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        sharedPref = getSharedPreferences(PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
 
         /*GETS URL FROM INTENT*/
         Uri uri = getIntent().getData();
@@ -162,6 +158,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     navigationView.getMenu().findItem(R.id.nav_logout).setVisible(false);
                     navigationView.getMenu().findItem(R.id.nav_login).setVisible(true);
                     navigationView.getMenu().findItem(R.id.nav_register).setVisible(true);
+                    navigationView.getMenu().findItem(R.id.nav_favorites).setVisible(false);
                     navigationView.getMenu().findItem(R.id.nav_send).setVisible(false);
 
                 } else {
@@ -169,6 +166,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     navigationView.getMenu().findItem(R.id.nav_logout).setVisible(true);
                     navigationView.getMenu().findItem(R.id.nav_login).setVisible(false);
                     navigationView.getMenu().findItem(R.id.nav_register).setVisible(false);
+                    navigationView.getMenu().findItem(R.id.nav_favorites).setVisible(true);
+
+
                     navigationView.getMenu().findItem(R.id.nav_send).setVisible(true);
                     tvHeaderEmail.setText(currentUser.getEmail());
 
@@ -232,10 +232,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         new RegisterFragment()).commit();
                 break;
 
+            case R.id.nav_favorites:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        new FavoritesFragment()).commit();
+                break;
+
             case R.id.nav_logout:
                 signOut();
-
-
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         new DashboardFragment()).commit();
 

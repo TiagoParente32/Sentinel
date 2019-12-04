@@ -27,6 +27,13 @@
     <string name="tweet">Tweet</string>
     <string name="tweetHint">What\'s happening?</string>
     <string name="tweetMax">280</string>
+    <string name="favorites">Favorites</string>
+    <string name="ok">Ok</string>
+    <string name="cancel">Cancel</string>
+    <string name="favoritDialogMessage">Do you really wish to remove this location from the Favorites?</string>
+    <string name="favoriteDialogTitle">Confirmation</string>
+    <string name="no_favorites">No favorites added!</string>
+    <string name="add_favorite">Add Favorite</string>
     <string name="send">Send</string>
     <string name="temperature">Temperature</string>
     <string name="humidity">Humidity</string>

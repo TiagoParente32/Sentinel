@@ -28,5 +28,8 @@ public final class Constants {
     public static final String DATA_INTENT_SPINNER_DATA= "data_intent_spinner_adapter";
 
 
+    public static final String PREFERENCES_FILE_NAME = "pt.ipleiria.estg.dei.sentinel.SHARED_PREFERENCES";
+    public static final String PREFERENCES_FAVORITES_SET ="favorites_string_set";
+
 
 }

@@ -5,7 +5,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -50,7 +49,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
 
         //binds methods to button
         view.findViewById(R.id.btnLogin).setOnClickListener(this);
-        view.findViewById(R.id.btnRegister).setOnClickListener(this);
+        view.findViewById(R.id.btnAdd).setOnClickListener(this);
 
         return view;
     }
@@ -182,7 +181,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
 
             signIn(inputEmail.getEditText().getText().toString().trim(), inputPassword.getEditText().getText().toString().trim());
         }
-        if(i == R.id.btnRegister){
+        if(i == R.id.btnAdd){
             /*OPENS REGISTER ACTIVITY*/
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                     new RegisterFragment()).commit();
