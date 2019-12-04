@@ -58,7 +58,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
         inputPasswordConf = view.findViewById(R.id.inputPasswordConf);
 
         //binds methods to button
-        view.findViewById(R.id.btnRegister).setOnClickListener(this);
+        view.findViewById(R.id.btnAdd).setOnClickListener(this);
 
 
         return view;
@@ -201,7 +201,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onClick(View v){
         int i = v.getId();
-        if(i == R.id.btnRegister){
+        if(i == R.id.btnAdd){
             registerUser(inputEmail.getEditText().getText().toString().trim(),inputPassword.getEditText().getText().toString().trim(),inputPasswordConf.getEditText().getText().toString().trim());
         }
 

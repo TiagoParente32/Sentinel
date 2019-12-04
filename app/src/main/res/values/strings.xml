@@ -32,4 +32,6 @@
     <string name="cancel">Cancel</string>
     <string name="favoritDialogMessage">Do you really wish to remove this location from the Favorites?</string>
     <string name="favoriteDialogTitle">Confirmation</string>
+    <string name="no_favorites">No favorites added!</string>
+    <string name="add_favorite">Add Favorite</string>
 </resources>
