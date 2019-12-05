@@ -21,7 +21,7 @@ import java.util.Set;
 import pt.ipleiria.estg.dei.sentinel.fragments.FavoritesFragment;
 
 public class CustomAdapter extends BaseAdapter implements ListAdapter {
-    private ArrayList<String> list = new ArrayList<String>();
+    public ArrayList<String> list;
     private Context context;
     private SharedPreferences sharedPref;
 
@@ -75,9 +75,12 @@ public class CustomAdapter extends BaseAdapter implements ListAdapter {
 
             builder.setPositiveButton(R.string.ok, (dialog, id) -> {
                 list.remove(position);
-                new FavoritesFragment().persistData(list);
                 notifyDataSetChanged();
-            });
+                try{
+                    sharedPref.edit().putStringSet(Constants.PREFERENCES_FAVORITES_SET,new HashSet<>(this.list)).commit();
+                }catch(Exception ex){
+                    Log.i("ERROR_FAVORITES_SAVE","Error saving preference favorites-> " + ex.getMessage());
+                }            });
             builder.setNegativeButton(R.string.cancel, (dialog, id) -> {
 
             });

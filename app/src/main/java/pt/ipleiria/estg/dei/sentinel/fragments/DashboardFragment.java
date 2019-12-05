@@ -6,6 +6,8 @@ import androidx.fragment.app.Fragment;
 
 import android.animation.ObjectAnimator;
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
@@ -16,7 +18,6 @@ import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
@@ -33,7 +34,9 @@ import com.google.firebase.database.ValueEventListener;
 
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import pt.ipleiria.estg.dei.sentinel.Constants;
 import pt.ipleiria.estg.dei.sentinel.activities.MainActivity;
@@ -52,6 +55,8 @@ public class DashboardFragment extends Fragment {
     private ProgressBar pbHum;
     private Spinner spinnerRooms;
     private ImageButton btnShare;
+    private ImageButton btnAddFavorites;
+    private SharedPreferences sharedPref;
 
     //------------variables---------------
     private DatabaseReference mDatabase;
@@ -70,6 +75,7 @@ public class DashboardFragment extends Fragment {
     private int checkListener = 0;
     private ArrayAdapter<String> adapter;
     private String data = "";
+    private ArrayList<String> favoritesList;
 
 
 
@@ -109,6 +115,9 @@ public class DashboardFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.fragment_dashboard,container,false);
 
+
+        sharedPref = getActivity().getSharedPreferences(Constants.PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
+
         qoa = view.findViewById(R.id.textViewQOA);
         humidade = view.findViewById(R.id.textViewHumidade);
         temperatura = view.findViewById(R.id.textViewTemperatura);
@@ -118,16 +127,32 @@ public class DashboardFragment extends Fragment {
         pbTemp = view.findViewById(R.id.progressBarTemperatura);
         pbHum = view.findViewById(R.id.progressBarHumidade);
         btnShare = view.findViewById(R.id.btnShare);
+        btnAddFavorites = view.findViewById(R.id.btnAddFavorite);
 
+
+        /*GET FAVORITES LIST*/
+        Set<String> set;
+
+        if(sharedPref.contains(Constants.PREFERENCES_FAVORITES_SET)){
+
+            try{
+                set = sharedPref.getStringSet(Constants.PREFERENCES_FAVORITES_SET,null);
+            }catch(Exception ex){
+                Log.i("ERROR_FAVORITES_SAVE","Error saving preference favorites-> " + ex.getMessage());
+                set = new HashSet<>();
+            }
+
+            this.favoritesList = new ArrayList<>(set);
+
+        }else{
+            this.favoritesList = new ArrayList<>();
+        }
 
         /*CALLS MAIN ACTIVITY METHOD TO TWEET*/
-        view.findViewById(R.id.btnShare).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((MainActivity)getActivity()).loginToTwitter();
-            }
+        view.findViewById(R.id.btnShare).setOnClickListener(v -> ((MainActivity)getActivity()).loginToTwitter());
+        view.findViewById(R.id.btnAddFavorite).setOnClickListener(v -> {
+            persistFavorite();
         });
-
 
         //check if user is authenticated
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -143,15 +168,21 @@ public class DashboardFragment extends Fragment {
             spinnerRooms.setAlpha(1);
         }
 
+
+
+
         //user is signed in
         spinnerRooms.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 try {
+                    checkIsFavorite();
                     //este if é para o listener nao dar trigger quando o spinner é criado
                     if (++checkListener > 1) {
                         selectedIndex = position;
                         updateUIOnItemSelected();
+
+
                     }
                 } catch (Exception e) {
                     Log.w(TAG, "Failed to read value.", e);
@@ -164,7 +195,37 @@ public class DashboardFragment extends Fragment {
             }
         });
 
+
+
         return view;
+    }
+
+    private boolean checkIsFavorite(){
+        /*CHECKS IF SELECTED ROOM IS IN FAVORITES LIST*/
+        if(favoritesList.contains(spinnerRooms.getSelectedItem())) {
+            btnAddFavorites.setImageResource(R.drawable.ic_star_white);
+            return true;
+        }
+        btnAddFavorites.setImageResource(R.drawable.ic_star_white_border);
+        return false;
+
+    }
+
+    private void persistFavorite(){
+        if(checkIsFavorite()){
+            this.favoritesList.remove((String)spinnerRooms.getSelectedItem());
+            btnAddFavorites.setImageResource(R.drawable.ic_star_white_border);
+        }else{
+            this.favoritesList.add((String)spinnerRooms.getSelectedItem());
+            btnAddFavorites.setImageResource(R.drawable.ic_star_white);
+        }
+        try{
+            sharedPref.edit().putStringSet(Constants.PREFERENCES_FAVORITES_SET,new HashSet<>(this.favoritesList)).commit();
+        }catch(Exception ex){
+            Log.i("ERROR_FAVORITES_SAVE","Error saving preference favorites-> " + ex.getMessage());
+        }
+
+
     }
 
 

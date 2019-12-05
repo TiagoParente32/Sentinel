@@ -31,10 +31,10 @@
         android:layout_marginTop="20dp"
         android:background="@drawable/spinner_with_border"
         android:gravity="center"
+        android:overlapAnchor="false"
         android:popupBackground="@color/colorPrimary"
         android:spinnerMode="dropdown"
         android:textAlignment="center"
-        android:overlapAnchor="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewTitulo" />
@@ -181,5 +181,15 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageButton
+        android:id="@+id/btnAddFavorite"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="60dp"
+        android:backgroundTint="#00FFFFFF"
+        android:src="@drawable/ic_star_white_border"
+        app:layout_constraintStart_toEndOf="@+id/spinnerRooms"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

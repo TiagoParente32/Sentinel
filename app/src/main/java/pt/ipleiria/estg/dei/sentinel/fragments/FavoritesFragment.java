@@ -1,6 +1,5 @@
 package pt.ipleiria.estg.dei.sentinel.fragments;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -8,14 +7,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
-import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -25,10 +24,18 @@ import pt.ipleiria.estg.dei.sentinel.Constants;
 import pt.ipleiria.estg.dei.sentinel.CustomAdapter;
 import pt.ipleiria.estg.dei.sentinel.R;
 
-public class FavoritesFragment extends Fragment {
+public class FavoritesFragment extends Fragment implements View.OnClickListener {
     private ListView lView;
-    private ArrayList<String> list;
+    private ArrayList<String> favoritesList;
     private SharedPreferences sharedPref;
+    private ImageButton btnAdd;
+    private Spinner spinnerRooms;
+    private ArrayAdapter adapterSpinner;
+    private ArrayList<String> roomsList ;
+    private CustomAdapter adapterList;
+
+
+
 
     @Nullable
     @Override
@@ -39,16 +46,38 @@ public class FavoritesFragment extends Fragment {
 
         //instantiate custom adapter
 
-        CustomAdapter adapter = new CustomAdapter(list, this.getContext(),sharedPref);
+        adapterList = new CustomAdapter(favoritesList, this.getContext(),sharedPref);
         TextView emptyText = view.findViewById(R.id.tvEmpty);
+        btnAdd = view.findViewById(R.id.btnAdd);
+        spinnerRooms = view.findViewById(R.id.spinnerRoomsFavorites);
+
+
+        btnAdd.setOnClickListener(this);
+
+
+        //RECEBER DA MAIN ACTIVITY A ROOMSLIST
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            roomsList = bundle.getStringArrayList(Constants.DATA_INTENT_SPINNER_DATA);
+        }else{
+            roomsList = new ArrayList<>();
+        }
 
 
         //handle listview and assign adapter
         lView = view.findViewById(R.id.lvFavorites);
-        lView.setAdapter(adapter);
+        lView.setAdapter(adapterList);
         lView.setEmptyView(emptyText);
 
 
+        /*SPINNER ROOM*/
+        adapterSpinner = new ArrayAdapter<>(this.getActivity(), R.layout.spinner_list, roomsList);
+        adapterSpinner.setDropDownViewResource(R.layout.spinner_list_dropdown);
+        spinnerRooms.setAdapter(adapterSpinner);
+
+        readData();
+
+        adapterSpinner.notifyDataSetChanged();
 
 
         return view;
@@ -77,6 +106,8 @@ public class FavoritesFragment extends Fragment {
             Log.i("ERROR_FAVORITES_SAVE","Error saving preference favorites-> " + ex.getMessage());
         }
 
+        this.adapterList.list = favorites;
+        this.adapterList.notifyDataSetChanged();
 
     }
 
@@ -92,14 +123,36 @@ public class FavoritesFragment extends Fragment {
                 set = new HashSet<>();
             }
 
-            this.list = new ArrayList<>(set);
+            this.favoritesList = new ArrayList<>(set);
 
         }else{
-            this.list = new ArrayList<>();
+            this.favoritesList = new ArrayList<>();
         }
+
 
     }
 
 
+    @Override
+    public void onClick(View v) {
+        switch(v.getId()){
+            case R.id.btnAdd:
+                create();
+        }
+    }
 
+    private void create() {
+        String room =(String)  spinnerRooms.getSelectedItem();
+
+        if(favoritesList.contains(room)){
+            return;
+        }
+
+       this.favoritesList.add(room);
+
+       persistData(this.favoritesList);
+
+
+
+    }
 }
