@@ -43,7 +43,7 @@ public class FavoritesFragment extends Fragment  {
 
         //instantiate custom adapter
 
-        adapterList =new CustomAdapter(this.favoritesList,getActivity());
+        adapterList =new CustomAdapter(this.favoritesList,getActivity(),sharedPref);
         lView = view.findViewById(R.id.lvFavorites);
 
         TextView emptyText = view.findViewById(R.id.tvEmpty);

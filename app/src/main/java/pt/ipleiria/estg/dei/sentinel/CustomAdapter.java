@@ -23,11 +23,15 @@ import pt.ipleiria.estg.dei.sentinel.fragments.FavoritesFragment;
 public class CustomAdapter extends BaseAdapter implements ListAdapter {
     public ArrayList<String> list;
     private Context context;
+    private SharedPreferences sharedPref;
 
-    public CustomAdapter(ArrayList<String> list, Context context){
+
+    public CustomAdapter(ArrayList<String> list, Context context, SharedPreferences sharePref){
         this.list = list;
         this.context = context;
+        this.sharedPref = sharePref;
     }
+
 
 
     @Override
@@ -56,9 +60,34 @@ public class CustomAdapter extends BaseAdapter implements ListAdapter {
         //Handle TextView and display string from your list
         TextView listItemText = view.findViewById(R.id.list_item_string);
         listItemText.setText(list.get(position));
+        ImageButton deleteBtn = view.findViewById(R.id.btnDelete);
 
 
         listItemText.setTextColor(Color.WHITE);
+
+
+        deleteBtn.setOnClickListener(v -> {
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(context,R.style.DialogTheme);
+
+            builder.setMessage(R.string.favoritDialogMessage)
+                    .setTitle(R.string.favoriteDialogTitle);
+
+            builder.setPositiveButton(R.string.ok, (dialog, id) -> {
+                list.remove(position);
+                notifyDataSetChanged();
+                try{
+                    sharedPref.edit().putStringSet(Constants.PREFERENCES_FAVORITES_SET,new HashSet<>(this.list)).commit();
+                }catch(Exception ex){
+                    Log.i("ERROR_FAVORITES_SAVE","Error saving preference favorites-> " + ex.getMessage());
+                }            });
+            builder.setNegativeButton(R.string.cancel, (dialog, id) -> {
+
+            });
+            AlertDialog dialog = builder.create();
+            dialog.show();
+
+        });
 
         return view;
     }
