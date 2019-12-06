@@ -51,8 +51,6 @@ public class SendFragment extends Fragment implements SensorEventListener {
     private DatabaseReference ref;
     private String dateString;
     private StringBuilder horaSplit;
-    private boolean boolSensorTemp = true;
-    private boolean boolSensorHum = true;
     private boolean guessed = true;
     private TextView message ;
 
@@ -77,6 +75,11 @@ public class SendFragment extends Fragment implements SensorEventListener {
         btnGuessLocation = view.findViewById(R.id.buttonGuessLocation);
         message = view.findViewById(R.id.textViewMessageSend);
 
+        //disable edit
+        editTemperature.getEditText().setClickable(false);
+        editTemperature.getEditText().setEnabled(false);
+        editHumidity.getEditText().setClickable(false);
+        editHumidity.getEditText().setEnabled(false);
         //RECEBER DA MAIN ACTIVITY A ROOMSLIST
         Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -104,8 +107,11 @@ public class SendFragment extends Fragment implements SensorEventListener {
             editTemperature.getEditText().setText(""+temperatureSensor.getPower());
         } else {
             //mostrar "erro" depois
-            editTemperature.getEditText().setText("0");
+            //editTemperature.getEditText().setText("0");
             editTemperature.setError("Temperature Sensor not found");
+            btnSend.setEnabled(false);
+            btnSend.setClickable(false);
+            btnSend.setAlpha(0.5f);
         }
 
         if (h){
@@ -114,9 +120,11 @@ public class SendFragment extends Fragment implements SensorEventListener {
 
         }else {
             //mostrar "erro" depois
-            editHumidity.getEditText().setText("0");
+            //editHumidity.getEditText().setText("0");
             editHumidity.setError("Humidity Sensor not found");
-
+            btnSend.setEnabled(false);
+            btnSend.setClickable(false);
+            btnSend.setAlpha(0.5f);
         }
 
         btnSend.setOnClickListener(new Button.OnClickListener() {
@@ -212,13 +220,11 @@ public class SendFragment extends Fragment implements SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        if (event.sensor.getType() == Sensor.TYPE_AMBIENT_TEMPERATURE && boolSensorTemp){
+        if (event.sensor.getType() == Sensor.TYPE_AMBIENT_TEMPERATURE){
             editTemperature.getEditText().setText(""+ event.values[0]);
-            boolSensorTemp = false;
         }
-        if (event.sensor.getType() == Sensor.TYPE_RELATIVE_HUMIDITY && boolSensorHum){
+        if (event.sensor.getType() == Sensor.TYPE_RELATIVE_HUMIDITY){
             editHumidity.getEditText().setText(""+ event.values[0]);
-            boolSensorHum = false;
         }
     }
 
