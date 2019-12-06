@@ -7,27 +7,13 @@
     android:background="@color/colorPrimary">
 
 
-    <Spinner
-        android:id="@+id/spinnerRoomsFavorites"
-        style="@style/Widget.AppCompat.DropDownItem.Spinner"
-        android:layout_width="300dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/spinner_with_border"
-        android:gravity="center"
-        android:overlapAnchor="false"
-        android:popupBackground="@color/colorPrimary"
-        android:spinnerMode="dropdown"
-        android:textAlignment="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.3"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <TextView
         android:id="@+id/tvEmpty"
         android:layout_width="352dp"
         android:layout_height="73dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
         android:fontFamily="sans-serif"
         android:text="@string/no_favorites"
         android:textAlignment="center"
@@ -38,7 +24,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:divider="#FFFFFF"
+        android:dividerHeight="2dp"/>
 
 
     <ListView
@@ -54,18 +42,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerRoomsFavorites">
+        app:layout_constraintTop_toTopOf="parent">
 
     </ListView>
 
-    <ImageButton
-        android:id="@+id/btnAdd"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="20dp"
-        android:backgroundTint="#00FFFFFF"
-        app:layout_constraintStart_toEndOf="@+id/spinnerRoomsFavorites"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_add_white" />
 </androidx.constraintlayout.widget.ConstraintLayout>
