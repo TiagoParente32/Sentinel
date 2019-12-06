@@ -2,6 +2,7 @@ package pt.ipleiria.estg.dei.sentinel.fragments;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,14 +25,10 @@ import pt.ipleiria.estg.dei.sentinel.Constants;
 import pt.ipleiria.estg.dei.sentinel.CustomAdapter;
 import pt.ipleiria.estg.dei.sentinel.R;
 
-public class FavoritesFragment extends Fragment implements View.OnClickListener {
+public class FavoritesFragment extends Fragment  {
     private ListView lView;
     private ArrayList<String> favoritesList;
     private SharedPreferences sharedPref;
-    private ImageButton btnAdd;
-    private Spinner spinnerRooms;
-    private ArrayAdapter adapterSpinner;
-    private ArrayList<String> roomsList ;
     private CustomAdapter adapterList;
 
 
@@ -46,22 +43,10 @@ public class FavoritesFragment extends Fragment implements View.OnClickListener 
 
         //instantiate custom adapter
 
-        adapterList = new CustomAdapter(favoritesList, this.getContext(),sharedPref);
+        adapterList =new CustomAdapter(this.favoritesList,getActivity());
+        lView = view.findViewById(R.id.lvFavorites);
+
         TextView emptyText = view.findViewById(R.id.tvEmpty);
-        btnAdd = view.findViewById(R.id.btnAdd);
-        spinnerRooms = view.findViewById(R.id.spinnerRoomsFavorites);
-
-
-        btnAdd.setOnClickListener(this);
-
-
-        //RECEBER DA MAIN ACTIVITY A ROOMSLIST
-        Bundle bundle = this.getArguments();
-        if (bundle != null) {
-            roomsList = bundle.getStringArrayList(Constants.DATA_INTENT_SPINNER_DATA);
-        }else{
-            roomsList = new ArrayList<>();
-        }
 
 
         //handle listview and assign adapter
@@ -70,14 +55,6 @@ public class FavoritesFragment extends Fragment implements View.OnClickListener 
         lView.setEmptyView(emptyText);
 
 
-        /*SPINNER ROOM*/
-        adapterSpinner = new ArrayAdapter<>(this.getActivity(), R.layout.spinner_list, roomsList);
-        adapterSpinner.setDropDownViewResource(R.layout.spinner_list_dropdown);
-        spinnerRooms.setAdapter(adapterSpinner);
-
-        readData();
-
-        adapterSpinner.notifyDataSetChanged();
 
 
         return view;
@@ -98,18 +75,6 @@ public class FavoritesFragment extends Fragment implements View.OnClickListener 
     }
 
 
-    public  void persistData(ArrayList<String> favorites){
-        Set<String> set = new HashSet<>(favorites);
-        try{
-            sharedPref.edit().putStringSet(Constants.PREFERENCES_FAVORITES_SET,set).commit();
-        }catch(Exception ex){
-            Log.i("ERROR_FAVORITES_SAVE","Error saving preference favorites-> " + ex.getMessage());
-        }
-
-        this.adapterList.list = favorites;
-        this.adapterList.notifyDataSetChanged();
-
-    }
 
     private void readData(){
         Set<String> set;
@@ -133,26 +98,5 @@ public class FavoritesFragment extends Fragment implements View.OnClickListener 
     }
 
 
-    @Override
-    public void onClick(View v) {
-        switch(v.getId()){
-            case R.id.btnAdd:
-                create();
-        }
-    }
 
-    private void create() {
-        String room =(String)  spinnerRooms.getSelectedItem();
-
-        if(favoritesList.contains(room)){
-            return;
-        }
-
-       this.favoritesList.add(room);
-
-       persistData(this.favoritesList);
-
-
-
-    }
 }

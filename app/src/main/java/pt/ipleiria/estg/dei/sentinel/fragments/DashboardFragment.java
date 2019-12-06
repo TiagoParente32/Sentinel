@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment;
 
 import android.animation.ObjectAnimator;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -213,11 +214,33 @@ public class DashboardFragment extends Fragment {
 
     private void persistFavorite(){
         if(checkIsFavorite()){
-            this.favoritesList.remove((String)spinnerRooms.getSelectedItem());
-            btnAddFavorites.setImageResource(R.drawable.ic_star_white_border);
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(),R.style.DialogTheme);
+
+                builder.setMessage(R.string.favoritDialogMessage)
+                        .setTitle(R.string.favoriteDialogTitle);
+
+                builder.setPositiveButton(R.string.ok, (dialog, id) -> {
+                    this.favoritesList.remove((String)spinnerRooms.getSelectedItem());
+                    adapter.notifyDataSetChanged();
+                    try{
+                        sharedPref.edit().putStringSet(Constants.PREFERENCES_FAVORITES_SET,new HashSet<>(this.favoritesList)).commit();
+                        btnAddFavorites.setImageResource(R.drawable.ic_star_white_border);
+
+                    }catch(Exception ex){
+                        Log.i("ERROR_FAVORITES_SAVE","Error saving preference favorites-> " + ex.getMessage());
+                    }            });
+                builder.setNegativeButton(R.string.cancel, (dialog, id) -> {
+
+                });
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
         }else{
+
             this.favoritesList.add((String)spinnerRooms.getSelectedItem());
             btnAddFavorites.setImageResource(R.drawable.ic_star_white);
+
         }
         try{
             sharedPref.edit().putStringSet(Constants.PREFERENCES_FAVORITES_SET,new HashSet<>(this.favoritesList)).commit();

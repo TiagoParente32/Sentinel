@@ -236,9 +236,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             case R.id.nav_favorites:
                 FavoritesFragment favoritesFragment = new FavoritesFragment();
-                bundle = new Bundle();
-                bundle.putStringArrayList(Constants.DATA_INTENT_SPINNER_DATA,roomsList);
-                favoritesFragment.setArguments(bundle);
 
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         favoritesFragment).commit();
