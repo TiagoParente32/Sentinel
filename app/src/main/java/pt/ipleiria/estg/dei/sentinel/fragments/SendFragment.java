@@ -75,6 +75,7 @@ public class SendFragment extends Fragment implements SensorEventListener {
         btnGuessLocation = view.findViewById(R.id.buttonGuessLocation);
         message = view.findViewById(R.id.textViewMessageSend);
 
+
         //disable edit
         editTemperature.getEditText().setClickable(false);
         editTemperature.getEditText().setEnabled(false);

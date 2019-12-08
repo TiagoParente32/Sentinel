@@ -36,6 +36,7 @@ import pt.ipleiria.estg.dei.sentinel.fragments.FavoritesFragment;
 import pt.ipleiria.estg.dei.sentinel.fragments.LoginFragment;
 import pt.ipleiria.estg.dei.sentinel.fragments.RegisterFragment;
 import pt.ipleiria.estg.dei.sentinel.fragments.SendFragment;
+import pt.ipleiria.estg.dei.sentinel.fragments.StatisticsFragment;
 import twitter4j.Twitter;
 import twitter4j.TwitterFactory;
 import twitter4j.auth.AccessToken;
@@ -210,6 +211,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()) {
+            case R.id.nav_statistics:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        new StatisticsFragment()).commit();
+                break;
             case R.id.nav_send:
                 SendFragment sendFragment = new SendFragment();
                 Bundle bundle = new Bundle();
