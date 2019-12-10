@@ -249,7 +249,15 @@ public class StatisticsFragment extends Fragment {
         temperatura.resetData(dataPointsTemp);
         humidade.resetData(dataPointsHum);
 
-        graph.getViewport().scrollToEnd();
+        //graph.getGridLabelRenderer().setNumHorizontalLabels(values.size());
+
+        graph.getViewport().setMinX(fromDate.getTime());
+        graph.getViewport().setMaxX(toDate.getTime());
+
+        graph.getViewport().setXAxisBoundsManual(true);
+
+        //graph.getGridLabelRenderer().setHumanRounding(false);
+        //graph.getViewport().scrollToEnd();
 
     }
 
@@ -270,13 +278,6 @@ public class StatisticsFragment extends Fragment {
         graph.getViewport().setScalable(true);
         graph.getViewport().setScrollable(true);
         graph.getViewport().scrollToEnd();
-//        graph.onDataChanged(false, false);
-//        graph.getViewport().calcCompleteRange();
-//        graph.getViewport().computeScroll();
-//        graph.getViewport().isXAxisBoundsManual();
-//        graph.getViewport().isYAxisBoundsManual();
-//        graph.getViewport().setMaxXAxisSize(100);
-
 
         //exemplo
         temperatura = new LineGraphSeries<DataPoint>();
