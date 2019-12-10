@@ -189,8 +189,17 @@
         android:layout_height="50dp"
         android:backgroundTint="#00FFFFFF"
         android:src="@drawable/ic_star_white_border"
-        app:layout_constraintBottom_toBottomOf="@+id/spinnerRooms"
         app:layout_constraintStart_toEndOf="@+id/spinnerRooms"
+        app:layout_constraintTop_toTopOf="@+id/spinnerRooms" />
+
+    <ImageButton
+        android:id="@+id/btnExposure"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="7dp"
+        android:backgroundTint="#00FFFFFF"
+        android:src="@drawable/ic_exposure_white"
+        app:layout_constraintEnd_toStartOf="@+id/spinnerRooms"
         app:layout_constraintTop_toTopOf="@+id/spinnerRooms" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

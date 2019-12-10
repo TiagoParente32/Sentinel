@@ -24,12 +24,14 @@ public class CustomAdapter extends BaseAdapter implements ListAdapter {
     public ArrayList<String> list;
     private Context context;
     private SharedPreferences sharedPref;
+    private int view; // 1-favorites 2-exposure
 
 
-    public CustomAdapter(ArrayList<String> list, Context context, SharedPreferences sharePref){
+    public CustomAdapter(ArrayList<String> list, Context context, SharedPreferences sharePref,int view){
         this.list = list;
         this.context = context;
         this.sharedPref = sharePref;
+        this.view = view;
     }
 
 
@@ -77,7 +79,12 @@ public class CustomAdapter extends BaseAdapter implements ListAdapter {
                 list.remove(position);
                 notifyDataSetChanged();
                 try{
-                    sharedPref.edit().putStringSet(Constants.PREFERENCES_FAVORITES_SET,new HashSet<>(this.list)).commit();
+                    if(this.view == 1){
+                        sharedPref.edit().putStringSet(Constants.PREFERENCES_FAVORITES_SET,new HashSet<>(this.list)).commit();
+
+                    }else if(this.view == 2){
+                        sharedPref.edit().putStringSet(Constants.PREFERENCES_EXPOSURE_SET,new HashSet<>(this.list)).commit();
+                    }
                 }catch(Exception ex){
                     Log.i("ERROR_FAVORITES_SAVE","Error saving preference favorites-> " + ex.getMessage());
                 }            });
