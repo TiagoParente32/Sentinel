@@ -149,11 +149,14 @@ public class DashboardFragment extends Fragment {
             this.favoritesList = new ArrayList<>();
         }
 
-        /*CALLS MAIN ACTIVITY METHOD TO TWEET*/
+        /*ON CLICK ACTIONS*/
         view.findViewById(R.id.btnShare).setOnClickListener(v -> ((MainActivity)getActivity()).loginToTwitter());
+
         view.findViewById(R.id.btnAddFavorite).setOnClickListener(v -> {
             persistFavorite();
         });
+
+        
 
         //check if user is authenticated
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();

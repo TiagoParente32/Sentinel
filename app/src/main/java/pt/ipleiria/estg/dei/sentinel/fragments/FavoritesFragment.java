@@ -46,7 +46,7 @@ public class FavoritesFragment extends Fragment  {
         adapterList =new CustomAdapter(this.favoritesList,getActivity(),sharedPref);
         lView = view.findViewById(R.id.lvFavorites);
 
-        TextView emptyText = view.findViewById(R.id.tvEmpty);
+        TextView emptyText = view.findViewById(R.id.tvEmptyFavorites);
 
 
         //handle listview and assign adapter
