@@ -139,8 +139,6 @@ public class SendFragment extends Fragment implements SensorEventListener {
                 String horaMin = formatter2.format(date);
                 //horaSplit;
                 horaSplit = new StringBuilder(horaMin);
-                System.out.println("*****************************");
-                System.out.println("hora lenght" + horaSplit.length());
                 horaSplit.setCharAt(2,'h');
                 horaSplit.setCharAt(5,'m');
                 horaSplit.insert(horaSplit.length(),'s');
@@ -158,7 +156,7 @@ public class SendFragment extends Fragment implements SensorEventListener {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if(task.isSuccessful()){
-                            message.setText("Data Sent Sucessfully");
+                            message.setText("Value Sent Sucessfully");
                             message.setVisibility(View.VISIBLE);
                             message.postDelayed(new Runnable() {
                                 public void run() {
@@ -166,7 +164,7 @@ public class SendFragment extends Fragment implements SensorEventListener {
                                 }
                             }, 3000);
                         }else {
-                            message.setText("Error Sending Data");
+                            message.setText("Error Sending Value");
                             message.setVisibility(View.VISIBLE);
                             message.postDelayed(new Runnable() {
                                 public void run() {
