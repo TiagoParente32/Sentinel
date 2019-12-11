@@ -43,7 +43,7 @@
         android:id="@+id/textViewFrom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
+        android:layout_marginStart="16dp"
         android:gravity="center"
         android:text="@string/from"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
@@ -70,15 +70,14 @@
         android:id="@+id/dateFrom"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:ems="10"
         android:hint="2019-12-4"
         android:inputType="date"
         android:textColor="@color/colorWhite"
-        android:textColorHint="@color/colorWhite"
-        app:layout_constraintEnd_toEndOf="@+id/spinnerFilter"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/spinnerFilter"
+        android:textColorHint="@color/colorTransparentWhite"
+        app:layout_constraintStart_toEndOf="@+id/textViewFrom"
         app:layout_constraintTop_toBottomOf="@+id/spinnerFilter" />
 
     <EditText
@@ -90,7 +89,7 @@
         android:hint="2019-12-5"
         android:inputType="date"
         android:textColor="@color/colorWhite"
-        android:textColorHint="@color/colorWhite"
+        android:textColorHint="@color/colorTransparentWhite"
         app:layout_constraintBottom_toBottomOf="@+id/dateFrom"
         app:layout_constraintStart_toEndOf="@+id/textViewTo"
         app:layout_constraintTop_toTopOf="@+id/dateFrom" />
@@ -99,9 +98,12 @@
         android:id="@+id/graph"
         android:layout_width="match_parent"
         android:layout_height="350dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="24dp"
-        app:layout_constraintTop_toBottomOf="@+id/dateFrom"
-        tools:layout_editor_absoluteX="16dp" />
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dateFrom" />
 
     <Button
         android:id="@+id/btnTable"
@@ -133,5 +135,16 @@
         android:textColor="@color/colorWhite"
         app:layout_constraintStart_toEndOf="@+id/checkBoxTemp"
         app:layout_constraintTop_toBottomOf="@+id/graph" />
+
+    <ImageButton
+        android:id="@+id/btn_search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:background="@null"
+        android:src="@android:drawable/ic_menu_search"
+        app:layout_constraintBottom_toBottomOf="@+id/dateTo"
+        app:layout_constraintStart_toEndOf="@+id/dateTo"
+        app:layout_constraintTop_toTopOf="@+id/dateTo" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

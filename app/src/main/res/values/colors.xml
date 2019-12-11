@@ -10,4 +10,5 @@
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorTweet">#223344</color>
     <color name="colorTwitterBlue">#00ACED</color>
+    <color name="colorTransparentWhite">#59FFFFFF</color>
 </resources>

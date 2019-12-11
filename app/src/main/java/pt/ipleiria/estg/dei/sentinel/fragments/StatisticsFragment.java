@@ -11,8 +11,10 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -44,24 +46,23 @@ import pt.ipleiria.estg.dei.sentinel.R;
 
 public class StatisticsFragment extends Fragment {
 
+    public static final String TAG = "Statistics";
     private Spinner spinnerFilter;
-    private EditText dateFrom;
-    private EditText dateTo;
+    private EditText editDateFrom;
+    private EditText editDateTo;
     private TextView txtFrom;
     private TextView txtTo;
     private GraphView graph;
     private CheckBox checkBoxTemp;
     private CheckBox checkBoxHum;
-    LineGraphSeries<DataPoint> temperatura;
-    LineGraphSeries<DataPoint> humidade;
+    private ImageButton btnSearch;
+    private DatabaseReference mDatabase;
     private Date fromDate;
     private Date toDate;
-    private String selected;
-    private DatabaseReference mDatabase;
-    public static final String TAG = "Statistics";
     private DataSnapshot ds;
-    private int i = 0;
     private List<Value> values;
+    private LineGraphSeries<DataPoint> temperatura;
+    private LineGraphSeries<DataPoint> humidade;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -77,32 +78,28 @@ public class StatisticsFragment extends Fragment {
         getActivity().setTitle("DASHBOARD");
 
         spinnerFilter = view.findViewById(R.id.spinnerFilter);
-        dateFrom = view.findViewById(R.id.dateFrom);
-        dateTo = view.findViewById(R.id.dateTo);
+        editDateFrom = view.findViewById(R.id.dateFrom);
+        editDateTo = view.findViewById(R.id.dateTo);
         txtFrom = view.findViewById(R.id.textViewFrom);
         txtTo = view.findViewById(R.id.textViewTo);
         graph = view.findViewById(R.id.graph);
         checkBoxHum = view.findViewById(R.id.checkBoxHum);
         checkBoxTemp = view.findViewById(R.id.checkBoxTemp);
         values = new ArrayList<>();
+        btnSearch = view.findViewById(R.id.btn_search);
 
         checkBoxHum.setChecked(true);
         checkBoxTemp.setChecked(true);
 
-        //set default date
+        //set default date pq o onDataChange é executado primeiro que o evento do spinner
         Calendar cal = Calendar.getInstance();
-//        toDate = new Date(System.currentTimeMillis());
-//        cal.setTime(toDate);
-//        cal.add(Calendar.HOUR, -24);
-//        fromDate = cal.getTime();
         toDate = new Date(System.currentTimeMillis());
         cal.setTime(toDate);
-        cal.add(Calendar.WEEK_OF_MONTH, -1);
+        cal.add(Calendar.HOUR, -24);
         fromDate = cal.getTime();
 
-        //set invisible
+        //set invisible From-To form
         toggleFromTo(false);
-
 
         //SETUP SPINNER LIST
         String[] arraySpinner = new String[] {
@@ -117,15 +114,13 @@ public class StatisticsFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Calendar cal = Calendar.getInstance();
+                //set dos intervalos de datas, no custom é no btnSearch
                 switch (spinnerFilter.getSelectedItem().toString()){
                     case "Custom":
                         toggleFromTo(true);
                         break;
                     case "Day":
                         toggleFromTo(false);
-                        //reset vars
-    //                        temperatura = new LineGraphSeries<>();
-    //                        humidade = new LineGraphSeries<>();
                         toDate = new Date(System.currentTimeMillis());
                         cal.setTime(toDate);
                         cal.add(Calendar.HOUR, -24);
@@ -134,8 +129,6 @@ public class StatisticsFragment extends Fragment {
                         updateGraph(ds);
                         break;
                     case "Week":
-//                        temperatura = new LineGraphSeries<>();
-//                        humidade = new LineGraphSeries<>();
                         toggleFromTo(false);
                         toDate = new Date(System.currentTimeMillis());
                         cal.setTime(toDate);
@@ -145,8 +138,6 @@ public class StatisticsFragment extends Fragment {
                         updateGraph(ds);
                         break;
                     case "Month":
-//                        temperatura = new LineGraphSeries<>();
-//                        humidade = new LineGraphSeries<>();
                         toggleFromTo(false);
                         toDate = new Date(System.currentTimeMillis());
                         cal.setTime(toDate);
@@ -156,7 +147,6 @@ public class StatisticsFragment extends Fragment {
                         updateGraph(ds);
                         break;
                 }
-                selected = spinnerFilter.getSelectedItem().toString();
             }
 
             @Override
@@ -206,6 +196,25 @@ public class StatisticsFragment extends Fragment {
             }
         });
 
+        btnSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    if (!editDateFrom.getText().toString().matches("([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))") ||
+                            !editDateTo.getText().toString().matches("([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))")) {
+                        Toast toast = Toast.makeText(getContext(), "Invalid Date Format 'yyyy-MM-dd'", Toast.LENGTH_SHORT);
+                        toast.show();
+                        return;
+                    }
+                    toDate = new SimpleDateFormat("yyyy-MM-dd").parse(editDateTo.getText().toString());
+                    fromDate = new SimpleDateFormat("yyyy-MM-dd").parse(editDateFrom.getText().toString());
+                    updateGraph(ds);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
         return view;
     }
 
@@ -234,13 +243,11 @@ public class StatisticsFragment extends Fragment {
         }
 
         //ordenar por data
-        //AED carrega
         Collections.sort(values, new CompareDates());
 
         DataPoint[] dataPointsTemp = new DataPoint[values.size()];
         DataPoint[] dataPointsHum = new DataPoint[values.size()];
 
-        //porque? porque o foreach nao estava a dar dont ask me why
         for(int i = 0; i< values.size(); i++){
             Value value = values.get(i);
             dataPointsTemp[i] = new DataPoint(value.getDate().getTime(),value.getTemperatura());
@@ -249,15 +256,12 @@ public class StatisticsFragment extends Fragment {
         temperatura.resetData(dataPointsTemp);
         humidade.resetData(dataPointsHum);
 
-        //graph.getGridLabelRenderer().setNumHorizontalLabels(values.size());
 
         graph.getViewport().setMinX(fromDate.getTime());
         graph.getViewport().setMaxX(toDate.getTime());
 
         graph.getViewport().setXAxisBoundsManual(true);
-
-        //graph.getGridLabelRenderer().setHumanRounding(false);
-        //graph.getViewport().scrollToEnd();
+        graph.getGridLabelRenderer().setNumHorizontalLabels(8);
 
     }
 
@@ -268,16 +272,20 @@ public class StatisticsFragment extends Fragment {
         graph.getGridLabelRenderer().setHorizontalLabelsColor(Color.WHITE);
         graph.getGridLabelRenderer().setGridColor(Color.WHITE);
         graph.getGridLabelRenderer().setHorizontalLabelsVisible(true);
-        graph.getGridLabelRenderer().setHorizontalLabelsAngle(90);
-        graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(getActivity(),new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")));
-        graph.getGridLabelRenderer().reloadStyles();
+        graph.getGridLabelRenderer().setHorizontalLabelsAngle(135);
+        graph.getGridLabelRenderer().setVerticalLabelsVisible(true);
+        graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(getContext(),new SimpleDateFormat("yy/MM/dd HH:mm")));
         graph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
         graph.getLegendRenderer().setVisible(true);
-
 
         graph.getViewport().setScalable(true);
         graph.getViewport().setScrollable(true);
         graph.getViewport().scrollToEnd();
+        graph.getViewport().setYAxisBoundsManual(true);
+        graph.getViewport().setMaxY(100);
+        graph.getViewport().setMinY(-100);
+
+        graph.getGridLabelRenderer().reloadStyles();
 
         //exemplo
         temperatura = new LineGraphSeries<DataPoint>();
@@ -293,15 +301,17 @@ public class StatisticsFragment extends Fragment {
 
     public void toggleFromTo(boolean bool){
         if(bool){
-            dateFrom.setVisibility(View.VISIBLE);
-            dateTo.setVisibility(View.VISIBLE);
+            editDateFrom.setVisibility(View.VISIBLE);
+            editDateTo.setVisibility(View.VISIBLE);
             txtFrom.setVisibility(View.VISIBLE);
             txtTo.setVisibility(View.VISIBLE);
+            btnSearch.setVisibility(View.VISIBLE);
         }else{
-            dateFrom.setVisibility(View.INVISIBLE);
-            dateTo.setVisibility(View.INVISIBLE);
+            editDateFrom.setVisibility(View.INVISIBLE);
+            editDateTo.setVisibility(View.INVISIBLE);
             txtFrom.setVisibility(View.INVISIBLE);
             txtTo.setVisibility(View.INVISIBLE);
+            btnSearch.setVisibility(View.INVISIBLE);
         }
     }
 }
