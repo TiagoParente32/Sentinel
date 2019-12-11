@@ -38,4 +38,10 @@
     <string name="temperature">Temperature</string>
     <string name="humidity">Humidity</string>
     <string name="location">Guess My Location</string>
+    <string name="statistics">Statistics</string>
+    <string name="last">Last:</string>
+    <string name="from">From:</string>
+    <string name="to">To:</string>
+    <string name="table">Table</string>
+
 </resources>

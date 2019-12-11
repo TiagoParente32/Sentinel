@@ -36,6 +36,7 @@ import pt.ipleiria.estg.dei.sentinel.fragments.FavoritesFragment;
 import pt.ipleiria.estg.dei.sentinel.fragments.LoginFragment;
 import pt.ipleiria.estg.dei.sentinel.fragments.RegisterFragment;
 import pt.ipleiria.estg.dei.sentinel.fragments.SendFragment;
+import pt.ipleiria.estg.dei.sentinel.fragments.StatisticsFragment;
 import twitter4j.Twitter;
 import twitter4j.TwitterFactory;
 import twitter4j.auth.AccessToken;
@@ -162,6 +163,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     navigationView.getMenu().findItem(R.id.nav_register).setVisible(true);
                     navigationView.getMenu().findItem(R.id.nav_favorites).setVisible(false);
                     navigationView.getMenu().findItem(R.id.nav_send).setVisible(false);
+                    navigationView.getMenu().findItem(R.id.nav_statistics).setVisible(false);
 
                 } else {
                     /*DISPLAYS LOGIN AND REGISTER BUTTONS*/
@@ -172,6 +174,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
                     navigationView.getMenu().findItem(R.id.nav_send).setVisible(true);
+                    navigationView.getMenu().findItem(R.id.nav_statistics).setVisible(true);
                     tvHeaderEmail.setText(currentUser.getEmail());
 
                 }
@@ -210,6 +213,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()) {
+            case R.id.nav_statistics:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        new StatisticsFragment()).commit();
+                break;
             case R.id.nav_send:
                 SendFragment sendFragment = new SendFragment();
                 Bundle bundle = new Bundle();
