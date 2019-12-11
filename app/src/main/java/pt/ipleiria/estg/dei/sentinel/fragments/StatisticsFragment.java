@@ -1,6 +1,7 @@
 package pt.ipleiria.estg.dei.sentinel.fragments;
 
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -8,11 +9,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,6 +44,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import de.codecrafters.tableview.TableView;
 import pt.ipleiria.estg.dei.sentinel.CompareDates;
 import pt.ipleiria.estg.dei.sentinel.Value;
 import pt.ipleiria.estg.dei.sentinel.R;
@@ -63,6 +68,12 @@ public class StatisticsFragment extends Fragment {
     private List<Value> values;
     private LineGraphSeries<DataPoint> temperatura;
     private LineGraphSeries<DataPoint> humidade;
+    private TableLayout tableLayout;
+    private Button btnTable;
+    private boolean tableBoolean = false;
+    private TextView h1;
+    private TextView h2;
+    private TextView h3;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -87,6 +98,13 @@ public class StatisticsFragment extends Fragment {
         checkBoxTemp = view.findViewById(R.id.checkBoxTemp);
         values = new ArrayList<>();
         btnSearch = view.findViewById(R.id.btn_search);
+        tableLayout = view.findViewById(R.id.tableLayout);
+        btnTable = view.findViewById(R.id.btnTable);
+        h1 = view.findViewById(R.id.h1);
+        h2 = view.findViewById(R.id.h2);
+        h3 = view.findViewById(R.id.h3);
+
+
 
         checkBoxHum.setChecked(true);
         checkBoxTemp.setChecked(true);
@@ -100,6 +118,8 @@ public class StatisticsFragment extends Fragment {
 
         //set invisible From-To form
         toggleFromTo(false);
+        //esconde table e mostra graph só
+        toggleTable(false);
 
         //SETUP SPINNER LIST
         String[] arraySpinner = new String[] {
@@ -215,23 +235,30 @@ public class StatisticsFragment extends Fragment {
             }
         });
 
+        btnTable.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggleTable(!tableBoolean);
+                tableBoolean=!tableBoolean;
+            }
+        });
         return view;
     }
 
-    public void updateGraph(DataSnapshot dataSnapshot){
+    public void updateGraph(DataSnapshot dataSnapshot) {
         values.clear();
-        for (DataSnapshot rooms: dataSnapshot.getChildren()) {
-            for (DataSnapshot dates: rooms.getChildren()) {
-                for(DataSnapshot array: dates.getChildren()){
+        for (DataSnapshot rooms : dataSnapshot.getChildren()) {
+            for (DataSnapshot dates : rooms.getChildren()) {
+                for (DataSnapshot array : dates.getChildren()) {
                     StringBuilder stringDate = new StringBuilder(dates.getKey() + " " + array.child("hora").getValue().toString());
-                    stringDate.setCharAt(13,':');
-                    stringDate.setCharAt(16,':');
+                    stringDate.setCharAt(13, ':');
+                    stringDate.setCharAt(16, ':');
                     stringDate.setLength(stringDate.length() - 1);
                     try {
                         Date dateToCompare = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(stringDate.toString());
-                        if(dateToCompare.compareTo(fromDate)>=0 && dateToCompare.compareTo(toDate)<=0){
+                        if (dateToCompare.compareTo(fromDate) >= 0 && dateToCompare.compareTo(toDate) <= 0) {
                             //dateToCompare > fromDate && dateToCompare<=toDate
-                            Value dado = new Value(dateToCompare,Float.parseFloat(array.child("temperatura").getValue().toString()),
+                            Value dado = new Value(dateToCompare, Float.parseFloat(array.child("temperatura").getValue().toString()),
                                     Float.parseFloat(array.child("humidade").getValue().toString()));
                             values.add(dado);
                         }
@@ -248,22 +275,49 @@ public class StatisticsFragment extends Fragment {
         DataPoint[] dataPointsTemp = new DataPoint[values.size()];
         DataPoint[] dataPointsHum = new DataPoint[values.size()];
 
-        for(int i = 0; i< values.size(); i++){
+        tableLayout.removeAllViewsInLayout();
+        //border
+        GradientDrawable border = new GradientDrawable();
+        //border.setColor(0xFFFFFFFF); //white background
+        border.setStroke(1, 0xFF000000);
+
+        for (int i = 0; i < values.size(); i++) {
             Value value = values.get(i);
-            dataPointsTemp[i] = new DataPoint(value.getDate().getTime(),value.getTemperatura());
-            dataPointsHum[i] = new DataPoint(value.getDate().getTime(),value.getHumidadade());
+            dataPointsTemp[i] = new DataPoint(value.getDate().getTime(), value.getTemperatura());
+            dataPointsHum[i] = new DataPoint(value.getDate().getTime(), value.getHumidadade());
+
+            //tableBoolean
+            TableRow tr = new TableRow(getContext());
+            TextView c1 = new TextView(getContext());
+            c1.setText(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(values.get(i).getDate()));
+            c1.setTextColor(Color.WHITE);
+
+            TextView c2 = new TextView(getContext());
+            c2.setText(String.format("%.02f",values.get(i).getHumidadade()));
+            c2.setTextColor(Color.WHITE);
+
+            TextView c3 = new TextView(getContext());
+            c3.setText(String.format("%.02f",values.get(i).getTemperatura()));
+            c3.setTextColor(Color.WHITE);
+
+            tr.addView(c1);
+            tr.addView(c2);
+            tr.addView(c3);
+
+            tr.setBackground(border);
+            tableLayout.addView(tr);
         }
+
         temperatura.resetData(dataPointsTemp);
         humidade.resetData(dataPointsHum);
-
 
         graph.getViewport().setMinX(fromDate.getTime());
         graph.getViewport().setMaxX(toDate.getTime());
 
         graph.getViewport().setXAxisBoundsManual(true);
         graph.getGridLabelRenderer().setNumHorizontalLabels(8);
-
     }
+
 
     public void renderGraph(){
         graph.getGridLabelRenderer().setVerticalLabelsColor(Color.WHITE);
@@ -287,7 +341,6 @@ public class StatisticsFragment extends Fragment {
 
         graph.getGridLabelRenderer().reloadStyles();
 
-        //exemplo
         temperatura = new LineGraphSeries<DataPoint>();
         humidade = new LineGraphSeries<DataPoint>();
         temperatura.setColor(Color.RED);
@@ -312,6 +365,28 @@ public class StatisticsFragment extends Fragment {
             txtFrom.setVisibility(View.INVISIBLE);
             txtTo.setVisibility(View.INVISIBLE);
             btnSearch.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    public void toggleTable(boolean bool){
+        if(bool){
+            tableLayout.setVisibility(View.VISIBLE);
+            h1.setVisibility(View.VISIBLE);
+            h2.setVisibility(View.VISIBLE);
+            h3.setVisibility(View.VISIBLE);
+            graph.setVisibility(View.INVISIBLE);
+            checkBoxHum.setVisibility(View.INVISIBLE);
+            checkBoxTemp.setVisibility(View.INVISIBLE);
+            btnTable.setText("Graph");
+        }else {
+            tableLayout.setVisibility(View.INVISIBLE);
+            h1.setVisibility(View.INVISIBLE);
+            h2.setVisibility(View.INVISIBLE);
+            h3.setVisibility(View.INVISIBLE);
+            graph.setVisibility(View.VISIBLE);
+            checkBoxHum.setVisibility(View.VISIBLE);
+            checkBoxTemp.setVisibility(View.VISIBLE);
+            btnTable.setText("Table");
         }
     }
 }
