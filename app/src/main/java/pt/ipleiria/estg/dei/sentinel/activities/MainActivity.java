@@ -163,6 +163,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     navigationView.getMenu().findItem(R.id.nav_register).setVisible(true);
                     navigationView.getMenu().findItem(R.id.nav_favorites).setVisible(false);
                     navigationView.getMenu().findItem(R.id.nav_send).setVisible(false);
+                    navigationView.getMenu().findItem(R.id.nav_statistics).setVisible(false);
 
                 } else {
                     /*DISPLAYS LOGIN AND REGISTER BUTTONS*/
@@ -173,6 +174,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
                     navigationView.getMenu().findItem(R.id.nav_send).setVisible(true);
+                    navigationView.getMenu().findItem(R.id.nav_statistics).setVisible(true);
                     tvHeaderEmail.setText(currentUser.getEmail());
 
                 }
