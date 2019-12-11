@@ -119,7 +119,7 @@
             <TextView
                 android:id="@+id/h1"
                 android:layout_height="wrap_content"
-                android:layout_width="100dp"
+                android:layout_width="80dp"
                 android:text="Date"
                 android:layout_marginStart="16dp"
                 android:textAlignment="textStart"

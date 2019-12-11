@@ -289,15 +289,15 @@ public class StatisticsFragment extends Fragment {
             //tableBoolean
             TableRow tr = new TableRow(getContext());
             TextView c1 = new TextView(getContext());
-            c1.setText(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(values.get(i).getDate()));
+            c1.setText(new SimpleDateFormat("yy-MM-dd hh:mm:ss").format(values.get(i).getDate()));
             c1.setTextColor(Color.WHITE);
 
             TextView c2 = new TextView(getContext());
-            c2.setText(String.format("%.02f",values.get(i).getHumidadade()));
+            c2.setText(String.format("%.02f",values.get(i).getHumidadade())+"ºC");
             c2.setTextColor(Color.WHITE);
 
             TextView c3 = new TextView(getContext());
-            c3.setText(String.format("%.02f",values.get(i).getTemperatura()));
+            c3.setText(String.format("%.02f",values.get(i).getTemperatura())+"%");
             c3.setTextColor(Color.WHITE);
 
             tr.addView(c1);
