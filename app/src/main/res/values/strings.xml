@@ -38,6 +38,11 @@
     <string name="temperature">Temperature</string>
     <string name="humidity">Humidity</string>
     <string name="location">Guess My Location</string>
+    <string name="no_exposure">No Exposure Data</string>
+    <string name="my_exposure">My Exposure</string>
+    <string name="avgTemp">AVG Temperature</string>
+    <string name="avgHum">AVG Humidity</string>
+    <string name="qoa">QoA</string>
     <string name="statistics">Statistics</string>
     <string name="last">Last:</string>
     <string name="from">From:</string>

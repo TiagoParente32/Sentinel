@@ -34,6 +34,7 @@ import pt.ipleiria.estg.dei.sentinel.R;
 import pt.ipleiria.estg.dei.sentinel.fragments.DashboardFragment;
 import pt.ipleiria.estg.dei.sentinel.fragments.FavoritesFragment;
 import pt.ipleiria.estg.dei.sentinel.fragments.LoginFragment;
+import pt.ipleiria.estg.dei.sentinel.fragments.MyExposureFragment;
 import pt.ipleiria.estg.dei.sentinel.fragments.RegisterFragment;
 import pt.ipleiria.estg.dei.sentinel.fragments.SendFragment;
 import pt.ipleiria.estg.dei.sentinel.fragments.StatisticsFragment;
@@ -163,6 +164,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     navigationView.getMenu().findItem(R.id.nav_register).setVisible(true);
                     navigationView.getMenu().findItem(R.id.nav_favorites).setVisible(false);
                     navigationView.getMenu().findItem(R.id.nav_send).setVisible(false);
+                    navigationView.getMenu().findItem(R.id.nav_exposure).setVisible(false);
                     navigationView.getMenu().findItem(R.id.nav_statistics).setVisible(false);
 
                 } else {
@@ -171,6 +173,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     navigationView.getMenu().findItem(R.id.nav_login).setVisible(false);
                     navigationView.getMenu().findItem(R.id.nav_register).setVisible(false);
                     navigationView.getMenu().findItem(R.id.nav_favorites).setVisible(true);
+                    navigationView.getMenu().findItem(R.id.nav_exposure).setVisible(true);
 
 
                     navigationView.getMenu().findItem(R.id.nav_send).setVisible(true);
@@ -247,6 +250,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         favoritesFragment).commit();
                 break;
+
+            case R.id.nav_exposure:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                    new MyExposureFragment()).commit();
+                break;
+
 
             case R.id.nav_logout:
                 signOut();

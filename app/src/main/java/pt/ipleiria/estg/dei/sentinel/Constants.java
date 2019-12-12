@@ -31,5 +31,7 @@ public final class Constants {
     public static final String PREFERENCES_FILE_NAME = "pt.ipleiria.estg.dei.sentinel.SHARED_PREFERENCES";
     public static final String PREFERENCES_FAVORITES_SET ="favorites_string_set";
 
+    public static final String PREFERENCES_EXPOSURE_SET ="exposure_string_set";
+
 
 }

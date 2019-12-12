@@ -8,7 +8,7 @@
 
 
     <TextView
-        android:id="@+id/tvEmpty"
+        android:id="@+id/tvEmptyFavorites"
         android:layout_width="352dp"
         android:layout_height="73dp"
         android:layout_marginStart="5dp"

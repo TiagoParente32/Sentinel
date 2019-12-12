@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary">
+
+
+    <TextView
+        android:id="@+id/tvEmptyExposure"
+        android:layout_width="352dp"
+        android:layout_height="73dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:fontFamily="sans-serif"
+        android:text="@string/no_exposure"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        android:textColor="@color/colorWhite"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:divider="#FFFFFF"
+        android:dividerHeight="2dp"/>
+
+
+    <ListView
+        android:id="@+id/lvMyexposure"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="200dp"
+        android:foregroundTint="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <ProgressBar
+        android:id="@+id/pbHum"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="40dp"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="100"
+        android:progressDrawable="@drawable/progress_circular_bar_one_color"
+        android:rotation="92.5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lvMyexposure" />
+    <ImageView
+        android:id="@+id/imageViewHumidade"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:background="#00FFFFFF"
+        android:foregroundTint="#00FFFFFF"
+        app:layout_constraintBottom_toBottomOf="@+id/pbHum"
+        app:layout_constraintEnd_toEndOf="@+id/pbHum"
+        app:layout_constraintStart_toStartOf="@+id/pbHum"
+        app:layout_constraintTop_toTopOf="@+id/pbHum"
+        app:srcCompat="@mipmap/drops_foreground" />
+
+    <TextView
+        android:id="@+id/txtHum"
+        android:layout_width="61dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textColor="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="@+id/pbHum"
+        app:layout_constraintStart_toStartOf="@+id/pbHum"
+        app:layout_constraintTop_toBottomOf="@+id/pbHum" />
+
+    <ImageView
+        android:id="@+id/imageViewTemperatura"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        app:layout_constraintBottom_toBottomOf="@+id/pbTemp"
+        app:layout_constraintEnd_toEndOf="@+id/pbTemp"
+        app:layout_constraintStart_toStartOf="@+id/pbTemp"
+        app:layout_constraintTop_toTopOf="@+id/pbTemp"
+        app:srcCompat="@mipmap/temperatura_foreground" />
+
+    <ProgressBar
+        android:id="@+id/pbTemp"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerInParent="true"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="40dp"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="100"
+        android:progressDrawable="@drawable/progress_circular_bar_one_color"
+        android:rotation="92.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lvMyexposure" />
+
+    <TextView
+        android:id="@+id/txtTemp"
+        android:layout_width="61dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textColor="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="@+id/pbTemp"
+        app:layout_constraintStart_toStartOf="@+id/pbTemp"
+        app:layout_constraintTop_toBottomOf="@+id/pbTemp" />
+
+    <TextView
+        android:id="@+id/txtViewTemp"
+        android:layout_width="200dp"
+        android:layout_height="0dp"
+        android:fontFamily="@font/roboto"
+        android:gravity="center"
+        android:text="@string/avgTemp"
+        android:textAllCaps="true"
+        android:textColor="@color/colorWhite"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/pbTemp"
+        app:layout_constraintEnd_toEndOf="@+id/pbTemp"
+        app:layout_constraintStart_toStartOf="@+id/pbTemp" />
+
+    <TextView
+        android:id="@+id/txtViewHum"
+        android:layout_width="200dp"
+        android:layout_height="0dp"
+        android:fontFamily="@font/roboto"
+        android:gravity="center"
+        android:text="@string/avgHum"
+        android:textAllCaps="true"
+        android:textColor="@color/colorWhite"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/pbHum"
+        app:layout_constraintEnd_toEndOf="@+id/pbHum"
+        app:layout_constraintStart_toStartOf="@+id/pbHum" />
+
+    <TextView
+        android:id="@+id/txtVQoa"
+        android:layout_width="200dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="5dp"
+        android:fontFamily="@font/roboto"
+        android:gravity="center"
+        android:text="@string/qoa"
+        android:textAllCaps="true"
+        android:textColor="@color/colorWhite"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/textQoa"
+        app:layout_constraintEnd_toStartOf="@+id/txtViewHum"
+        app:layout_constraintStart_toEndOf="@+id/txtViewTemp" />
+
+    <TextView
+        android:id="@+id/textQoa"
+        android:layout_width="150dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="50dp"
+        android:gravity="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textColor="#FFFFFF"
+        app:layout_constraintEnd_toStartOf="@+id/pbHum"
+        app:layout_constraintStart_toEndOf="@+id/pbTemp"
+        app:layout_constraintTop_toBottomOf="@+id/lvMyexposure" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

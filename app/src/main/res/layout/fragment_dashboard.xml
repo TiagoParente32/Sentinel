@@ -90,14 +90,14 @@
         android:layout_height="70dp"
         android:background="#00FFFFFF"
         android:foregroundTint="#00FFFFFF"
-        app:layout_constraintBottom_toBottomOf="@+id/progressBarHumidade"
-        app:layout_constraintEnd_toEndOf="@+id/progressBarHumidade"
-        app:layout_constraintStart_toStartOf="@+id/progressBarHumidade"
-        app:layout_constraintTop_toTopOf="@+id/progressBarHumidade"
+        app:layout_constraintBottom_toBottomOf="@+id/pbHum"
+        app:layout_constraintEnd_toEndOf="@+id/pbHum"
+        app:layout_constraintStart_toStartOf="@+id/pbHum"
+        app:layout_constraintTop_toTopOf="@+id/pbHum"
         app:srcCompat="@mipmap/drops_foreground" />
 
     <ProgressBar
-        android:id="@+id/progressBarHumidade"
+        android:id="@+id/pbHum"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="100dp"
         android:layout_height="100dp"
@@ -112,29 +112,29 @@
         app:layout_constraintTop_toBottomOf="@+id/progressBar2" />
 
     <TextView
-        android:id="@+id/textViewHumidade"
+        android:id="@+id/txtHum"
         android:layout_width="61dp"
         android:layout_height="20dp"
         android:layout_marginTop="8dp"
         android:gravity="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textColor="#FFFFFF"
-        app:layout_constraintEnd_toEndOf="@+id/progressBarHumidade"
-        app:layout_constraintStart_toStartOf="@+id/progressBarHumidade"
-        app:layout_constraintTop_toBottomOf="@+id/progressBarHumidade" />
+        app:layout_constraintEnd_toEndOf="@+id/pbHum"
+        app:layout_constraintStart_toStartOf="@+id/pbHum"
+        app:layout_constraintTop_toBottomOf="@+id/pbHum" />
 
     <ImageView
         android:id="@+id/imageViewTemperatura"
         android:layout_width="70dp"
         android:layout_height="70dp"
-        app:layout_constraintBottom_toBottomOf="@+id/progressBarTemperatura"
-        app:layout_constraintEnd_toEndOf="@+id/progressBarTemperatura"
-        app:layout_constraintStart_toStartOf="@+id/progressBarTemperatura"
-        app:layout_constraintTop_toTopOf="@+id/progressBarTemperatura"
+        app:layout_constraintBottom_toBottomOf="@+id/pbTemp"
+        app:layout_constraintEnd_toEndOf="@+id/pbTemp"
+        app:layout_constraintStart_toStartOf="@+id/pbTemp"
+        app:layout_constraintTop_toTopOf="@+id/pbTemp"
         app:srcCompat="@mipmap/temperatura_foreground" />
 
     <ProgressBar
-        android:id="@+id/progressBarTemperatura"
+        android:id="@+id/pbTemp"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="100dp"
         android:layout_height="100dp"
@@ -149,16 +149,16 @@
         app:layout_constraintTop_toBottomOf="@+id/progressBar2" />
 
     <TextView
-        android:id="@+id/textViewTemperatura"
+        android:id="@+id/txtTemp"
         android:layout_width="61dp"
         android:layout_height="20dp"
         android:layout_marginTop="8dp"
         android:gravity="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textColor="#FFFFFF"
-        app:layout_constraintEnd_toEndOf="@+id/progressBarTemperatura"
-        app:layout_constraintStart_toStartOf="@+id/progressBarTemperatura"
-        app:layout_constraintTop_toBottomOf="@+id/progressBarTemperatura" />
+        app:layout_constraintEnd_toEndOf="@+id/pbTemp"
+        app:layout_constraintStart_toStartOf="@+id/pbTemp"
+        app:layout_constraintTop_toBottomOf="@+id/pbTemp" />
 
     <TextView
         android:id="@+id/textViewData"
@@ -189,8 +189,17 @@
         android:layout_height="50dp"
         android:backgroundTint="#00FFFFFF"
         android:src="@drawable/ic_star_white_border"
-        app:layout_constraintBottom_toBottomOf="@+id/spinnerRooms"
         app:layout_constraintStart_toEndOf="@+id/spinnerRooms"
+        app:layout_constraintTop_toTopOf="@+id/spinnerRooms" />
+
+    <ImageButton
+        android:id="@+id/btnExposure"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="7dp"
+        android:backgroundTint="#00FFFFFF"
+        android:src="@drawable/ic_exposure_white"
+        app:layout_constraintEnd_toStartOf="@+id/spinnerRooms"
         app:layout_constraintTop_toTopOf="@+id/spinnerRooms" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

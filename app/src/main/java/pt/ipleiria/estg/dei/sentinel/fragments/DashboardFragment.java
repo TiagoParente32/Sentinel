@@ -23,6 +23,7 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -33,10 +34,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 
-
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 import pt.ipleiria.estg.dei.sentinel.Constants;
@@ -57,6 +60,7 @@ public class DashboardFragment extends Fragment {
     private Spinner spinnerRooms;
     private ImageButton btnShare;
     private ImageButton btnAddFavorites;
+    private ImageButton btnExposure;
     private SharedPreferences sharedPref;
 
     //------------variables---------------
@@ -77,10 +81,7 @@ public class DashboardFragment extends Fragment {
     private ArrayAdapter<String> adapter;
     private String data = "";
     private ArrayList<String> favoritesList;
-
-
-
-
+    private ArrayList<String> exposureList;
 
 
     @Override
@@ -120,15 +121,16 @@ public class DashboardFragment extends Fragment {
         sharedPref = getActivity().getSharedPreferences(Constants.PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
 
         qoa = view.findViewById(R.id.textViewQOA);
-        humidade = view.findViewById(R.id.textViewHumidade);
-        temperatura = view.findViewById(R.id.textViewTemperatura);
+        humidade = view.findViewById(R.id.txtHum);
+        temperatura = view.findViewById(R.id.txtTemp);
         ultimaData = view.findViewById(R.id.textViewData);
         pb = (ProgressBar) view.findViewById(R.id.progressBar2);
         spinnerRooms = view.findViewById(R.id.spinnerRooms);
-        pbTemp = view.findViewById(R.id.progressBarTemperatura);
-        pbHum = view.findViewById(R.id.progressBarHumidade);
+        pbTemp = view.findViewById(R.id.pbTemp);
+        pbHum = view.findViewById(R.id.pbHum);
         btnShare = view.findViewById(R.id.btnShare);
         btnAddFavorites = view.findViewById(R.id.btnAddFavorite);
+        btnExposure = view.findViewById(R.id.btnExposure);
 
 
         /*GET FAVORITES LIST*/
@@ -149,11 +151,33 @@ public class DashboardFragment extends Fragment {
             this.favoritesList = new ArrayList<>();
         }
 
-        /*CALLS MAIN ACTIVITY METHOD TO TWEET*/
-        view.findViewById(R.id.btnShare).setOnClickListener(v -> ((MainActivity)getActivity()).loginToTwitter());
-        view.findViewById(R.id.btnAddFavorite).setOnClickListener(v -> {
-            persistFavorite();
-        });
+
+        /*GET EXPOSURE LIST*/
+
+        if(sharedPref.contains(Constants.PREFERENCES_EXPOSURE_SET)){
+
+            try{
+                set = sharedPref.getStringSet(Constants.PREFERENCES_EXPOSURE_SET,null);
+            }catch(Exception ex){
+                Log.i("ERROR_EXPOSURE_GETTING","Error getting saved exposures-> " + ex.getMessage());
+                set = new HashSet<>();
+            }
+
+            this.exposureList = new ArrayList<>(set);
+
+        }else{
+            this.exposureList = new ArrayList<>();
+        }
+
+
+        /*ON CLICK ACTIONS*/
+        btnShare.setOnClickListener(v -> ((MainActivity)getActivity()).loginToTwitter());
+
+        btnAddFavorites.setOnClickListener(v -> persistFavorite());
+
+        btnExposure.setOnClickListener(v -> persistExposure());
+
+
 
         //check if user is authenticated
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -164,6 +188,7 @@ public class DashboardFragment extends Fragment {
             spinnerRooms.setClickable(false);
             spinnerRooms.setAlpha(0.5f);
             btnShare.setVisibility(View.INVISIBLE);
+            btnExposure.setVisibility(View.INVISIBLE);
 
         }else{
             spinnerRooms.setAlpha(1);
@@ -243,7 +268,8 @@ public class DashboardFragment extends Fragment {
 
         }
         try{
-            sharedPref.edit().putStringSet(Constants.PREFERENCES_FAVORITES_SET,new HashSet<>(this.favoritesList)).commit();
+            HashSet<String>  set = new HashSet<>(this.favoritesList);
+            sharedPref.edit().putStringSet(Constants.PREFERENCES_FAVORITES_SET,set).commit();
         }catch(Exception ex){
             Log.i("ERROR_FAVORITES_SAVE","Error saving preference favorites-> " + ex.getMessage());
         }
@@ -251,6 +277,26 @@ public class DashboardFragment extends Fragment {
 
     }
 
+
+    private void persistExposure(){
+        Toast.makeText(getActivity(),"Room added to Exposure Data!",Toast.LENGTH_SHORT).show();
+        try{
+            String data = (String)spinnerRooms.getSelectedItem() + ':' + mediaTemp + ':' + mediaHum + ':' +  new SimpleDateFormat("yyyy-mm-dd-HH:mm:ss", Locale.getDefault()).format(new Date());
+
+
+            this.exposureList.add(data);
+            HashSet<String>  set = new HashSet<>(this.exposureList);
+
+
+            sharedPref.edit().putStringSet(Constants.PREFERENCES_EXPOSURE_SET,set).commit();
+
+            Log.i("EXPOSURE_SAVED","EXPOSURE SAVED SUCCESSFULLY");
+
+
+        }catch(Exception ex){
+            Log.i("ERROR_EXPOSURE_SAVE","Error saving preference exposure-> " + ex.getMessage());
+        }
+    }
 
     public void updateUIOnDataChange(DataSnapshot dataSnapshot) {
         //ir buscar a ultima data de selected

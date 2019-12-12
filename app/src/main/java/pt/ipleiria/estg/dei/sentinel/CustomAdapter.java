@@ -18,20 +18,30 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+import pt.ipleiria.estg.dei.sentinel.activities.MainActivity;
 import pt.ipleiria.estg.dei.sentinel.fragments.FavoritesFragment;
+import pt.ipleiria.estg.dei.sentinel.fragments.MyExposureFragment;
 
 public class CustomAdapter extends BaseAdapter implements ListAdapter {
     public ArrayList<String> list;
     private Context context;
     private SharedPreferences sharedPref;
+    private EventListener listener;
+    private int view; // 1-favorites 2-exposure
 
 
-    public CustomAdapter(ArrayList<String> list, Context context, SharedPreferences sharePref){
+    public CustomAdapter(ArrayList<String> list, Context context, SharedPreferences sharePref,int view,EventListener listener){
         this.list = list;
         this.context = context;
         this.sharedPref = sharePref;
+        this.view = view;
+        this.listener = listener;
+
     }
 
+    public interface EventListener {
+        void onEvent();
+    }
 
 
     @Override
@@ -59,7 +69,7 @@ public class CustomAdapter extends BaseAdapter implements ListAdapter {
 
         //Handle TextView and display string from your list
         TextView listItemText = view.findViewById(R.id.list_item_string);
-        listItemText.setText(list.get(position));
+        listItemText.setText(list.get(position).split(":")[0]);
         ImageButton deleteBtn = view.findViewById(R.id.btnDelete);
 
 
@@ -77,10 +87,17 @@ public class CustomAdapter extends BaseAdapter implements ListAdapter {
                 list.remove(position);
                 notifyDataSetChanged();
                 try{
-                    sharedPref.edit().putStringSet(Constants.PREFERENCES_FAVORITES_SET,new HashSet<>(this.list)).commit();
+                    if(this.view == 1){
+                        sharedPref.edit().putStringSet(Constants.PREFERENCES_FAVORITES_SET,new HashSet<>(this.list)).commit();
+
+                    }else if(this.view == 2){
+                        sharedPref.edit().putStringSet(Constants.PREFERENCES_EXPOSURE_SET,new HashSet<>(this.list)).commit();
+                        this.listener.onEvent();
+                    }
                 }catch(Exception ex){
                     Log.i("ERROR_FAVORITES_SAVE","Error saving preference favorites-> " + ex.getMessage());
-                }            });
+                }
+            });
             builder.setNegativeButton(R.string.cancel, (dialog, id) -> {
 
             });
