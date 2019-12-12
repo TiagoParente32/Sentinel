@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_centerHorizontal="true"
+    android:layout_centerVertical="true"
+    android:background="@color/colorPrimary"
+    tools:context=".fragments.StatisticsFragment">
+
+
+    <Spinner
+        android:id="@+id/spinnerFilter"
+        style="@style/Widget.AppCompat.DropDownItem.Spinner"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="52dp"
+        android:background="@drawable/spinner_with_border"
+        android:gravity="center"
+        android:overlapAnchor="false"
+        android:popupBackground="@color/colorPrimary"
+        android:spinnerMode="dropdown"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="@string/last"
+        android:textColor="@color/colorWhite"
+        android:gravity="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        app:layout_constraintBottom_toBottomOf="@+id/spinnerFilter"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/spinnerFilter"/>
+
+    <TextView
+        android:id="@+id/textViewFrom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:gravity="center"
+        android:text="@string/from"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="@color/colorWhite"
+        app:layout_constraintBottom_toBottomOf="@+id/dateFrom"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/dateFrom" />
+
+    <TextView
+        android:id="@+id/textViewTo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:gravity="center"
+        android:text="@string/to"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="@color/colorWhite"
+        app:layout_constraintBottom_toBottomOf="@+id/dateFrom"
+        app:layout_constraintStart_toEndOf="@+id/dateFrom"
+        app:layout_constraintTop_toTopOf="@+id/dateFrom"
+        app:layout_constraintVertical_bias="0.533" />
+
+    <EditText
+        android:id="@+id/dateFrom"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="2019-12-4"
+        android:inputType="date"
+        android:textColor="@color/colorWhite"
+        android:textColorHint="@color/colorTransparentWhite"
+        app:layout_constraintStart_toEndOf="@+id/textViewFrom"
+        app:layout_constraintTop_toBottomOf="@+id/spinnerFilter" />
+
+    <EditText
+        android:id="@+id/dateTo"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:ems="10"
+        android:hint="2019-12-5"
+        android:inputType="date"
+        android:textColor="@color/colorWhite"
+        android:textColorHint="@color/colorTransparentWhite"
+        app:layout_constraintBottom_toBottomOf="@+id/dateFrom"
+        app:layout_constraintStart_toEndOf="@+id/textViewTo"
+        app:layout_constraintTop_toTopOf="@+id/dateFrom" />
+
+    <com.jjoe64.graphview.GraphView
+        android:id="@+id/graph"
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dateFrom" />
+
+    <TableLayout
+        android:id="@+id/headertbl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:background="@color/colorPrimary"
+        android:stretchColumns="*"
+        app:layout_constraintBottom_toTopOf="@+id/graph">
+
+        <TableRow>
+
+            <TextView
+                android:id="@+id/h1"
+                android:layout_height="wrap_content"
+                android:layout_width="80dp"
+                android:text="Date"
+                android:layout_marginStart="16dp"
+                android:textAlignment="textStart"
+                android:textSize="20sp"
+                android:textColor="@color/colorWhite"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/h2"
+                android:layout_height="wrap_content"
+                android:text="Temperature"
+                android:textAlignment="textStart"
+                android:textColor="@color/colorWhite"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/h3"
+                android:layout_height="wrap_content"
+                android:text="Humidity"
+                android:textAlignment="textStart"
+                android:textColor="@color/colorWhite"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+        </TableRow>
+    </TableLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        android:scrollbars="none"
+        android:layout_weight="1"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dateFrom">
+
+        <TableLayout
+            android:id="@+id/tableLayout"
+            android:layout_width="match_parent"
+            android:layout_height="350dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="8dp"
+            android:stretchColumns="0,1,2,3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/dateFrom">
+
+        </TableLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/btnTable"
+        android:layout_width="350dp"
+        android:layout_height="45dp"
+        android:layout_marginBottom="24dp"
+        android:background="@drawable/shadow_btn"
+        android:text="@string/table"
+        android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <CheckBox
+        android:id="@+id/checkBoxTemp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="@string/temperature"
+        android:textColor="@color/colorWhite"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/graph" />
+
+    <CheckBox
+        android:id="@+id/checkBoxHum"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/humidity"
+        android:textColor="@color/colorWhite"
+        app:layout_constraintStart_toEndOf="@+id/checkBoxTemp"
+        app:layout_constraintTop_toBottomOf="@+id/graph" />
+
+    <ImageButton
+        android:id="@+id/btn_search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:background="@null"
+        android:src="@android:drawable/ic_menu_search"
+        app:layout_constraintBottom_toBottomOf="@+id/dateTo"
+        app:layout_constraintStart_toEndOf="@+id/dateTo"
+        app:layout_constraintTop_toTopOf="@+id/dateTo" />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
