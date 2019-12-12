@@ -36,6 +36,7 @@ public class MyExposureFragment extends Fragment implements CustomAdapter.EventL
     private ProgressBar pbHum;
     private TextView humidade;
     private TextView temperatura;
+    private TextView qoa;
 
     private float totalTemp=0;
     private float totalHum=0;
@@ -54,6 +55,8 @@ public class MyExposureFragment extends Fragment implements CustomAdapter.EventL
 
         pbTemp = view.findViewById(R.id.pbTemp);
         pbHum = view.findViewById(R.id.pbHum);
+
+        qoa = view.findViewById(R.id.textQoa);
 
         ArrayList<String> list = new ArrayList<>();
         temperaturesList = new ArrayList<>();
@@ -175,6 +178,24 @@ public class MyExposureFragment extends Fragment implements CustomAdapter.EventL
             pbHum.getProgressDrawable().setColorFilter(Color.parseColor("#8E1600"), PorterDuff.Mode.SRC_IN);
 
         }
+
+
+        if ((avgTemp >= 19 && avgTemp <= 35) && (avgHum >= 50 && avgHum <= 75)) {
+            //GREEN TEXT
+            qoa.setText("GOOD");
+            qoa.setTextColor(Color.GREEN);
+        } else if (((avgTemp < 19 || avgTemp >= 35) && (avgHum >= 50 && avgHum <= 75)) || (
+            (avgTemp >= 19 && avgTemp <= 35) && (avgHum < 50 || avgHum >= 75))) {
+            //YELLOW TEXT
+            qoa.setText("AVERAGE");
+            qoa.setTextColor(Color.YELLOW);
+        } else {
+            //RED TEXT
+            qoa.setText("BAD");
+            qoa.setTextColor(Color.RED);
+
+        }
+
     }
 
 

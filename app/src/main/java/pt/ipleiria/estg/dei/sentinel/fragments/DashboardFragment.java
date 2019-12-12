@@ -279,7 +279,7 @@ public class DashboardFragment extends Fragment {
 
 
     private void persistExposure(){
-        Toast.makeText(getActivity(),"Boas",Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(),"Room added to Exposure Data!",Toast.LENGTH_SHORT).show();
         try{
             String data = (String)spinnerRooms.getSelectedItem() + ':' + mediaTemp + ':' + mediaHum + ':' +  new SimpleDateFormat("yyyy-mm-dd-HH:mm:ss", Locale.getDefault()).format(new Date());
 

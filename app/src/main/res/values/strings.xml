@@ -42,5 +42,6 @@
     <string name="my_exposure">My Exposure</string>
     <string name="avgTemp">AVG Temperature</string>
     <string name="avgHum">AVG Humidity</string>
+    <string name="qoa">QoA</string>
 
 </resources>

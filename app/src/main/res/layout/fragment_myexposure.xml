@@ -152,4 +152,33 @@
         app:layout_constraintEnd_toEndOf="@+id/pbHum"
         app:layout_constraintStart_toStartOf="@+id/pbHum" />
 
+    <TextView
+        android:id="@+id/txtVQoa"
+        android:layout_width="200dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="5dp"
+        android:fontFamily="@font/roboto"
+        android:gravity="center"
+        android:text="@string/qoa"
+        android:textAllCaps="true"
+        android:textColor="@color/colorWhite"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/textQoa"
+        app:layout_constraintEnd_toStartOf="@+id/txtViewHum"
+        app:layout_constraintStart_toEndOf="@+id/txtViewTemp" />
+
+    <TextView
+        android:id="@+id/textQoa"
+        android:layout_width="150dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="50dp"
+        android:gravity="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textColor="#FFFFFF"
+        app:layout_constraintEnd_toStartOf="@+id/pbHum"
+        app:layout_constraintStart_toEndOf="@+id/pbTemp"
+        app:layout_constraintTop_toBottomOf="@+id/lvMyexposure" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
