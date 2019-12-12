@@ -5,12 +5,15 @@ import androidx.fragment.app.Fragment;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -21,11 +24,23 @@ import pt.ipleiria.estg.dei.sentinel.Constants;
 import pt.ipleiria.estg.dei.sentinel.CustomAdapter;
 import pt.ipleiria.estg.dei.sentinel.R;
 
-public class MyExposureFragment extends Fragment{
+public class MyExposureFragment extends Fragment implements CustomAdapter.EventListener{
     private ListView lView;
     private ArrayList<String> exposuresList;
     private SharedPreferences sharedPref;
     private CustomAdapter adapterList;
+    private ArrayList<Float> temperaturesList;
+    private ArrayList<Float> humiditysList;
+
+    private ProgressBar pbTemp;
+    private ProgressBar pbHum;
+    private TextView humidade;
+    private TextView temperatura;
+
+    private float totalTemp=0;
+    private float totalHum=0;
+    private float avgTemp=0;
+    private float avgHum=0;
 
 
 
@@ -34,16 +49,28 @@ public class MyExposureFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.fragment_myexposure,container,false);
 
+        humidade = view.findViewById(R.id.txtHum);
+        temperatura = view.findViewById(R.id.txtTemp);
+
+        pbTemp = view.findViewById(R.id.pbTemp);
+        pbHum = view.findViewById(R.id.pbHum);
 
         ArrayList<String> list = new ArrayList<>();
+        temperaturesList = new ArrayList<>();
+        humiditysList = new ArrayList<>();
+
 
         for (String s : exposuresList) {
-            list.add(s.split("-")[0]);
+                //list.add(data[0]);
+                list.add(s);
         }
 
 
+        updateData();
+
+
         //instantiate custom adapter
-        adapterList =new CustomAdapter(list,getActivity(),sharedPref,2);
+        adapterList =new CustomAdapter(list,getActivity(),sharedPref,2,this);
 
         TextView emptyText = view.findViewById(R.id.tvEmptyExposure);
 
@@ -68,6 +95,8 @@ public class MyExposureFragment extends Fragment{
         readData();
 
     }
+
+
 
     @Override
     public void onStart() {
@@ -100,7 +129,60 @@ public class MyExposureFragment extends Fragment{
 
     }
 
+    public void updateData(){
+        String[] data;
+        totalTemp = 0;
+        totalHum = 0;
+        temperaturesList.clear();
+        humiditysList.clear();
 
+        for (String s : this.exposuresList) {
+            data = s.split(":");
+
+            temperaturesList.add(Float.parseFloat(data[1]));
+            humiditysList.add(Float.parseFloat(data[2]));
+
+            totalTemp += Float.parseFloat(data[1]);
+            totalHum += Float.parseFloat(data[2]);
+        }
+
+
+        /*CALCULATE AVG TEMPERATURE AND HUMIDITY AND SHOW IT*/
+        avgTemp = (float) totalTemp/temperaturesList.size();
+        avgHum = (float) totalHum/humiditysList.size();
+
+        String tempText = String.format("%.2f",avgTemp) + "ºC";
+        String humText = String.format("%.2f",avgHum) + "%";
+
+
+        temperatura.setText(tempText);
+        humidade.setText(humText);
+
+        if (avgTemp >= 19 && avgTemp <= 35) {
+            //verde
+            pbTemp.getProgressDrawable().setColorFilter(Color.parseColor("#90EE90"), PorterDuff.Mode.SRC_IN);
+        } else {
+            //vermelho
+            pbTemp.getProgressDrawable().setColorFilter(Color.parseColor("#8E1600"), PorterDuff.Mode.SRC_IN);
+
+        }
+        if (avgHum >= 50 && avgHum <= 75) {
+            //verde
+            pbHum.getProgressDrawable().setColorFilter(Color.parseColor("#90EE90"), PorterDuff.Mode.SRC_IN);
+
+        } else {
+            //vermelho
+            pbHum.getProgressDrawable().setColorFilter(Color.parseColor("#8E1600"), PorterDuff.Mode.SRC_IN);
+
+        }
+    }
+
+
+    @Override
+    public void onEvent() {
+        readData();
+        updateData();
+    }
 }
 
 

@@ -35,11 +35,7 @@ import com.google.firebase.database.ValueEventListener;
 
 
 import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -125,13 +121,13 @@ public class DashboardFragment extends Fragment {
         sharedPref = getActivity().getSharedPreferences(Constants.PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
 
         qoa = view.findViewById(R.id.textViewQOA);
-        humidade = view.findViewById(R.id.textViewHumidade);
-        temperatura = view.findViewById(R.id.textViewTemperatura);
+        humidade = view.findViewById(R.id.txtHum);
+        temperatura = view.findViewById(R.id.txtTemp);
         ultimaData = view.findViewById(R.id.textViewData);
         pb = (ProgressBar) view.findViewById(R.id.progressBar2);
         spinnerRooms = view.findViewById(R.id.spinnerRooms);
-        pbTemp = view.findViewById(R.id.progressBarTemperatura);
-        pbHum = view.findViewById(R.id.progressBarHumidade);
+        pbTemp = view.findViewById(R.id.pbTemp);
+        pbHum = view.findViewById(R.id.pbHum);
         btnShare = view.findViewById(R.id.btnShare);
         btnAddFavorites = view.findViewById(R.id.btnAddFavorite);
         btnExposure = view.findViewById(R.id.btnExposure);
@@ -285,7 +281,7 @@ public class DashboardFragment extends Fragment {
     private void persistExposure(){
         Toast.makeText(getActivity(),"Boas",Toast.LENGTH_SHORT).show();
         try{
-            String data = (String)spinnerRooms.getSelectedItem() + '-' + temperatura.getText() + '-' + humidade.getText() + '-' +  new SimpleDateFormat("yyyy-mm-dd-HH:mm:ss", Locale.getDefault()).format(new Date());
+            String data = (String)spinnerRooms.getSelectedItem() + ':' + mediaTemp + ':' + mediaHum + ':' +  new SimpleDateFormat("yyyy-mm-dd-HH:mm:ss", Locale.getDefault()).format(new Date());
 
 
             this.exposureList.add(data);

@@ -25,7 +25,7 @@ import pt.ipleiria.estg.dei.sentinel.Constants;
 import pt.ipleiria.estg.dei.sentinel.CustomAdapter;
 import pt.ipleiria.estg.dei.sentinel.R;
 
-public class FavoritesFragment extends Fragment  {
+public class FavoritesFragment extends Fragment implements CustomAdapter.EventListener {
     private ListView lView;
     private ArrayList<String> favoritesList;
     private SharedPreferences sharedPref;
@@ -43,7 +43,7 @@ public class FavoritesFragment extends Fragment  {
 
         //instantiate custom adapter
 
-        adapterList =new CustomAdapter(this.favoritesList,getActivity(),sharedPref,1);
+        adapterList =new CustomAdapter(this.favoritesList,getActivity(),sharedPref,1,this);
         lView = view.findViewById(R.id.lvFavorites);
 
         TextView emptyText = view.findViewById(R.id.tvEmptyFavorites);
@@ -98,5 +98,8 @@ public class FavoritesFragment extends Fragment  {
     }
 
 
+    @Override
+    public void onEvent() {
 
+    }
 }

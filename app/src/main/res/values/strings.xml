@@ -40,4 +40,7 @@
     <string name="location">Guess My Location</string>
     <string name="no_exposure">No Exposure Data</string>
     <string name="my_exposure">My Exposure</string>
+    <string name="avgTemp">AVG Temperature</string>
+    <string name="avgHum">AVG Humidity</string>
+
 </resources>
