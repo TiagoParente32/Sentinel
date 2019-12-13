@@ -25,6 +25,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -62,6 +63,7 @@ public class DashboardFragment extends Fragment {
     private ImageButton btnAddFavorites;
     private ImageButton btnExposure;
     private SharedPreferences sharedPref;
+    private View contextView;
 
     //------------variables---------------
     private DatabaseReference mDatabase;
@@ -279,7 +281,6 @@ public class DashboardFragment extends Fragment {
 
 
     private void persistExposure(){
-        Toast.makeText(getActivity(),"Room added to Exposure Data!",Toast.LENGTH_SHORT).show();
         try{
             String data = (String)spinnerRooms.getSelectedItem() + ':' + mediaTemp + ':' + mediaHum + ':' +  new SimpleDateFormat("yyyy-mm-dd-HH:mm:ss", Locale.getDefault()).format(new Date());
 
@@ -287,8 +288,9 @@ public class DashboardFragment extends Fragment {
             this.exposureList.add(data);
             HashSet<String>  set = new HashSet<>(this.exposureList);
 
-
             sharedPref.edit().putStringSet(Constants.PREFERENCES_EXPOSURE_SET,set).commit();
+
+            Snackbar.make(getView(),"Room added to My Exposure!",Snackbar.LENGTH_SHORT).show();
 
             Log.i("EXPOSURE_SAVED","EXPOSURE SAVED SUCCESSFULLY");
 

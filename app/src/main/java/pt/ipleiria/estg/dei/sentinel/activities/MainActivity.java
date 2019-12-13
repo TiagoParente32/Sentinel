@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -332,15 +333,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-    public static void tweet(String tweet,Context context){
+    public static void tweet(String tweet,View view){
 
         Handler message = new Handler() {
             public void handleMessage(Message msg){
                 if(msg.what == 0){
-                    Toast.makeText(context, "Tweet sent successfully!", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(view,"Tweet sent successfully!",Snackbar.LENGTH_SHORT).show();
                 }
                 if(msg.what == 1){
-                    Toast.makeText(context, "An error occurred while trying to send the Tweet!", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(view,"An error occurred while trying to send the Tweet!",Snackbar.LENGTH_SHORT).show();
+
                 }
             }
         };
