@@ -43,8 +43,5 @@ dependencies {
     implementation 'org.twitter4j:twitter4j-core:4.0.1'
     implementation 'com.jjoe64:graphview:4.2.2'
     implementation 'de.codecrafters.tableview:tableview:2.4.2'
-
-
-
 }
 apply plugin: 'com.google.gms.google-services'
