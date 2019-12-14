@@ -1,205 +1,226 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:id="@+id/swipeRefresh"
     android:layout_height="match_parent"
-    android:layout_centerHorizontal="true"
-    android:layout_centerVertical="true"
-    android:background="@color/colorPrimary"
-    tools:context=".fragments.DashboardFragment">
+    android:layout_width="match_parent" >
 
-    <TextView
-        android:id="@+id/textViewTitulo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:fontFamily="sans-serif"
-        android:gravity="center"
-        android:text="@string/building_a"
-        android:textAllCaps="true"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        android:textColor="#FFFFFF"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Spinner
-        android:id="@+id/spinnerRooms"
-        style="@style/Widget.AppCompat.DropDownItem.Spinner"
-        android:layout_width="300dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/spinner_with_border"
-        android:gravity="center"
-        android:overlapAnchor="false"
-        android:popupBackground="@color/colorPrimary"
-        android:spinnerMode="dropdown"
-        android:textAlignment="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewTitulo" />
-
-    <ProgressBar
-        android:id="@+id/progressBar2"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:layout_centerInParent="true"
-        android:indeterminate="false"
-        android:max="100"
-        android:progress="0"
-        android:progressDrawable="@drawable/progress_circular_bar"
-        android:rotation="92.5"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/progressBar3" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:background="@color/colorPrimary"
+        tools:context=".fragments.DashboardFragment">
 
 
-    <ProgressBar
-        android:id="@+id/progressBar3"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="20dp"
-        android:indeterminate="false"
-        android:max="100"
-        android:progress="99"
-        android:progressDrawable="@drawable/progress_circular_bar_transparent"
-        android:rotation="92.5"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerRooms" />
 
-    <TextView
-        android:id="@+id/textViewQOA"
-        android:layout_width="150dp"
-        android:layout_height="70dp"
-        android:gravity="center"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        android:textColor="#FFFFFF"
-        app:layout_constraintBottom_toBottomOf="@+id/progressBar2"
-        app:layout_constraintEnd_toEndOf="@+id/progressBar2"
-        app:layout_constraintStart_toStartOf="@+id/progressBar2"
-        app:layout_constraintTop_toTopOf="@+id/progressBar3" />
+        <TextView
+            android:id="@+id/textViewTitulo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="sans-serif"
+            android:gravity="center"
+            android:text="@string/building_a"
+            android:textAllCaps="true"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+            android:textColor="#FFFFFF"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/imageViewHumidade"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:background="#00FFFFFF"
-        android:foregroundTint="#00FFFFFF"
-        app:layout_constraintBottom_toBottomOf="@+id/pbHum"
-        app:layout_constraintEnd_toEndOf="@+id/pbHum"
-        app:layout_constraintStart_toStartOf="@+id/pbHum"
-        app:layout_constraintTop_toTopOf="@+id/pbHum"
-        app:srcCompat="@mipmap/drops_foreground" />
+        <Spinner
+            android:id="@+id/spinnerRooms"
+            style="@style/Widget.AppCompat.DropDownItem.Spinner"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/spinner_with_border"
+            android:gravity="center"
+            android:overlapAnchor="false"
+            android:popupBackground="@color/colorPrimary"
+            android:spinnerMode="dropdown"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewTitulo" />
 
-    <ProgressBar
-        android:id="@+id/pbHum"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="8dp"
-        android:indeterminate="false"
-        android:max="100"
-        android:progress="100"
-        android:progressDrawable="@drawable/progress_circular_bar_one_color"
-        android:rotation="92.5"
-        app:layout_constraintStart_toStartOf="@+id/progressBar2"
-        app:layout_constraintTop_toBottomOf="@+id/progressBar2" />
+        <ProgressBar
+            android:id="@+id/progressBar2"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:layout_centerInParent="true"
+            android:indeterminate="false"
+            android:max="100"
+            android:progress="0"
+            android:progressDrawable="@drawable/progress_circular_bar"
+            android:rotation="92.5"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/progressBar3" />
 
-    <TextView
-        android:id="@+id/txtHum"
-        android:layout_width="61dp"
-        android:layout_height="20dp"
-        android:layout_marginTop="8dp"
-        android:gravity="center"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textColor="#FFFFFF"
-        app:layout_constraintEnd_toEndOf="@+id/pbHum"
-        app:layout_constraintStart_toStartOf="@+id/pbHum"
-        app:layout_constraintTop_toBottomOf="@+id/pbHum" />
 
-    <ImageView
-        android:id="@+id/imageViewTemperatura"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        app:layout_constraintBottom_toBottomOf="@+id/pbTemp"
-        app:layout_constraintEnd_toEndOf="@+id/pbTemp"
-        app:layout_constraintStart_toStartOf="@+id/pbTemp"
-        app:layout_constraintTop_toTopOf="@+id/pbTemp"
-        app:srcCompat="@mipmap/temperatura_foreground" />
+        <ProgressBar
+            android:id="@+id/progressBar3"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="20dp"
+            android:indeterminate="false"
+            android:max="100"
+            android:progress="99"
+            android:progressDrawable="@drawable/progress_circular_bar_transparent"
+            android:rotation="92.5"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinnerRooms" />
 
-    <ProgressBar
-        android:id="@+id/pbTemp"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="8dp"
-        android:indeterminate="false"
-        android:max="100"
-        android:progress="100"
-        android:progressDrawable="@drawable/progress_circular_bar_one_color"
-        android:rotation="92.5"
-        app:layout_constraintEnd_toEndOf="@+id/progressBar2"
-        app:layout_constraintTop_toBottomOf="@+id/progressBar2" />
+        <TextView
+            android:id="@+id/textViewQOA"
+            android:layout_width="150dp"
+            android:layout_height="70dp"
+            android:gravity="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+            android:textColor="#FFFFFF"
+            app:layout_constraintBottom_toBottomOf="@+id/progressBar2"
+            app:layout_constraintEnd_toEndOf="@+id/progressBar2"
+            app:layout_constraintStart_toStartOf="@+id/progressBar2"
+            app:layout_constraintTop_toTopOf="@+id/progressBar3" />
 
-    <TextView
-        android:id="@+id/txtTemp"
-        android:layout_width="61dp"
-        android:layout_height="20dp"
-        android:layout_marginTop="8dp"
-        android:gravity="center"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textColor="#FFFFFF"
-        app:layout_constraintEnd_toEndOf="@+id/pbTemp"
-        app:layout_constraintStart_toStartOf="@+id/pbTemp"
-        app:layout_constraintTop_toBottomOf="@+id/pbTemp" />
+        <ImageView
+            android:id="@+id/imageViewHumidade"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:background="#00FFFFFF"
+            android:foregroundTint="#00FFFFFF"
+            app:layout_constraintBottom_toBottomOf="@+id/pbHum"
+            app:layout_constraintEnd_toEndOf="@+id/pbHum"
+            app:layout_constraintStart_toStartOf="@+id/pbHum"
+            app:layout_constraintTop_toTopOf="@+id/pbHum"
+            app:srcCompat="@mipmap/drops_foreground" />
 
-    <TextView
-        android:id="@+id/textViewData"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-        android:textColor="#FFFFFF"
-        app:layout_constraintBottom_toTopOf="@+id/btnShare"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent" />
+        <ProgressBar
+            android:id="@+id/pbHum"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="8dp"
+            android:indeterminate="false"
+            android:max="100"
+            android:progress="100"
+            android:progressDrawable="@drawable/progress_circular_bar_one_color"
+            android:rotation="92.5"
+            app:layout_constraintStart_toStartOf="@+id/progressBar2"
+            app:layout_constraintTop_toBottomOf="@+id/progressBar2" />
 
-    <ImageButton
-        android:id="@+id/btnShare"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_marginBottom="16dp"
-        android:background="#00FFFFFF"
-        android:src="@drawable/ic_share_white_24dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        <TextView
+            android:id="@+id/txtHum"
+            android:layout_width="61dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textColor="#FFFFFF"
+            app:layout_constraintEnd_toEndOf="@+id/pbHum"
+            app:layout_constraintStart_toStartOf="@+id/pbHum"
+            app:layout_constraintTop_toBottomOf="@+id/pbHum" />
 
-    <ImageButton
-        android:id="@+id/btnAddFavorite"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:backgroundTint="#00FFFFFF"
-        android:src="@drawable/ic_star_white_border"
-        app:layout_constraintStart_toEndOf="@+id/spinnerRooms"
-        app:layout_constraintTop_toTopOf="@+id/spinnerRooms" />
+        <ImageView
+            android:id="@+id/imageViewTemperatura"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            app:layout_constraintBottom_toBottomOf="@+id/pbTemp"
+            app:layout_constraintEnd_toEndOf="@+id/pbTemp"
+            app:layout_constraintStart_toStartOf="@+id/pbTemp"
+            app:layout_constraintTop_toTopOf="@+id/pbTemp"
+            app:srcCompat="@mipmap/temperatura_foreground" />
 
-    <ImageButton
-        android:id="@+id/btnExposure"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginEnd="7dp"
-        android:backgroundTint="#00FFFFFF"
-        android:src="@drawable/ic_exposure_white"
-        app:layout_constraintEnd_toStartOf="@+id/spinnerRooms"
-        app:layout_constraintTop_toTopOf="@+id/spinnerRooms" />
+        <ProgressBar
+            android:id="@+id/pbTemp"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="8dp"
+            android:indeterminate="false"
+            android:max="100"
+            android:progress="100"
+            android:progressDrawable="@drawable/progress_circular_bar_one_color"
+            android:rotation="92.5"
+            app:layout_constraintEnd_toEndOf="@+id/progressBar2"
+            app:layout_constraintTop_toBottomOf="@+id/progressBar2" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/txtTemp"
+            android:layout_width="61dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textColor="#FFFFFF"
+            app:layout_constraintEnd_toEndOf="@+id/pbTemp"
+            app:layout_constraintStart_toStartOf="@+id/pbTemp"
+            app:layout_constraintTop_toBottomOf="@+id/pbTemp" />
+
+        <TextView
+            android:id="@+id/textViewData"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textColor="#FFFFFF"
+            app:layout_constraintBottom_toTopOf="@+id/btnShare"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageButton
+            android:id="@+id/btnShare"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginBottom="16dp"
+            android:background="#00FFFFFF"
+            android:src="@drawable/ic_share_white_24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageButton
+            android:id="@+id/btnAddFavorite"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:backgroundTint="#00FFFFFF"
+            android:src="@drawable/ic_star_white_border"
+            app:layout_constraintStart_toEndOf="@+id/spinnerRooms"
+            app:layout_constraintTop_toTopOf="@+id/spinnerRooms" />
+
+        <ImageButton
+            android:id="@+id/btnExposure"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="7dp"
+            android:backgroundTint="#00FFFFFF"
+            android:src="@drawable/ic_exposure_white"
+            app:layout_constraintEnd_toStartOf="@+id/spinnerRooms"
+            app:layout_constraintTop_toTopOf="@+id/spinnerRooms" />
+
+        <TextView
+            android:id="@+id/textEmptyData"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display2"
+            android:textColor="@color/colorWhite"
+            android:gravity="center"
+            app:layout_constraintBottom_toBottomOf="@+id/progressBar2"
+            app:layout_constraintEnd_toEndOf="@+id/progressBar2"
+            app:layout_constraintStart_toStartOf="@+id/progressBar2"
+            app:layout_constraintTop_toTopOf="@+id/progressBar2" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
