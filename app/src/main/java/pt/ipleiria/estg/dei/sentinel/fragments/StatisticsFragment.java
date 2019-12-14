@@ -18,12 +18,12 @@ import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -222,8 +222,7 @@ public class StatisticsFragment extends Fragment {
                 try {
                     if (!editDateFrom.getText().toString().matches("([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))") ||
                             !editDateTo.getText().toString().matches("([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))")) {
-                        Toast toast = Toast.makeText(getContext(), "Invalid Date Format 'yyyy-MM-dd'", Toast.LENGTH_SHORT);
-                        toast.show();
+                        Snackbar.make(getView(),"Invalid Date Format 'yyyy-MM-dd'",Snackbar.LENGTH_SHORT).show();
                         return;
                     }
                     toDate = new SimpleDateFormat("yyyy-MM-dd").parse(editDateTo.getText().toString());

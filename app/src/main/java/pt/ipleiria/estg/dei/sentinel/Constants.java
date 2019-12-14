@@ -33,5 +33,7 @@ public final class Constants {
 
     public static final String PREFERENCES_EXPOSURE_SET ="exposure_string_set";
 
+    public static final String MAIN_ACTIVITY_VIEW ="main_activity_view";
+
 
 }
