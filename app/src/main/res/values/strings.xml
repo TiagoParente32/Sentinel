@@ -51,5 +51,6 @@
     <string name="profile">Profile</string>
     <string name="oldPassword">Current Password</string>
     <string name="save">Save</string>
+    <string name="clear_twitter_login">Clear Twitter Login</string>
 
 </resources>

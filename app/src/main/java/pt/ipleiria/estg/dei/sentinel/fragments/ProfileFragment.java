@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -44,6 +45,9 @@ public class ProfileFragment extends Fragment {
     private String oldEmail;
     private FirebaseUser user;
     private static final String TAG="REAUTHENTICATE_USER";
+    private boolean signedIn;
+    private SharedPreferences sharedPref;
+    private CheckBox twitterSignIn;
 
     @Nullable
     @Override
@@ -53,17 +57,31 @@ public class ProfileFragment extends Fragment {
 
         user = FirebaseAuth.getInstance().getCurrentUser();
 
+        sharedPref = getActivity().getSharedPreferences(Constants.PREFERENCES_FILE_NAME,Context.MODE_PRIVATE);
+
+        /*CHECKS IS TWITTER USER IS LOGGED IN*/
+        signedIn = sharedPref.getBoolean(Constants.PREF_KEY_TWITTER_LOGIN,true);
+
+
         txtUserEmail = view.findViewById(R.id.txtUserEmail);
         inputEmail = view.findViewById(R.id.inputNewEmail);
         inputOldPassword = view.findViewById(R.id.inputOldPassword);
         inputNewPassword = view.findViewById(R.id.inputNewPassword);
         inputNewPasswordConf = view.findViewById(R.id.inputNewPasswordConf);
         txtError = view.findViewById(R.id.txtError);
+        twitterSignIn = view.findViewById(R.id.clearTwitter);
 
         oldEmail = user.getEmail();
 
         txtUserEmail.setText(oldEmail);
         inputEmail.getEditText().setText(oldEmail);
+
+        /*HIDES CHECKBOX ACCORDING TO TWITTER LOGIN STATE*/
+        if(signedIn){
+            twitterSignIn.setVisibility(View.VISIBLE);
+        }else{
+            twitterSignIn.setVisibility(View.INVISIBLE);
+        }
 
         /*SETS ON BUTTON SAVE CLICK LISTENER*/
         view.findViewById(R.id.btnSave).setOnClickListener((v -> {
@@ -143,8 +161,9 @@ public class ProfileFragment extends Fragment {
             return;
         }
 
-        if(newEmail.equals(user.getEmail()) && newPassword.isEmpty()){
+        if(newEmail.equals(user.getEmail()) && newPassword.isEmpty() && !twitterSignIn.isChecked()){
             txtError.setText("No changes made");
+            clearInputs();
             return;
         }
 
@@ -157,6 +176,7 @@ public class ProfileFragment extends Fragment {
         if(!newPassword.isEmpty() && !isPasswordValid(newPassword)) {
             inputNewPassword.setError("Password must have at least have 8 digits, 1 number and 1 special character");
             inputNewPassword.requestFocus();
+            clearInputs();
             return;
         }
 
@@ -164,6 +184,7 @@ public class ProfileFragment extends Fragment {
         if(!newPasswordConf.equals(newPassword)){
             inputNewPasswordConf.setError("Password Confirmation doesn't match password");
             inputNewPasswordConf.requestFocus();
+            clearInputs();
             return;
         }
 
@@ -233,6 +254,26 @@ public class ProfileFragment extends Fragment {
                         }
                     });
         }
+
+        /*CLEAR TWITTER LOG IN*/
+        if(twitterSignIn.isChecked()){
+            try{
+
+                SharedPreferences.Editor e = sharedPref.edit();
+
+                e.putBoolean(Constants.PREF_KEY_TWITTER_LOGIN,false);
+                e.putString(Constants.PREF_KEY_OAUTH_SECRET,"");
+                e.putString(Constants.PREF_KEY_OAUTH_TOKEN,"");
+                e.commit();
+
+                Log.v("CLEAR_TWITTER_LOGIN","SUCCESSFULL");
+
+            }catch (Exception ex){
+                Log.v("CLEAR_TWITTER_LOGIN",ex.getMessage());
+            }
+        }
+
+
         txtError.setText("Profile updated successfully");
 
 

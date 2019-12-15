@@ -112,7 +112,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 e.putString(Constants.PREF_KEY_OAUTH_TOKEN, accessToken.getToken());
                                 e.putString(Constants.PREF_KEY_OAUTH_SECRET, accessToken.getTokenSecret());
                                 e.putBoolean(Constants.PREF_KEY_TWITTER_LOGIN, true);
-                                e.putBoolean(Constants.KEEP_SIGNEDIN_TWITTER,false);
+                                e.putBoolean(Constants.PREF_KEY_TWITTER_LOGIN,true).commit();
+
                                 e.commit(); // save changes
 
                                 Intent intent = new Intent(MainActivity.this,TwitterPop_Activity.class);
@@ -289,11 +290,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void loginToTwitter() {
-        // Check if already logged in
-        if(!isTwitterLoggedInAlready()) {
 
-
-            // Start new thread for activity (you can't do too much work on the UI/Main thread.
+            // Start new thread for activity/ cant do much on UI thread
             Thread thread = new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -305,37 +303,49 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     builder.setOAuthConsumerKey(Constants.API_KEY);
                     builder.setOAuthConsumerSecret(Constants.API_SECRET);
 
-                    // Build
-                    configuration = builder.build();
+                    // Check if already logged in
+                    if(!isTwitterLoggedInAlready()) {
 
-                    TwitterFactory factory = new TwitterFactory(configuration);
-                    twitter = factory.getInstance();
+                        configuration = builder.build();
+                        TwitterFactory factory = new TwitterFactory(configuration);
+                        twitter = factory.getInstance();
 
-                    try {
-                        requestToken = twitter
-                                .getOAuthRequestToken(Constants.CALLBACKURL);
+                        try {
+                            requestToken = twitter
+                                    .getOAuthRequestToken(Constants.CALLBACKURL);
 
-                        sharedPref.edit().putBoolean(Constants.KEEP_SIGNEDIN_TWITTER,true).commit();
 
-                        MainActivity.this.startActivity(new Intent(Intent.ACTION_VIEW, Uri
-                                .parse(requestToken.getAuthenticationURL())));
+                            MainActivity.this.startActivity(new Intent(Intent.ACTION_VIEW, Uri
+                                    .parse(requestToken.getAuthenticationURL())));
 
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                    }else{
+                        String accessToken = sharedPref.getString(Constants.PREF_KEY_OAUTH_TOKEN,"");
+                        String accessTokenSecret = sharedPref.getString(Constants.PREF_KEY_OAUTH_SECRET,"");
+
+                        builder.setOAuthAccessToken(accessToken);
+                        builder.setOAuthAccessTokenSecret(accessTokenSecret);
+
+                        configuration = builder.build();
+                        TwitterFactory factory = new TwitterFactory(configuration);
+                        twitter = factory.getInstance();
+
+                        Intent intent = new Intent(MainActivity.this,TwitterPop_Activity.class);
+                        intent.putExtra(Constants.DATA_INTENT_TEMPERATURE, temperature);
+                        intent.putExtra(Constants.DATA_INTENT_HUMIDITY, humidity);
+                        intent.putExtra(Constants.DATA_INTENT_LOCATION, location);
+                        intent.putExtra(Constants.DATA_INTENT_AIRQUALITY,airQuality);
+
+
+                        startActivity(intent);        }
                 }
             });
             thread.start();
 
-        }else{
-            Intent intent = new Intent(MainActivity.this,TwitterPop_Activity.class);
-            intent.putExtra(Constants.DATA_INTENT_TEMPERATURE, temperature);
-            intent.putExtra(Constants.DATA_INTENT_HUMIDITY, humidity);
-            intent.putExtra(Constants.DATA_INTENT_LOCATION, location);
-            intent.putExtra(Constants.DATA_INTENT_AIRQUALITY,airQuality);
 
-
-            startActivity(intent);        }
 
     }
 
@@ -388,8 +398,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     /* IF USER PREFERENCE KEEP SIGNED IN IS FALSE, SIGNOUT USER BEFORE APP CLOSURE*/
     @Override
     public void onStop() {
-        sharedPref.edit().putBoolean(Constants.PREF_KEY_TWITTER_LOGIN, false).commit();
-        if (!sharedPref.getBoolean(Constants.KEEP_SIGNEDIN, false) && !sharedPref.getBoolean(Constants.KEEP_SIGNEDIN_TWITTER,false)){
+        if (!sharedPref.getBoolean(Constants.KEEP_SIGNEDIN, false)){
             signOut();
         }
         super.onStop();
