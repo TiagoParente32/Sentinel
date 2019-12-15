@@ -35,6 +35,7 @@ import pt.ipleiria.estg.dei.sentinel.fragments.DashboardFragment;
 import pt.ipleiria.estg.dei.sentinel.fragments.FavoritesFragment;
 import pt.ipleiria.estg.dei.sentinel.fragments.LoginFragment;
 import pt.ipleiria.estg.dei.sentinel.fragments.MyExposureFragment;
+import pt.ipleiria.estg.dei.sentinel.fragments.ProfileFragment;
 import pt.ipleiria.estg.dei.sentinel.fragments.RegisterFragment;
 import pt.ipleiria.estg.dei.sentinel.fragments.SendFragment;
 import pt.ipleiria.estg.dei.sentinel.fragments.StatisticsFragment;
@@ -166,6 +167,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     navigationView.getMenu().findItem(R.id.nav_send).setVisible(false);
                     navigationView.getMenu().findItem(R.id.nav_exposure).setVisible(false);
                     navigationView.getMenu().findItem(R.id.nav_statistics).setVisible(false);
+                    navigationView.getMenu().findItem(R.id.nav_profile).setVisible(false);
 
                 } else {
                     /*DISPLAYS LOGIN AND REGISTER BUTTONS*/
@@ -174,6 +176,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     navigationView.getMenu().findItem(R.id.nav_register).setVisible(false);
                     navigationView.getMenu().findItem(R.id.nav_favorites).setVisible(true);
                     navigationView.getMenu().findItem(R.id.nav_exposure).setVisible(true);
+                    navigationView.getMenu().findItem(R.id.nav_profile).setVisible(true);
 
 
                     navigationView.getMenu().findItem(R.id.nav_send).setVisible(true);
@@ -256,6 +259,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     new MyExposureFragment()).commit();
                 break;
 
+            case R.id.nav_profile:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        new ProfileFragment()).commit();
+                break;
 
             case R.id.nav_logout:
                 signOut();

@@ -49,7 +49,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
 
         //binds methods to button
         view.findViewById(R.id.btnLogin).setOnClickListener(this);
-        view.findViewById(R.id.btnAdd).setOnClickListener(this);
+        view.findViewById(R.id.btnSave).setOnClickListener(this);
 
         return view;
     }
@@ -181,7 +181,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
 
             signIn(inputEmail.getEditText().getText().toString().trim(), inputPassword.getEditText().getText().toString().trim());
         }
-        if(i == R.id.btnAdd){
+        if(i == R.id.btnSave){
             /*OPENS REGISTER ACTIVITY*/
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                     new RegisterFragment()).commit();

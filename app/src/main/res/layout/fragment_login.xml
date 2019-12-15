@@ -35,7 +35,7 @@
         app:srcCompat="@drawable/ic_lock_black_24dp" />
 
     <Button
-        android:id="@+id/btnAdd"
+        android:id="@+id/btnSave"
         android:layout_width="350dp"
         android:layout_height="45dp"
         android:layout_marginStart="20dp"
