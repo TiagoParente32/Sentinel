@@ -13,7 +13,7 @@
     <string name="login_failed">"Login failed"</string>
     <string name="login">Login</string>
     <string name="keep_me_signed">Keep me signed in</string>
-    <string name="password_conf">Password confirmation</string>
+    <string name="password_conf">Password Confirmation</string>
     <string name="register">Create Account</string>
     <string name="error_user_exists">The email addressed is already asssociated with an account!</string>
     <string name="error_invalid_email">Invalid email address!</string>
@@ -48,5 +48,9 @@
     <string name="from">From:</string>
     <string name="to">To:</string>
     <string name="table">Table</string>
+    <string name="profile">Profile</string>
+    <string name="oldPassword">Current Password</string>
+    <string name="save">Save</string>
+    <string name="clear_twitter_login">Clear Twitter Login</string>
 
 </resources>

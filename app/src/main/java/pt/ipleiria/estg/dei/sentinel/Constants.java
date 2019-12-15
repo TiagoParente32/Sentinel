@@ -3,7 +3,6 @@ package pt.ipleiria.estg.dei.sentinel;
 public final class Constants {
 
     public static final String KEEP_SIGNEDIN = "keep_signed_in";
-    public static final String KEEP_SIGNEDIN_TWITTER = "keep_signed_in_twitter";
 
 
 
