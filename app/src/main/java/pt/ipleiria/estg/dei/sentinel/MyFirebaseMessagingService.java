@@ -56,8 +56,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         // Also if you intend on generating your own notifications as a result of a received FCM
         // message, here is where that should be initiated. See sendNotification method below.
-        String message = remoteMessage.getNotification().getBody();
-        sendNotification(message);
+        sendNotification(remoteMessage.getNotification().getBody(),remoteMessage.getNotification().getTitle());
     }
 
     private void scheduleJob() {
@@ -67,7 +66,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Log.d(TAG, "Sentinel Alert Sent");
     }
 
-    private void sendNotification(String messageBody) {
+    private void sendNotification(String messageBody,String messageTitle) {
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
@@ -96,11 +95,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         }
 
         notificationManager.notify(0, notificationBuilder.build());
-        saveNotification(messageBody);
+        saveNotification(messageBody,messageTitle);
     }
 
 
-    private void saveNotification(String messageBody){
+    private void saveNotification(String messageBody,String messageTitle){
         Set<String> set = null;
         int counter = 0;
         try{
@@ -113,7 +112,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             counter = sharedPref.getInt(Constants.PREFERENCES_NOTIFICATIONS_UNREAD,0);
 
             counter++; //INCREASES COUNTER BECAUSE OF NEW MESSAGE
-            set.add(messageBody+":1");
+            set.add(messageTitle+":" + messageBody + ":" + "1");
 
             /*SAVES LIST WITH NEW MESSAGE AND UNREAD MESSSAGES COUNTER*/
 

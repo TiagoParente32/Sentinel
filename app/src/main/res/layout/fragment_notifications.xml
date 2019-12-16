@@ -28,7 +28,9 @@
         android:dividerHeight="2dp"/>
 
 
-    <ListView
+
+
+    <ExpandableListView
         android:id="@+id/lvNotifications"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -41,6 +43,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        android:divider="@color/colorWhite"
+        android:dividerHeight="0.5dp"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

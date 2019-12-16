@@ -436,7 +436,7 @@ public class DashboardFragment extends Fragment {
             mediaHum = (humidadeSum / numHumidade);
         }else{
             toggleUI(false);
-            textEmptyData.setText("No Data Found In " + spinnerRooms.getSelectedItem().toString());
+            textEmptyData.setText("No Data Found");
         }
 
         //limitar humidade de 0%-100%

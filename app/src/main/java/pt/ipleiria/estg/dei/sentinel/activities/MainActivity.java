@@ -208,7 +208,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         /*SETS SHARED PREFERENCES LISTENER TO UPDATE NOTIFICATION COUNTER*/
         SharedPreferences.OnSharedPreferenceChangeListener listener = (prefs, key) -> {
             if(key.equals(Constants.PREFERENCES_NOTIFICATIONS_UNREAD)){
-                readNotificationCounter();
+                this.runOnUiThread(() -> readNotificationCounter());
             }
         };
 
@@ -225,6 +225,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void readNotificationCounter(){
         try{
             notificationCounter = sharedPref.getInt(Constants.PREFERENCES_NOTIFICATIONS_UNREAD,0);
+
+            if(notificationCounter == 0){
+                tvNotificationCounter.setVisibility(View.INVISIBLE);
+                return;
+            }
+            tvNotificationCounter.setVisibility(View.VISIBLE);
             counter = String.valueOf(notificationCounter);
             tvNotificationCounter.setText(counter);
         }catch(Exception ex){

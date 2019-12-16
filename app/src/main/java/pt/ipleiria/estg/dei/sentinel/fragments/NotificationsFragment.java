@@ -7,6 +7,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ExpandableListAdapter;
+import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -15,19 +17,24 @@ import androidx.fragment.app.Fragment;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
 import pt.ipleiria.estg.dei.sentinel.Constants;
 import pt.ipleiria.estg.dei.sentinel.CustomAdapter;
+import pt.ipleiria.estg.dei.sentinel.CustomAdapterExpandable;
 import pt.ipleiria.estg.dei.sentinel.R;
 
-public class NotificationsFragment extends Fragment implements CustomAdapter.EventListener {
+public class NotificationsFragment extends Fragment implements CustomAdapterExpandable.EventListener {
 
-    private ListView lView;
+    private ExpandableListView lView;
     private ArrayList<String> notificationsList;
+    private ArrayList<String> notificationsTitle;
+    private HashMap<String,String> notificationsBody;
+    private HashMap<String,Integer> readList;
     private SharedPreferences sharedPref;
-    private CustomAdapter adapterList;
+    private CustomAdapterExpandable adapterList;
 
     @Nullable
     @Override
@@ -36,13 +43,16 @@ public class NotificationsFragment extends Fragment implements CustomAdapter.Eve
 
         this.sharedPref = getActivity().getSharedPreferences(Constants.PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
 
-        //instantiate custom adapter
+        this.notificationsTitle = new ArrayList<>();
+        this.notificationsBody = new HashMap<>();
+        this.readList = new HashMap<>();
+        this.notificationsList = new ArrayList<>();
 
 
         readData();
 
 
-        adapterList =new CustomAdapter(this.notificationsList,getActivity(),sharedPref,3,this);
+        adapterList =new CustomAdapterExpandable(this.notificationsTitle,this.notificationsBody,this.readList,getActivity(),sharedPref, this);
         lView = view.findViewById(R.id.lvFavorites);
 
         TextView emptyText = view.findViewById(R.id.tvEmptyNotifications);
@@ -50,15 +60,26 @@ public class NotificationsFragment extends Fragment implements CustomAdapter.Eve
 
         //handle listview and assign adapter
         lView = view.findViewById(R.id.lvNotifications);
-        lView.setAdapter(adapterList);
+        lView.setAdapter((ExpandableListAdapter)adapterList);
         lView.setEmptyView(emptyText);
+
+        lView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v,
+                                        int groupPosition, int childPosition, long id) {
+
+
+
+
+                return false;
+            }
+        });
 
 
         /*SET SHARED PREFERENCES LISTENER*/
         SharedPreferences.OnSharedPreferenceChangeListener listener = (prefs, key) -> {
             if(key.equals(Constants.PREFERENCES_NOTIFICATIONS_UNREAD)){
-                this.notificationsList.clear();
-                this.notificationsList.addAll(new ArrayList<>(prefs.getStringSet(Constants.PREFERENCES_NOTIFICATIONS_SET,new HashSet<>())));
+                readData();
                 adapterList.notifyDataSetChanged();
             }
         };
@@ -81,6 +102,10 @@ public class NotificationsFragment extends Fragment implements CustomAdapter.Eve
 
     private void readData(){
         Set<String> set;
+        this.notificationsList.clear();
+        this.notificationsBody.clear();
+        this.notificationsTitle.clear();
+        this.readList.clear();
 
         if(sharedPref.contains(Constants.PREFERENCES_NOTIFICATIONS_SET)){
 
@@ -92,6 +117,15 @@ public class NotificationsFragment extends Fragment implements CustomAdapter.Eve
             }
 
             this.notificationsList = new ArrayList<>(set);
+
+            String[] data;
+            /*SPLITS STRINGS*/
+            for (String s: this.notificationsList) {
+                data = s.split(":");
+                this.notificationsTitle.add(data[0]);
+                this.notificationsBody.put(data[0],data[1]);
+                this.readList.put(data[0],Integer.parseInt(data[2]));
+            }
 
         }else{
             this.notificationsList = new ArrayList<>();
