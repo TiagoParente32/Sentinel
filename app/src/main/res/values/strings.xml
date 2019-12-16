@@ -55,6 +55,7 @@
     <string name="fcm_message">Sentinel Alert</string>
     <string name="default_notification_channel_name" translatable="true">Alerts</string>
     <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
+    <string name="no_notifications">No notifications to show</string>
 
 
 </resources>

@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.NotificationCompat;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -63,7 +64,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
 
     private void handleNow() {
-        Log.d(TAG, "Short lived task is done.");
+        Log.d(TAG, "Sentinel Alert Sent");
     }
 
     private void sendNotification(String messageBody) {
@@ -89,25 +90,39 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         // Since android Oreo notification channel is needed.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(channelId,
-                    "Channel human readable title",
+                    "Sentinel Alerts",
                     NotificationManager.IMPORTANCE_DEFAULT);
             notificationManager.createNotificationChannel(channel);
         }
 
         notificationManager.notify(0, notificationBuilder.build());
+        saveNotification(messageBody);
     }
 
 
     private void saveNotification(String messageBody){
         Set<String> set = null;
+        int counter = 0;
         try{
-
-            set = sharedPref.getStringSet(Constants.PREFERENCES_NOTIFICATIONS_SET,new HashSet<>());
+            SharedPreferences.Editor e = sharedPref.edit();
 
             /*GETS SAVE LIST IF EXISTS*/
-            set.add(messageBody+"-1");
+            set = sharedPref.getStringSet(Constants.PREFERENCES_NOTIFICATIONS_SET,new HashSet<>());
 
-            sharedPref.edit().putStringSet(Constants.PREFERENCES_NOTIFICATIONS_SET,set).commit();
+            /*GETS UNREAD MESSAGE COUNTER*/
+            counter = sharedPref.getInt(Constants.PREFERENCES_NOTIFICATIONS_UNREAD,0);
+
+            counter++; //INCREASES COUNTER BECAUSE OF NEW MESSAGE
+            set.add(messageBody+":1");
+
+            /*SAVES LIST WITH NEW MESSAGE AND UNREAD MESSSAGES COUNTER*/
+
+            e.putStringSet(Constants.PREFERENCES_NOTIFICATIONS_SET,set).commit();
+            e.putInt(Constants.PREFERENCES_NOTIFICATIONS_UNREAD,counter).commit();
+
+
+
+
 
         }catch(Exception ex){
             Log.v("ERROR_SAVE_NOTIFICATION",ex.getMessage());

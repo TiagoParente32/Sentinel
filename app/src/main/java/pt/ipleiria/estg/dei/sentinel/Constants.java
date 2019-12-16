@@ -33,6 +33,6 @@ public final class Constants {
     public static final String PREFERENCES_EXPOSURE_SET ="exposure_string_set";
 
     public static final String PREFERENCES_NOTIFICATIONS_SET = "notifcations_string_set";
-
+    public static final String PREFERENCES_NOTIFICATIONS_UNREAD = "notifications_unread_int";
 
 }
