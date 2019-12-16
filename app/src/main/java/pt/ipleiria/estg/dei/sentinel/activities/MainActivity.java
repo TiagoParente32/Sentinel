@@ -48,7 +48,6 @@ import twitter4j.conf.ConfigurationBuilder;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private static final int MBVIEW_REQUEST_CODE = 1;
     private DrawerLayout drawer;
     private TextView tvHeaderEmail;
     public SharedPreferences sharedPref;

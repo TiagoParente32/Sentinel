@@ -33,6 +33,7 @@ dependencies {
     implementation 'androidx.annotation:annotation:1.1.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.legacy:legacy-support-v13:1.0.0'
     testImplementation 'junit:junit:4.12'
     implementation 'com.google.firebase:firebase-auth:19.1.0'
     implementation 'com.google.firebase:firebase-database:19.2.0'
@@ -43,5 +44,7 @@ dependencies {
     implementation 'org.twitter4j:twitter4j-core:4.0.1'
     implementation 'com.jjoe64:graphview:4.2.2'
     implementation 'de.codecrafters.tableview:tableview:2.4.2'
+    implementation 'com.google.firebase:firebase-messaging:20.1.0'
+
 }
 apply plugin: 'com.google.gms.google-services'
