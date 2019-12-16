@@ -17,6 +17,7 @@ import android.os.Message;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +36,7 @@ import pt.ipleiria.estg.dei.sentinel.fragments.DashboardFragment;
 import pt.ipleiria.estg.dei.sentinel.fragments.FavoritesFragment;
 import pt.ipleiria.estg.dei.sentinel.fragments.LoginFragment;
 import pt.ipleiria.estg.dei.sentinel.fragments.MyExposureFragment;
+import pt.ipleiria.estg.dei.sentinel.fragments.NotificationsFragment;
 import pt.ipleiria.estg.dei.sentinel.fragments.ProfileFragment;
 import pt.ipleiria.estg.dei.sentinel.fragments.RegisterFragment;
 import pt.ipleiria.estg.dei.sentinel.fragments.SendFragment;
@@ -145,6 +147,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        findViewById(R.id.btnNotifications).setOnClickListener(v -> {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                    new NotificationsFragment()).commit();
+        });
+
 
         tvHeaderEmail = navigationView.getHeaderView(0).findViewById(R.id.nav_email);
 

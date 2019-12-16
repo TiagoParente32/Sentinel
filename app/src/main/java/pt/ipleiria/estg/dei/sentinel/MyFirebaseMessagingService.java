@@ -76,7 +76,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(this, channelId)
-                        .setSmallIcon(R.drawable.logo)
+                        .setSmallIcon(R.drawable.logo_white)
                         .setContentTitle(getString(R.string.fcm_message))
                         .setContentText(messageBody)
                         .setAutoCancel(true)
@@ -107,7 +107,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             /*GETS SAVE LIST IF EXISTS*/
             set.add(messageBody+"-1");
 
-            sharedPref.edit().putStringSet(Constants.PREFERENCES_NOTIFICATIONS_SET,set);
+            sharedPref.edit().putStringSet(Constants.PREFERENCES_NOTIFICATIONS_SET,set).commit();
 
         }catch(Exception ex){
             Log.v("ERROR_SAVE_NOTIFICATION",ex.getMessage());

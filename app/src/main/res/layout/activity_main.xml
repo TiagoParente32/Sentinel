@@ -21,7 +21,18 @@
             android:id="@+id/toolbar"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            android:elevation="4dp"/>
+            android:elevation="4dp">
+
+            <ImageButton
+                android:id="@+id/btnNotifications"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="#00673AB7"
+                android:backgroundTint="#3F51B5"
+                app:srcCompat="@drawable/ic_notifications_white"
+                android:layout_gravity="end"/>
+
+        </androidx.appcompat.widget.Toolbar>
 
 
 
