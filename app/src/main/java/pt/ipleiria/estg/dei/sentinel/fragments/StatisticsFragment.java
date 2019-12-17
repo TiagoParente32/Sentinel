@@ -74,6 +74,7 @@ public class StatisticsFragment extends Fragment {
     private TextView h1;
     private TextView h2;
     private TextView h3;
+    private TextView textViewNoDataStats;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -102,6 +103,7 @@ public class StatisticsFragment extends Fragment {
         h1 = view.findViewById(R.id.h1);
         h2 = view.findViewById(R.id.h2);
         h3 = view.findViewById(R.id.h3);
+        textViewNoDataStats = view.findViewById(R.id.textViewNoDataStats);
 
 
 
@@ -315,6 +317,12 @@ public class StatisticsFragment extends Fragment {
 
         graph.getViewport().setXAxisBoundsManual(true);
         graph.getGridLabelRenderer().setNumHorizontalLabels(8);
+
+        if(values.isEmpty()){
+            toggleStats(false);
+        }else{
+            toggleStats(true);
+        }
     }
 
 
@@ -388,4 +396,31 @@ public class StatisticsFragment extends Fragment {
             btnTable.setText("Table");
         }
     }
+    public void toggleStats(boolean bool){
+        if(bool){
+            //ver stats , por exemplo grafico
+            tableLayout.setVisibility(View.INVISIBLE);
+            h1.setVisibility(View.INVISIBLE);
+            h2.setVisibility(View.INVISIBLE);
+            h3.setVisibility(View.INVISIBLE);
+            graph.setVisibility(View.VISIBLE);
+            checkBoxHum.setVisibility(View.VISIBLE);
+            checkBoxTemp.setVisibility(View.VISIBLE);
+            btnTable.setText("Table");
+            btnTable.setVisibility(View.VISIBLE);
+            textViewNoDataStats.setVisibility(View.INVISIBLE);
+        }else {
+            //esconder stats
+            tableLayout.setVisibility(View.INVISIBLE);
+            h1.setVisibility(View.INVISIBLE);
+            h2.setVisibility(View.INVISIBLE);
+            h3.setVisibility(View.INVISIBLE);
+            graph.setVisibility(View.INVISIBLE);
+            checkBoxHum.setVisibility(View.INVISIBLE);
+            checkBoxTemp.setVisibility(View.INVISIBLE);
+            btnTable.setVisibility(View.INVISIBLE);
+            textViewNoDataStats.setVisibility(View.VISIBLE);
+        }
+    }
+
 }
