@@ -52,5 +52,6 @@
     <string name="oldPassword">Current Password</string>
     <string name="save">Save</string>
     <string name="clear_twitter_login">Clear Twitter Login</string>
+    <string name="no_data_found">No Data Found</string>
 
 </resources>
