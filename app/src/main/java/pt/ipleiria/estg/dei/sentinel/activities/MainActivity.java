@@ -10,13 +10,16 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.net.sip.SipSession;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +28,7 @@ import android.widget.Toast;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +39,7 @@ import pt.ipleiria.estg.dei.sentinel.fragments.DashboardFragment;
 import pt.ipleiria.estg.dei.sentinel.fragments.FavoritesFragment;
 import pt.ipleiria.estg.dei.sentinel.fragments.LoginFragment;
 import pt.ipleiria.estg.dei.sentinel.fragments.MyExposureFragment;
+import pt.ipleiria.estg.dei.sentinel.fragments.NotificationsFragment;
 import pt.ipleiria.estg.dei.sentinel.fragments.ProfileFragment;
 import pt.ipleiria.estg.dei.sentinel.fragments.RegisterFragment;
 import pt.ipleiria.estg.dei.sentinel.fragments.SendFragment;
@@ -48,12 +53,14 @@ import twitter4j.conf.ConfigurationBuilder;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private static final int MBVIEW_REQUEST_CODE = 1;
     private DrawerLayout drawer;
     private TextView tvHeaderEmail;
     public SharedPreferences sharedPref;
     private NavigationView navigationView;
     private Configuration configuration;
+    private TextView tvNotificationCounter;
+    private Toolbar toolbar;
+    private FirebaseUser currentUser;
 
 
 
@@ -69,6 +76,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private String humidity;
     private String location;
     private String airQuality;
+    private int notificationCounter;
+    private String counter;
 
     //DATA TO PASS TO SEND FRAG
     private ArrayList<String> roomsList ;
@@ -145,9 +154,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         drawer = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
+        tvNotificationCounter = findViewById(R.id.txtNotificationsNumber);
+        this.toolbar = findViewById(R.id.toolbar);
+
         navigationView.setNavigationItemSelectedListener(this);
+        findViewById(R.id.btnNotifications).setOnClickListener(v -> {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                    new NotificationsFragment()).commit();
+        });
+
 
         tvHeaderEmail = navigationView.getHeaderView(0).findViewById(R.id.nav_email);
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
+
 
 
         /*THE STRINGS IN THE CONSTRUCTOR ARE HELPFUL FOR BLIND PEOPLE WHO NEED TEXT TO SPEECH*/
@@ -155,9 +174,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close){
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-
-                if (currentUser == null) {
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                if (user == null) {
                     tvHeaderEmail.setText(R.string.unauthenticated);
 
                     /*DISPLAYS LOGIN AND REGISTER BUTTONS*/
@@ -170,6 +188,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     navigationView.getMenu().findItem(R.id.nav_statistics).setVisible(false);
                     navigationView.getMenu().findItem(R.id.nav_profile).setVisible(false);
 
+
                 } else {
                     /*DISPLAYS LOGIN AND REGISTER BUTTONS*/
                     navigationView.getMenu().findItem(R.id.nav_logout).setVisible(true);
@@ -178,11 +197,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     navigationView.getMenu().findItem(R.id.nav_favorites).setVisible(true);
                     navigationView.getMenu().findItem(R.id.nav_exposure).setVisible(true);
                     navigationView.getMenu().findItem(R.id.nav_profile).setVisible(true);
-
-
                     navigationView.getMenu().findItem(R.id.nav_send).setVisible(true);
+
                     navigationView.getMenu().findItem(R.id.nav_statistics).setVisible(true);
-                    tvHeaderEmail.setText(currentUser.getEmail());
+                    tvHeaderEmail.setText(user.getEmail());
 
                 }
             }
@@ -190,6 +208,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+
+        if(currentUser == null){
+            hideToolbarItens();
+        }else{
+            readNotificationCounter();
+        }
+
+
+        /*SETS SHARED PREFERENCES LISTENER TO UPDATE NOTIFICATION COUNTER*/
+        SharedPreferences.OnSharedPreferenceChangeListener listener = (prefs, key) -> {
+            if(key.equals(Constants.PREFERENCES_NOTIFICATIONS_UNREAD) || key.equals(Constants.PREFERENCES_LOGGED_IN)){
+                this.runOnUiThread(() -> readNotificationCounter());
+            }
+        };
+
+        sharedPref.registerOnSharedPreferenceChangeListener(listener);
 
 
         /*SWITCHS TO DASHBOARD FRAGMENT*/
@@ -199,6 +233,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
+    private void readNotificationCounter(){
+        if(FirebaseAuth.getInstance().getCurrentUser() != null) {
+            showToolbarItens();
+            try {
+                notificationCounter = sharedPref.getInt(Constants.PREFERENCES_NOTIFICATIONS_UNREAD, 0);
+
+                if (notificationCounter == 0) {
+                    tvNotificationCounter.setVisibility(View.INVISIBLE);
+                    return;
+                }
+                tvNotificationCounter.setVisibility(View.VISIBLE);
+                counter = String.valueOf(notificationCounter);
+                tvNotificationCounter.setText(counter);
+            } catch (Exception ex) {
+                Log.v("ERROR_READ_NOT_COUNTER", ex.getMessage());
+            }
+        }else{
+            hideToolbarItens();
+        }
+    }
 
     @Override
     protected void onStart() {
@@ -214,6 +268,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             super.onBackPressed();
         }
 
+    }
+
+    private void showToolbarItens(){
+        toolbar.findViewById(R.id.txtNotificationsNumber).setVisibility(View.VISIBLE);
+        toolbar.findViewById(R.id.btnNotifications).setVisibility(View.VISIBLE);
+    }
+
+    private void hideToolbarItens(){
+        toolbar.findViewById(R.id.txtNotificationsNumber).setVisibility(View.INVISIBLE);
+        toolbar.findViewById(R.id.btnNotifications).setVisibility(View.INVISIBLE);
     }
 
 
@@ -267,6 +331,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             case R.id.nav_logout:
                 signOut();
+                hideToolbarItens();
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         new DashboardFragment()).commit();
 
@@ -277,8 +342,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void signOut() {
-        sharedPref.edit().putBoolean(Constants.KEEP_SIGNEDIN, false).commit();
+        hideToolbarItens();
         FirebaseAuth.getInstance().signOut();
+        sharedPref.edit().putBoolean(Constants.PREFERENCES_LOGGED_IN,false).commit();
+        sharedPref.edit().putBoolean(Constants.KEEP_SIGNEDIN, false).commit();
     }
 
 
@@ -393,6 +460,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void setSpinnerData(List<String> roomsList) {
         this.roomsList = new ArrayList<>(roomsList);
     }
+
 
 
     /* IF USER PREFERENCE KEEP SIGNED IN IS FALSE, SIGNOUT USER BEFORE APP CLOSURE*/

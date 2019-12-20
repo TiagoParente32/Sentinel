@@ -32,5 +32,10 @@ public final class Constants {
 
     public static final String PREFERENCES_EXPOSURE_SET ="exposure_string_set";
 
+    public static final String PREFERENCES_NOTIFICATIONS_SET = "notifications_string_set";
+    public static final String PREFERENCES_NOTIFICATIONS_UNREAD = "notifications_unread_int";
 
+    public static final String PREFERENCES_NOTIFICATIONS_ON ="notifications_bool_on";
+
+    public static final String PREFERENCES_LOGGED_IN = "user_logged_in";
 }

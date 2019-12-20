@@ -53,7 +53,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.fragment_register,container,false);
 
-        inputEmail = view.findViewById(R.id.inputEmail);
+        inputEmail = view.findViewById(R.id.inputRegEmail);
         inputPassword = view.findViewById(R.id.inputPassword);
         inputPasswordConf = view.findViewById(R.id.inputPasswordConf);
 
@@ -64,24 +64,6 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
         return view;
     }
 
-    /*@Override
-    protected void onStart() {
-
-        super.onStart();
-
-
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-
-        if(currentUser != null){
-            //OPENS DASHBOARD ACTIVITY
-            Intent intent = new Intent(RegisterFragment.this, DashboardFragment.class);
-            startActivity(intent);
-            finish();
-
-        }
-
-
-    }*/
 
     private void registerUser(String email, String password, String passwordConf){
 

@@ -80,7 +80,7 @@ public class CustomAdapter extends BaseAdapter implements ListAdapter {
 
             AlertDialog.Builder builder = new AlertDialog.Builder(context,R.style.DialogTheme);
 
-            builder.setMessage(R.string.favoritDialogMessage)
+            builder.setMessage(R.string.dialog_message)
                     .setTitle(R.string.favoriteDialogTitle);
 
             builder.setPositiveButton(R.string.ok, (dialog, id) -> {
@@ -92,6 +92,9 @@ public class CustomAdapter extends BaseAdapter implements ListAdapter {
 
                     }else if(this.view == 2){
                         sharedPref.edit().putStringSet(Constants.PREFERENCES_EXPOSURE_SET,new HashSet<>(this.list)).commit();
+                        this.listener.onEvent();
+                    }else if(this.view == 3){
+
                         this.listener.onEvent();
                     }
                 }catch(Exception ex){

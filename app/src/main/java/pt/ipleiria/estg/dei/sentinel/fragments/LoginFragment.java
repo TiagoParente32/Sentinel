@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,6 +23,7 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import pt.ipleiria.estg.dei.sentinel.Constants;
 import pt.ipleiria.estg.dei.sentinel.R;
 
 public class LoginFragment extends Fragment implements View.OnClickListener{
@@ -30,6 +32,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
     private TextInputLayout inputPassword;
     private CheckBox checkboxSignedIn;
     private boolean keepSignedIn;
+    private SharedPreferences sharedPref;
 
     private FirebaseAuth mAuth;
 
@@ -46,6 +49,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
         inputEmail = view.findViewById(R.id.inputEmail);
         inputPassword = view.findViewById(R.id.inputPassword);
         checkboxSignedIn = view.findViewById(R.id.chbSignedIn);
+        sharedPref = getActivity().getSharedPreferences(Constants.PREFERENCES_FILE_NAME,Context.MODE_PRIVATE);
 
         //binds methods to button
         view.findViewById(R.id.btnLogin).setOnClickListener(this);
@@ -157,6 +161,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+                            sharedPref.edit().putBoolean(Constants.PREFERENCES_LOGGED_IN,true).commit();
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
@@ -164,11 +169,9 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
                             updateUI(null);
                         }
 
-                        // ...
                     }
                 });
 
-        //STARTS DASHBOARD ACTIVITY
 
 
     }
@@ -178,7 +181,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
     public void onClick(View v) {
         int i = v.getId();
         if(i == R.id.btnLogin){
-
             signIn(inputEmail.getEditText().getText().toString().trim(), inputPassword.getEditText().getText().toString().trim());
         }
         if(i == R.id.btnSave){

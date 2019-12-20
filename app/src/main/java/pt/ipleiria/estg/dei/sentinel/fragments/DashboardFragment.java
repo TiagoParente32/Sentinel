@@ -259,7 +259,7 @@ public class DashboardFragment extends Fragment {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(),R.style.DialogTheme);
 
-                builder.setMessage(R.string.favoritDialogMessage)
+                builder.setMessage(R.string.dialog_message)
                         .setTitle(R.string.favoriteDialogTitle);
 
                 builder.setPositiveButton(R.string.ok, (dialog, id) -> {
@@ -439,7 +439,7 @@ public class DashboardFragment extends Fragment {
             mediaHum = (humidadeSum / numHumidade);
         }else{
             toggleUI(false);
-            textEmptyData.setText("No Data Found In " + spinnerRooms.getSelectedItem().toString());
+            textEmptyData.setText("No Data Found");
         }
 
         //limitar humidade de 0%-100%
