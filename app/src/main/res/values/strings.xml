@@ -57,6 +57,7 @@
     <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
     <string name="no_notifications">No notifications to show</string>
     <string name="toggle_on">ON</string>
-
+    <string name="no_data_found">No Data Found</string>
+    <string name="refresh_success">Refreshed Successfully</string>
 
 </resources>

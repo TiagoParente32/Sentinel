@@ -27,6 +27,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -150,6 +151,7 @@ public class DashboardFragment extends Fragment {
                 System.out.println("refreshing...");
                 updateUIOnItemSelected();
                 swipeRefresh.setRefreshing(false);
+                Snackbar.make(getView(), R.string.refresh_success, Snackbar.LENGTH_SHORT).show();
             }
         });
 
@@ -200,20 +202,21 @@ public class DashboardFragment extends Fragment {
 
 
         //check if user is authenticated
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user == null) {
-            // User is  not signed in
-            //nao consegue alterar o sitio
-            spinnerRooms.setEnabled(false);
-            spinnerRooms.setClickable(false);
-            spinnerRooms.setAlpha(0.5f);
-            btnAddFavorites.setVisibility(View.INVISIBLE);
-            btnShare.setVisibility(View.INVISIBLE);
-            btnExposure.setVisibility(View.INVISIBLE);
-
-        }else{
-            spinnerRooms.setAlpha(1);
-        }
+//        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+//        if (user == null) {
+//            // User is  not signed in
+//            //nao consegue alterar o sitio
+//            spinnerRooms.setEnabled(false);
+//            spinnerRooms.setClickable(false);
+//            spinnerRooms.setAlpha(0.5f);
+//            btnAddFavorites.setVisibility(View.INVISIBLE);
+//            btnShare.setVisibility(View.INVISIBLE);
+//            btnExposure.setVisibility(View.INVISIBLE);
+//
+//        }else{
+//            spinnerRooms.setAlpha(1);
+//        }
+        checkUserAuth();
 
         //user is signed in
         spinnerRooms.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -467,6 +470,8 @@ public class DashboardFragment extends Fragment {
             imgHum.setVisibility(View.VISIBLE);
             imgTemp.setVisibility(View.VISIBLE);
             btnShare.setVisibility(View.VISIBLE);
+
+            checkUserAuth();
         }else {
             textEmptyData.setVisibility(View.VISIBLE);
             pb.setVisibility(View.INVISIBLE);
@@ -542,6 +547,23 @@ public class DashboardFragment extends Fragment {
                         }
                 }
             }
+        }
+    }
+
+    public void checkUserAuth(){
+        //check if user is authenticated
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) {
+            // User is  not signed in
+            //nao consegue alterar o sitio
+            spinnerRooms.setEnabled(false);
+            spinnerRooms.setClickable(false);
+            spinnerRooms.setAlpha(0.5f);
+            btnAddFavorites.setVisibility(View.INVISIBLE);
+            btnShare.setVisibility(View.INVISIBLE);
+            btnExposure.setVisibility(View.INVISIBLE);
+        }else{
+            spinnerRooms.setAlpha(1);
         }
     }
 

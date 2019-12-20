@@ -216,6 +216,24 @@
         app:layout_constraintStart_toEndOf="@+id/dateTo"
         app:layout_constraintTop_toTopOf="@+id/dateTo" />
 
+    <TextView
+        android:id="@+id/textViewNoDataStats"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:divider="#FFFFFF"
+        android:dividerHeight="2dp"
+        android:fontFamily="sans-serif"
+        android:text="@string/no_data_found"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        android:textColor="@color/colorWhite"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
