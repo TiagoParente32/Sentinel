@@ -22,6 +22,28 @@
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
             android:elevation="4dp">
+
+            <TextView
+                android:id="@+id/txtNotificationsNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="30dp"
+                android:textColor="@color/colorWhite"
+                android:textStyle="bold"
+                android:visibility="invisible"></TextView>
+
+            <ImageButton
+                android:id="@+id/btnNotifications"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:background="#00673AB7"
+                android:backgroundTint="#3F51B5"
+                android:visibility="invisible"
+                app:srcCompat="@drawable/ic_notifications_white" />
+
         </androidx.appcompat.widget.Toolbar>
 
 

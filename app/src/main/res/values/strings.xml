@@ -13,7 +13,7 @@
     <string name="login_failed">"Login failed"</string>
     <string name="login">Login</string>
     <string name="keep_me_signed">Keep me signed in</string>
-    <string name="password_conf">Password confirmation</string>
+    <string name="password_conf">Password Confirmation</string>
     <string name="register">Create Account</string>
     <string name="error_user_exists">The email addressed is already asssociated with an account!</string>
     <string name="error_invalid_email">Invalid email address!</string>
@@ -30,7 +30,7 @@
     <string name="favorites">Favorites</string>
     <string name="ok">Ok</string>
     <string name="cancel">Cancel</string>
-    <string name="favoritDialogMessage">Do you really wish to remove this location from the Favorites?</string>
+    <string name="dialog_message">Do you really wish to remove this location?</string>
     <string name="favoriteDialogTitle">Confirmation</string>
     <string name="no_favorites">No favorites added!</string>
     <string name="add_favorite">Add Favorite</string>
@@ -48,5 +48,16 @@
     <string name="from">From:</string>
     <string name="to">To:</string>
     <string name="table">Table</string>
+    <string name="profile">Profile</string>
+    <string name="oldPassword">Current Password</string>
+    <string name="save">Save</string>
+    <string name="clear_twitter_login">Clear Twitter Login</string>
+    <string name="fcm_message">Sentinel Alert</string>
+    <string name="default_notification_channel_name" translatable="true">Alerts</string>
+    <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
+    <string name="no_notifications">No notifications to show</string>
+    <string name="toggle_on">ON</string>
+    <string name="no_data_found">No Data Found</string>
+    <string name="refresh_success">Refreshed Successfully</string>
 
 </resources>

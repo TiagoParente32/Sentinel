@@ -3,7 +3,6 @@ package pt.ipleiria.estg.dei.sentinel;
 public final class Constants {
 
     public static final String KEEP_SIGNEDIN = "keep_signed_in";
-    public static final String KEEP_SIGNEDIN_TWITTER = "keep_signed_in_twitter";
 
 
 
@@ -33,7 +32,10 @@ public final class Constants {
 
     public static final String PREFERENCES_EXPOSURE_SET ="exposure_string_set";
 
-    public static final String MAIN_ACTIVITY_VIEW ="main_activity_view";
+    public static final String PREFERENCES_NOTIFICATIONS_SET = "notifications_string_set";
+    public static final String PREFERENCES_NOTIFICATIONS_UNREAD = "notifications_unread_int";
 
+    public static final String PREFERENCES_NOTIFICATIONS_ON ="notifications_bool_on";
 
+    public static final String PREFERENCES_LOGGED_IN = "user_logged_in";
 }

@@ -3,6 +3,7 @@ package pt.ipleiria.estg.dei.sentinel.fragments;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.animation.ObjectAnimator;
 import android.app.Activity;
@@ -20,6 +21,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -35,8 +37,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -64,6 +68,10 @@ public class DashboardFragment extends Fragment {
     private ImageButton btnExposure;
     private SharedPreferences sharedPref;
     private View contextView;
+    private TextView textEmptyData;
+    private ProgressBar pbBackground;
+    private ImageView imgHum;
+    private ImageView imgTemp;
 
     //------------variables---------------
     private DatabaseReference mDatabase;
@@ -78,12 +86,12 @@ public class DashboardFragment extends Fragment {
     private int numHumidade = 0;
     private float mediaHum = 0;
     private float mediaTemp = 0;
-    private String hora = "";
     private int checkListener = 0;
     private ArrayAdapter<String> adapter;
-    private String data = "";
     private ArrayList<String> favoritesList;
     private ArrayList<String> exposureList;
+    private SwipeRefreshLayout swipeRefresh;
+    private Date lastDate =  new Date(Long.MIN_VALUE);
 
 
     @Override
@@ -119,7 +127,6 @@ public class DashboardFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.fragment_dashboard,container,false);
 
-
         sharedPref = getActivity().getSharedPreferences(Constants.PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
 
         qoa = view.findViewById(R.id.textViewQOA);
@@ -133,7 +140,21 @@ public class DashboardFragment extends Fragment {
         btnShare = view.findViewById(R.id.btnShare);
         btnAddFavorites = view.findViewById(R.id.btnAddFavorite);
         btnExposure = view.findViewById(R.id.btnExposure);
-
+        swipeRefresh = view.findViewById(R.id.swipeRefresh);
+        textEmptyData = view.findViewById(R.id.textEmptyData);
+        pbBackground = view.findViewById(R.id.progressBar3);
+        imgHum = view.findViewById(R.id.imageViewHumidade);
+        imgTemp = view.findViewById(R.id.imageViewTemperatura);
+        // ON REFRESH LISTENER
+        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                System.out.println("refreshing...");
+                updateUIOnItemSelected();
+                swipeRefresh.setRefreshing(false);
+                Snackbar.make(getView(), R.string.refresh_success, Snackbar.LENGTH_SHORT).show();
+            }
+        });
 
         /*GET FAVORITES LIST*/
         Set<String> set;
@@ -179,25 +200,7 @@ public class DashboardFragment extends Fragment {
 
         btnExposure.setOnClickListener(v -> persistExposure());
 
-
-
-        //check if user is authenticated
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user == null) {
-            // User is  not signed in
-            //nao consegue alterar o sitio
-            spinnerRooms.setEnabled(false);
-            spinnerRooms.setClickable(false);
-            spinnerRooms.setAlpha(0.5f);
-            btnShare.setVisibility(View.INVISIBLE);
-            btnExposure.setVisibility(View.INVISIBLE);
-
-        }else{
-            spinnerRooms.setAlpha(1);
-        }
-
-
-
+        checkUserAuth();
 
         //user is signed in
         spinnerRooms.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -209,8 +212,6 @@ public class DashboardFragment extends Fragment {
                     if (++checkListener > 1) {
                         selectedIndex = position;
                         updateUIOnItemSelected();
-
-
                     }
                 } catch (Exception e) {
                     Log.w(TAG, "Failed to read value.", e);
@@ -222,8 +223,6 @@ public class DashboardFragment extends Fragment {
 
             }
         });
-
-
 
         return view;
     }
@@ -244,7 +243,7 @@ public class DashboardFragment extends Fragment {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(),R.style.DialogTheme);
 
-                builder.setMessage(R.string.favoritDialogMessage)
+                builder.setMessage(R.string.dialog_message)
                         .setTitle(R.string.favoriteDialogTitle);
 
                 builder.setPositiveButton(R.string.ok, (dialog, id) -> {
@@ -279,7 +278,6 @@ public class DashboardFragment extends Fragment {
 
     }
 
-
     private void persistExposure(){
         try{
             String data = (String)spinnerRooms.getSelectedItem() + ':' + mediaTemp + ':' + mediaHum + ':' +  new SimpleDateFormat("yyyy-mm-dd-HH:mm:ss", Locale.getDefault()).format(new Date());
@@ -301,8 +299,14 @@ public class DashboardFragment extends Fragment {
     }
 
     public void updateUIOnDataChange(DataSnapshot dataSnapshot) {
-        //ir buscar a ultima data de selected
-        data = getlatestDate(dataSnapshot, selected);
+        //resetar todas as variaveis
+        temperaturasSum = 0;
+        humidadeSum = 0;
+        numTemperatura = 0;
+        numHumidade = 0;
+        mediaHum = 0;
+        mediaTemp = 0;
+        lastDate = new Date(Long.MIN_VALUE);
         //lista de rooms
         List<String> roomsList = new ArrayList<>();
         //adicionar "Edificio A" hardcoded ja que nao está na bd
@@ -313,7 +317,6 @@ public class DashboardFragment extends Fragment {
             roomsList.add(rooms.getKey());
         }
         setSpinnerData(roomsList);
-
 
         //dar setup ao adapter e atribuilo ao spinner ( para meter os rooms todos sempre na dropdown)
         adapter = new ArrayAdapter<String>(this.getActivity(), R.layout.spinner_list, roomsList);
@@ -328,77 +331,35 @@ public class DashboardFragment extends Fragment {
 
         //default vais buscar "EdificioA"
         //se o index estiver 0, ou seja na primeira call, ou quando "edificio A" selected, nos outros updates skippa isto pq vai fazer o listener do spinner
-        if (selectedIndex == 0) {
-            iterateDatasnapshot();
 
-            //calcular medias
-            mediaTemp = (temperaturasSum / numTemperatura);
-            mediaHum = (humidadeSum / numHumidade);
+        iterateDatasnapshot();
 
-            //limitar humidade de 0%-100%
-            if (mediaHum < 0) {
-                mediaHum = 0;
-            }
-            if (mediaHum > 100) {
-                mediaHum = 100;
-            }
+        updateText();
 
-            //atribuir medias e datas a UI
-            temperatura.setText(  String.format("%.02f", mediaTemp)+ "ºC");
-            humidade.setText( String.format("%.02f", mediaHum) + "%");
-            ultimaData.setText("Last Update: " + data + " " + hora);
+        //setup das cores segundo os nossos limites
+        updateUIColors(mediaTemp, mediaHum);
+
+        setData(temperatura.getText().toString(),humidade.getText().toString(),selected,qoa.getText().toString());
 
 
-
-            //setup das cores segundo os nossos limites
-            updateUIColors(mediaTemp, mediaHum);
-
-            setData(temperatura.getText().toString(),humidade.getText().toString(),selected,qoa.getText().toString());
-
-        }
-    }
-
-    public String getlatestDate(DataSnapshot dataSnapshot, String selected) {
-        String data = "";
-        if (selected.equals("Edificio A")) {
-            for (DataSnapshot rooms : dataSnapshot.getChildren()) {
-                for (DataSnapshot datas : rooms.getChildren()) {
-                    if (datas.getKey().compareTo(data) > 0) {
-                        data = datas.getKey();
-                    }
-                }
-            }
-        } else {
-            for (DataSnapshot datas : dataSnapshot.child(selected).getChildren()) {
-                if (datas.getKey().compareTo(data) > 0) {
-                    data = datas.getKey();
-                }
-            }
-
-        }
-        return data;
     }
 
     public void updateUIColors(float mediaTemp, float mediaHum) {
         if (mediaTemp >= 19 && mediaTemp <= 35) {
             //verde
-            //imageTemp.setBackgroundColor(Color.parseColor("#008000"));
             pbTemp.getProgressDrawable().setColorFilter(Color.parseColor("#90EE90"), PorterDuff.Mode.SRC_IN);
         } else {
             //vermelho
-            //imageTemp.setBackgroundColor(Color.parseColor("#FF0000"));
             pbTemp.getProgressDrawable().setColorFilter(Color.parseColor("#8E1600"), PorterDuff.Mode.SRC_IN);
 
         }
 
         if (mediaHum >= 50 && mediaHum <= 75) {
             //verde
-            //imageHum.setBackgroundColor(Color.parseColor("#008000"));
             pbHum.getProgressDrawable().setColorFilter(Color.parseColor("#90EE90"), PorterDuff.Mode.SRC_IN);
 
         } else {
             //vermelho
-            //imageHum.setBackgroundColor(Color.parseColor("#FF0000"));
             pbHum.getProgressDrawable().setColorFilter(Color.parseColor("#8E1600"), PorterDuff.Mode.SRC_IN);
 
         }
@@ -440,17 +401,30 @@ public class DashboardFragment extends Fragment {
         numHumidade = 0;
         mediaHum = 0;
         mediaTemp = 0;
-        hora = "";
+        lastDate =  new Date(Long.MIN_VALUE);
         //ir buscar o selected item para string
         selected = spinnerRooms.getSelectedItem().toString();
-        //ir buscar ultima data do item selecionado
-        data = getlatestDate(ds, selected);
 
         iterateDatasnapshot();
 
-        //calculo de medias
-        mediaTemp = (temperaturasSum / numTemperatura);
-        mediaHum = (humidadeSum / numHumidade);
+        updateText();
+        //update das cores com os nossos limites
+        updateUIColors(mediaTemp, mediaHum);
+
+        setData(temperatura.getText().toString(),humidade.getText().toString(),selected,qoa.getText().toString());
+    }
+
+    public void updateText(){
+        toggleUI(true);
+
+        if(numHumidade != 0 && numTemperatura != 0){
+            //calculo de medias
+            mediaTemp = (temperaturasSum / numTemperatura);
+            mediaHum = (humidadeSum / numHumidade);
+        }else{
+            toggleUI(false);
+            textEmptyData.setText("No Data Found");
+        }
 
         //limitar humidade de 0%-100%
         if (mediaHum < 0) {
@@ -463,60 +437,117 @@ public class DashboardFragment extends Fragment {
         //atribuir a UI
         temperatura.setText( String.format("%.02f", mediaTemp) + "ºC");
         humidade.setText( String.format("%.02f", mediaHum) + "%");
-        ultimaData.setText("Last Update: " + data + " " + hora);
+        ultimaData.setText("Last Update: " + new SimpleDateFormat("yyyy-mm-dd hh:mm:ss").format(lastDate));
+    }
 
+    public void toggleUI(boolean bool){
+        if(bool){
+            textEmptyData.setVisibility(View.INVISIBLE);
+            pb.setVisibility(View.VISIBLE);
+            pbHum.setVisibility(View.VISIBLE);
+            pbTemp.setVisibility(View.VISIBLE);
+            qoa.setVisibility(View.VISIBLE);
+            humidade.setVisibility(View.VISIBLE);
+            temperatura.setVisibility(View.VISIBLE);
+            ultimaData.setVisibility(View.VISIBLE);
+            pbBackground.setVisibility(View.VISIBLE);
+            imgHum.setVisibility(View.VISIBLE);
+            imgTemp.setVisibility(View.VISIBLE);
+            btnShare.setVisibility(View.VISIBLE);
 
-
-        //update das cores com os nossos limites
-        updateUIColors(mediaTemp, mediaHum);
-
-        setData(temperatura.getText().toString(),humidade.getText().toString(),selected,qoa.getText().toString());
-
-
+            checkUserAuth();
+        }else {
+            textEmptyData.setVisibility(View.VISIBLE);
+            pb.setVisibility(View.INVISIBLE);
+            pbHum.setVisibility(View.INVISIBLE);
+            pbTemp.setVisibility(View.INVISIBLE);
+            qoa.setVisibility(View.INVISIBLE);
+            humidade.setVisibility(View.INVISIBLE);
+            temperatura.setVisibility(View.INVISIBLE);
+            ultimaData.setVisibility(View.INVISIBLE);
+            pbBackground.setVisibility(View.INVISIBLE);
+            imgHum.setVisibility(View.INVISIBLE);
+            imgTemp.setVisibility(View.INVISIBLE);
+            btnShare.setVisibility(View.INVISIBLE);
+        }
     }
 
     public void iterateDatasnapshot(){
+        Calendar cal = Calendar.getInstance();
+        Date toDate = new Date(System.currentTimeMillis());
+        cal.setTime(toDate);
+        cal.add(Calendar.HOUR, -24);
+        Date fromDate = cal.getTime();
+
         //se for "Edificio A" fazer a media geral de todos os rooms naquele dia
         if (selected.equals("Edificio A") || selectedIndex == 0) {
             //iterar por todos os rooms
             for (DataSnapshot rooms : ds.getChildren()) {
-                for (DataSnapshot latestDate : rooms.child(data).getChildren()) {
-                    for (DataSnapshot key : latestDate.getChildren()) {
-                        if (key.getKey().equals("temperatura")) {
-                            temperaturasSum += Float.parseFloat(key.getValue().toString());
-                            numTemperatura++;
-                        }
-                        if (key.getKey().equals("humidade")) {
-                            humidadeSum += Float.parseFloat(key.getValue().toString());
-                            numHumidade++;
-                        }
-                        if (key.getKey().equals("hora")) {
-                            if (key.getValue().toString().compareTo(hora) > 0) {
-                                hora = key.getValue().toString();
+                for (DataSnapshot dates : rooms.getChildren()) {
+                    for (DataSnapshot key : dates.getChildren()) {
+                        StringBuilder stringDate = new StringBuilder(dates.getKey() + " " + key.child("hora").getValue().toString());
+                        stringDate.setCharAt(13, ':');
+                        stringDate.setCharAt(16, ':');
+                        stringDate.setLength(stringDate.length() - 1);
+                        try{
+                            Date dateToCompare = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(stringDate.toString());
+                            if (dateToCompare.compareTo(fromDate) >= 0 && dateToCompare.compareTo(toDate) <= 0) {
+                                if(dateToCompare.compareTo(lastDate)>0){
+                                    lastDate = dateToCompare;
+                                }
+                                temperaturasSum += Float.parseFloat(key.child("temperatura").getValue().toString());
+                                humidadeSum += Float.parseFloat(key.child("humidade").getValue().toString());
+                                numTemperatura++;
+                                numHumidade++;
                             }
+                        }catch (ParseException e) {
+                            e.printStackTrace();
                         }
                     }
                 }
             }
-        } else {//se nao for "Edificio A" fazer media so do room "selected" na data
+        } else {
+            //se nao for "Edificio A" fazer media so do room "selected" na data
             //ou seja iterar apenas pelo filho "selected"
-            for (DataSnapshot latestDate : ds.child(selected).child(data).getChildren()) {
-                for (DataSnapshot key : latestDate.getChildren()) {
-                    if (key.getKey().equals("temperatura")) {
-                        temperaturasSum += Float.parseFloat(key.getValue().toString());
-                        numTemperatura++;
-                    }
-                    if (key.getKey().equals("humidade")) {
-                        humidadeSum += Float.parseFloat(key.getValue().toString());
-                        numHumidade++;
-                    }
-                    if (key.getKey().equals("hora")) {
-                        if (key.getValue().toString().compareTo(hora) > 0) {
-                            hora = key.getValue().toString();
+            for (DataSnapshot dates : ds.child(selected).getChildren()) {
+                for (DataSnapshot key : dates.getChildren()) {
+                        StringBuilder stringDate = new StringBuilder(dates.getKey() + " " + key.child("hora").getValue().toString());
+                        stringDate.setCharAt(13, ':');
+                        stringDate.setCharAt(16, ':');
+                        stringDate.setLength(stringDate.length() - 1);
+                        try{
+                            Date dateToCompare = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(stringDate.toString());
+                            if (dateToCompare.compareTo(fromDate) >= 0 && dateToCompare.compareTo(toDate) <= 0) {
+                                if(dateToCompare.compareTo(lastDate)>0){
+                                    lastDate = dateToCompare;
+                                }
+                                temperaturasSum += Float.parseFloat(key.child("temperatura").getValue().toString());
+                                humidadeSum += Float.parseFloat(key.child("humidade").getValue().toString());
+                                numTemperatura++;
+                                numHumidade++;
+                            }
+                        }catch (ParseException e) {
+                            e.printStackTrace();
                         }
-                    }
                 }
             }
+        }
+    }
+
+    public void checkUserAuth(){
+        //check if user is authenticated
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) {
+            // User is  not signed in
+            //nao consegue alterar o sitio
+            spinnerRooms.setEnabled(false);
+            spinnerRooms.setClickable(false);
+            spinnerRooms.setAlpha(0.5f);
+            btnAddFavorites.setVisibility(View.INVISIBLE);
+            btnShare.setVisibility(View.INVISIBLE);
+            btnExposure.setVisibility(View.INVISIBLE);
+        }else{
+            spinnerRooms.setAlpha(1);
         }
     }
 
@@ -527,14 +558,11 @@ public class DashboardFragment extends Fragment {
         }
     }
 
-
     public void setSpinnerData(List<String> roomsList ) {
         Activity activity = getActivity();
         if(activity instanceof MainActivity) {
             ((MainActivity) activity).setSpinnerData(roomsList);
         }
     }
-
-
 
 }
