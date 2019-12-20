@@ -24,8 +24,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public SharedPreferences sharedPref;
     private NavigationView navigationView;
     private Configuration configuration;
+
     private TextView tvNotificationCounter;
     private Toolbar toolbar;
     private FirebaseUser currentUser;
@@ -70,7 +71,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static RequestToken requestToken;
     private AccessToken accessToken;
 
-
     /*DATA TO PASS TO TWITTER ACITIVITY*/
     private String temperature;
     private String humidity;
@@ -81,7 +81,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     //DATA TO PASS TO SEND FRAG
     private ArrayList<String> roomsList ;
-
 
 
     @Override
@@ -412,9 +411,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             });
             thread.start();
 
-
-
-    }
+        }
 
     public static void tweet(String tweet,Context context){
 
@@ -449,6 +446,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
     }
+
 
     public void setData(String temperature,String humidity, String location,String airQuality) {
         this.temperature = temperature;

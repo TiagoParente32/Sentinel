@@ -67,6 +67,7 @@ public class DashboardFragment extends Fragment {
     private ImageButton btnAddFavorites;
     private ImageButton btnExposure;
     private SharedPreferences sharedPref;
+    private View contextView;
     private TextView textEmptyData;
     private ProgressBar pbBackground;
     private ImageView imgHum;
@@ -199,23 +200,6 @@ public class DashboardFragment extends Fragment {
 
         btnExposure.setOnClickListener(v -> persistExposure());
 
-
-
-        //check if user is authenticated
-//        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-//        if (user == null) {
-//            // User is  not signed in
-//            //nao consegue alterar o sitio
-//            spinnerRooms.setEnabled(false);
-//            spinnerRooms.setClickable(false);
-//            spinnerRooms.setAlpha(0.5f);
-//            btnAddFavorites.setVisibility(View.INVISIBLE);
-//            btnShare.setVisibility(View.INVISIBLE);
-//            btnExposure.setVisibility(View.INVISIBLE);
-//
-//        }else{
-//            spinnerRooms.setAlpha(1);
-//        }
         checkUserAuth();
 
         //user is signed in
@@ -295,7 +279,6 @@ public class DashboardFragment extends Fragment {
     }
 
     private void persistExposure(){
-        Toast.makeText(getActivity(),"Room added to Exposure Data!",Toast.LENGTH_SHORT).show();
         try{
             String data = (String)spinnerRooms.getSelectedItem() + ':' + mediaTemp + ':' + mediaHum + ':' +  new SimpleDateFormat("yyyy-mm-dd-HH:mm:ss", Locale.getDefault()).format(new Date());
 
@@ -303,8 +286,9 @@ public class DashboardFragment extends Fragment {
             this.exposureList.add(data);
             HashSet<String>  set = new HashSet<>(this.exposureList);
 
-
             sharedPref.edit().putStringSet(Constants.PREFERENCES_EXPOSURE_SET,set).commit();
+
+            Snackbar.make(getView(),"Room added to My Exposure!",Snackbar.LENGTH_SHORT).show();
 
             Log.i("EXPOSURE_SAVED","EXPOSURE SAVED SUCCESSFULLY");
 
