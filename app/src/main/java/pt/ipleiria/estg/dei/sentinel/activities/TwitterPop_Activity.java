@@ -119,9 +119,7 @@ public class TwitterPop_Activity extends AppCompatActivity {
 
     public void tweet(){
 
-        MainActivity activity = new MainActivity();
-
-        MainActivity.tweet(inputTweet.getText().toString(),findViewById(android.R.id.content).getRootView());
+        MainActivity.tweet(inputTweet.getText().toString(),getApplicationContext());
         finish();
 
     }
