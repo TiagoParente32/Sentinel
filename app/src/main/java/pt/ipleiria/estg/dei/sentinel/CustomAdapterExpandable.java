@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import android.widget.ExpandableListView;
 import android.widget.ImageButton;
 import android.widget.ListAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,7 +45,7 @@ public class CustomAdapterExpandable extends BaseAdapter implements ExpandableLi
 
     @Override
     public int getCount() {
-        return 10;
+        return notificationsTitle.size();
     }
 
     @Override
@@ -58,7 +60,7 @@ public class CustomAdapterExpandable extends BaseAdapter implements ExpandableLi
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        return null;
+            return null;
     }
 
 
@@ -70,7 +72,6 @@ public class CustomAdapterExpandable extends BaseAdapter implements ExpandableLi
     @Override
     public Object getGroup(int groupPosition) {
         return this.notificationsTitle.get(groupPosition);
-
     }
 
     @Override
@@ -102,10 +103,13 @@ public class CustomAdapterExpandable extends BaseAdapter implements ExpandableLi
                     getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = layoutInflater.inflate(R.layout.list_group, null);
         }
-        TextView listTitleTextView = (TextView) convertView
+        TextView listTitleTextView =  convertView
                 .findViewById(R.id.listTitle);
         listTitleTextView.setTypeface(null, Typeface.BOLD);
         listTitleTextView.setText(listTitle);
+       if(readList.containsKey(listTitle) && readList.get(listTitle) == 0 ){
+            listTitleTextView.setBackgroundColor(Color.TRANSPARENT);
+        }
         return convertView;
     }
 
@@ -118,9 +122,10 @@ public class CustomAdapterExpandable extends BaseAdapter implements ExpandableLi
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = layoutInflater.inflate(R.layout.list_view_expandable, null);
         }
-        TextView expandedListTextView = (TextView) convertView
+        TextView expandedListTextView = convertView
                 .findViewById(R.id.expandedListItem);
         expandedListTextView.setText(expandedListText);
+
         return convertView;
     }
 
@@ -151,6 +156,10 @@ public class CustomAdapterExpandable extends BaseAdapter implements ExpandableLi
 
     public interface EventListener {
         void onEvent();
+    }
+
+    public void setReadList(HashMap<String,Integer> readList){
+        this.readList = readList;
     }
 
 

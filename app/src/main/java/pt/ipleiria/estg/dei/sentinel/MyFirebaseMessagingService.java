@@ -67,6 +67,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
 
     private void sendNotification(String messageBody,String messageTitle) {
+        if(sharedPref.getBoolean(Constants.PREFERENCES_NOTIFICATIONS_ON,false)){
+            return;
+        }
+
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
@@ -77,7 +81,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(this, channelId)
                         .setSmallIcon(R.drawable.logo_white)
-                        .setContentTitle(getString(R.string.fcm_message))
+                        .setContentTitle(messageTitle)
                         .setContentText(messageBody)
                         .setAutoCancel(true)
                         .setSound(defaultSoundUri)
@@ -105,8 +109,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         try{
             SharedPreferences.Editor e = sharedPref.edit();
 
+
             /*GETS SAVE LIST IF EXISTS*/
             set = sharedPref.getStringSet(Constants.PREFERENCES_NOTIFICATIONS_SET,new HashSet<>());
+
 
             /*GETS UNREAD MESSAGE COUNTER*/
             counter = sharedPref.getInt(Constants.PREFERENCES_NOTIFICATIONS_UNREAD,0);
@@ -118,9 +124,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
             e.putStringSet(Constants.PREFERENCES_NOTIFICATIONS_SET,set).commit();
             e.putInt(Constants.PREFERENCES_NOTIFICATIONS_UNREAD,counter).commit();
-
-
-
 
 
         }catch(Exception ex){

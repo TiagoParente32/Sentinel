@@ -80,7 +80,7 @@ public class CustomAdapter extends BaseAdapter implements ListAdapter {
 
             AlertDialog.Builder builder = new AlertDialog.Builder(context,R.style.DialogTheme);
 
-            builder.setMessage(R.string.favoritDialogMessage)
+            builder.setMessage(R.string.dialog_message)
                     .setTitle(R.string.favoriteDialogTitle);
 
             builder.setPositiveButton(R.string.ok, (dialog, id) -> {

@@ -205,6 +205,7 @@ public class ProfileFragment extends Fragment {
                         Log.d(TAG, "User re-authenticated.");
                         if(task.isSuccessful()){
                             updateUser(newEmail,newPassword);
+                            txtError.setText("Profile updated successfully");
                         } else {
                             txtError.setText("Wrong password. Error updating data");
                             clearInputs();
@@ -227,6 +228,7 @@ public class ProfileFragment extends Fragment {
                                 inputEmail.getEditText().setText(user.getEmail());
                                 txtUserEmail.setText(user.getEmail());
                                 clearInputs();
+                                txtError.setText("Profile updated successfully");
                             }
                             else {
                                 txtError.setText("Error updating email");
@@ -245,6 +247,7 @@ public class ProfileFragment extends Fragment {
                             if (task.isSuccessful()) {
                                 Log.d(TAG, "Password updated successfully");
                                 clearInputs();
+                                txtError.setText("Profile updated successfully");
                             }
                             else {
                                 txtError.setText("Error updating password");
@@ -274,7 +277,6 @@ public class ProfileFragment extends Fragment {
         }
 
 
-        txtError.setText("Profile updated successfully");
 
 
     }
